@@ -1,0 +1,25 @@
+---
+title: "basic"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(sf)
+library(tidyverse)
+```
+
+Resources:
+<https://ryanpeek.github.io/mapping_in_R/index.html>
+
+library(tidycensus) # tidy data format of census data
+library(USAboundaries)
+
+```{r load data}
+# Load data
+dat = st_read("data/WHA Metadata/WHA2015.shp")
+# Check coordinate reference system
+st_crs(dat)
+# Plot
+plot(st_geometry(dat), col="blue3")
+```
