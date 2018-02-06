@@ -1,6 +1,6 @@
 ---
 title: "basic"
-output: html_document
+output: html_notebook
 ---
 
 ```{r setup, include=FALSE}
@@ -9,17 +9,46 @@ library(sf)
 library(tidyverse)
 ```
 
-Resources:
+`sf` Resources:
 <https://ryanpeek.github.io/mapping_in_R/index.html>
 
-library(tidycensus) # tidy data format of census data
-library(USAboundaries)
-
-```{r load data}
+```{r load hazard assessment data}
 # Load data
-dat = st_read("data/WHA Metadata/WHA2015.shp")
+haz_dat = st_read("data/WHA Metadata/WHA2015.shp")
 # Check coordinate reference system
-st_crs(dat)
+st_crs(haz_dat)
 # Plot
-plot(st_geometry(dat), col="blue3")
+plot(st_geometry(haz_dat), col="white")
+# View data
+View(haz_dat)
+```
+
+
+```{r load census data}
+# Might be possible to load census data this way...
+# library(tidycensus) # tidy data format of census data
+# library(USAboundaries)
+
+# Load data
+census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
+# Check coordinate reference system
+st_crs(census_dat)
+# Plot
+plot(st_geometry(census_dat), col="white")
+# View data
+View(census_dat)
+```
+
+```{r load fire history data}
+# Load data
+fire_dat = st_read("data/Fire History/HI_Wildfires1.shp")
+# Check coordinate reference system
+st_crs(fire_dat)
+# Plot
+fire_dat %>%
+  filter(Long < -50) %>%
+  ggplot() + 
+  geom_point(aes(x= Long, y = Lat))
+# View data
+View(fire_dat)
 ```
