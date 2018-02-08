@@ -11,10 +11,11 @@ library(tidyverse)
 
 `sf` Resources:
 <https://ryanpeek.github.io/mapping_in_R/index.html>
+<https://edzer.github.io/rstudio_conf/#1>
 
 ```{r load hazard assessment data}
 # Load data
-haz_dat = st_read("data/WHA Metadata/WHA2015.shp")
+haz_dat = st_read("../data/WHA Metadata/WHA2015.shp")
 # Check coordinate reference system
 st_crs(haz_dat)
 # Plot
