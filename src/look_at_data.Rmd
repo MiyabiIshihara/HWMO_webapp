@@ -1,6 +1,6 @@
 ---
 title: "basic"
-output: html_notebook
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -52,3 +52,48 @@ fire_dat %>%
 # View data
 View(fire_dat)
 ```
+
+```{r load community input data}
+# Load data
+comm_input_dat <-
+    # this generates the list of files
+    list.files(path = "../data/community_input/",
+               pattern="*.csv", 
+               full.names = T) %>% 
+    # map over read_csv, col_types specifies that each have same column headers
+    map_dfr(~read_csv(., col_types = cols(.default = "c"))) 
+```
+
+```{r clean community input data}
+## split secondary desc (should be 15 total)
+comm_input_dat <- comm_input_dat %>%
+    mutate(
+      # combines firewise and Firewise
+      secondary_desc = tolower(secondary_desc),
+      # combines collab and Collab
+      key_codes = tolower(key_codes)
+           ) %>%
+    separate(secondary_desc, c("sec_desc1", "sec_desc2", "sec_desc3"), ",")
+
+# Remove potentially complicating $ and '
+comm_input_dat$sec_desc1<-gsub("\\$", "money", comm_input_dat$sec_desc1)
+comm_input_dat$sec_desc1<-gsub("\\'", "", comm_input_dat$sec_desc1)
+# Remove all items after - (e.g. to- ll)
+comm_input_dat$sec_desc1<-gsub("\\-.*", "", comm_input_dat$sec_desc1)
+
+# Manipulate data
+comm_input_dat <- comm_input_dat %>% 
+  mutate(total_votes = as.numeric(total_votes)) %>%
+  mutate_if(is.character,funs(factor(.))) %>%
+  mutate(concern = as.character(concern),
+         recommendations = as.character(recommendations))
+```
+
+
+
+
+
+
+
+
+
