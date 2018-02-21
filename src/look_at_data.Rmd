@@ -24,25 +24,49 @@ plot(st_geometry(haz_dat), col="white")
 View(haz_dat)
 ```
 
+`tidycensus`:
+<https://walkerke.github.io/tidycensus/articles/basic-usage.html>
 
 ```{r load census data}
-# Might be possible to load census data this way...
-# library(tidycensus) # tidy data format of census data
-# library(USAboundaries)
-
-# Load data
-census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
+# Load HWMO data
+census_dat = st_read("../data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
 # Check coordinate reference system
 st_crs(census_dat)
 # Plot
 plot(st_geometry(census_dat), col="white")
 # View data
 View(census_dat)
+head(census_dat)
+
+# Load any other census data
+library(tidycensus)
+# library(USAboundaries)
+census_api_key("49ee7d5aa193a489b9db1395a624d2813b9b4d5c")
+# get particular data
+m90 <- get_decennial(geography = "state", variables = "H043A001", year = 1990)
+vt <- get_acs(geography = "county", 
+              variables = c(medincome = "B19013_001"), 
+              state = "VT")
+# Look at all variables
+v15 <- load_variables(2016, "acs5", cache = TRUE)
+
+View(v15)
+
+
 ```
+
+HWMO-given census variables:
+- Bachelors Degree or Higher: BD_Higher
+- Homeownership Rate: Homeowner
+- Median Household Income: MedH_Inc
+- Native Hawaiian alone or in combination with another race: NH_ac
+- Native Hawaiian and Other Pacific Islanders alone or in combination with another race: NH_PI_ac
+- Other Pacific Islanders alone or in combination with another race: PI_a 
+Other variables to consider: <https://www.epa.gov/ejscreen/overview-demographic-indicators-ejscreen>
 
 ```{r load fire history data}
 # Load data
-fire_dat = st_read("data/Fire History/HI_Wildfires1.shp")
+fire_dat = st_read("../data/Fire History/HI_Wildfires1.shp")
 # Check coordinate reference system
 st_crs(fire_dat)
 # Plot
