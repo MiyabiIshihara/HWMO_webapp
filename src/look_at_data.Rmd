@@ -113,6 +113,9 @@ comm_input_dat <- comm_input_dat %>%
   mutate_if(is.character,funs(factor(.))) %>%
   mutate(concern = as.character(concern),
          recommendations = as.character(recommendations))
+
+write_csv(comm_input_dat,"../data/comm_input.csv")
+
 ```
 
 
