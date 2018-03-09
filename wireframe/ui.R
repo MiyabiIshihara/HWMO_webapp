@@ -42,12 +42,14 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                         "#map {height: calc(100vh - 100px) !important;}"),
                                         plotOutput("map")
                                         ),
+                               tabPanel(title = "Community Strategy"),
                                tabPanel("Data",
                                         fluidRow(
                                           column(width = 12,
                                                  box(title = NULL,
                                                      width = NULL,
-                                                     DT::dataTableOutput("dt")),
+                                                     DT::dataTableOutput("dt")
+                                                     ),
                                                  box(title = "Download Data",
                                                      width = NULL,
                                                      downloadButton("download_data",
@@ -60,6 +62,8 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                                  )
                                           )
                                         ),
+                               tabPanel(title = "Take Action",
+                                        includeMarkdown("../take_action.md")),
                                tabPanel(title = "About",
                                         includeMarkdown("../about.md")
                                         )

@@ -8,6 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(sf)
 library(tidyverse)
 library(spdep)
+library(leaflet)
 ```
 
 `sf` Resources:
@@ -19,6 +20,8 @@ library(spdep)
 haz_dat = st_read("../data/WHA Metadata/WHA2015.shp")
 # Check coordinate reference system
 st_crs(haz_dat)
+haz_dat <- st_transform(haz_dat, "+proj=longlat +datum=WGS84")
+
 # Plot
 plot(st_geometry(haz_dat), col="white")
 haz_dat %>%
@@ -41,6 +44,13 @@ tidy_haz <- haz_dat %>%
   gather(key = haz_category, value = amount, -c(AreaName, Island, geometry))
 
 write_csv(tidy_haz, "../data/haz_dat.csv")
+```
+
+```{r leaflet}
+leaflet(haz_dat) %>%
+      addTiles() %>%  # Add default OpenStreetMap map tiles
+      addMarkers(~x, ~y) %>%
+  clearBounds()
 ```
 
 `tidycensus`:
@@ -135,6 +145,10 @@ comm_input_dat <- comm_input_dat %>%
 write_csv(comm_input_dat,"../data/comm_input.csv")
 ```
 
+```{r read clean community input data}
+
+comm_input_dat <- read_csv("../data/comm_input.csv")
+```
 
 
 

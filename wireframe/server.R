@@ -83,6 +83,14 @@ function(input, output, session) {
       scale_fill_gradientn(colors = sf.colors(20))
     
   })
+  
+  # Leaflet
+  #output$leafmap <- renderLeaflet({
+  #  leaflet() %>%
+  #    addTiles() %>%  # Add default OpenStreetMap map tiles
+  #    addMarkers(data = )
+  #})
+  
   #output$map <- renderPlotly({
   #  
   #  plot_geo( temp()
