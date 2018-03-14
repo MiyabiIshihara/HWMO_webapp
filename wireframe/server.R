@@ -46,17 +46,22 @@ function(input, output, session) {
                    hidden(
                      p(id = "element", 
                        tags$br(), 
-                       tags$b("The HWMO does this"), 
-                       "By this.", 
+                       tags$b(
+                         "HWMO is dedicated to outreach, education and technical assistance, project implementation, and research focused on proactive and collaborative wildfire prevention, mitigation and post-fire recovery in Hawaii and the Pacific."
+                         ),
                        tags$br(), 
                        tags$br(), 
-                       "And this", 
-                       tags$em("(Sources)"), 
-                       "and here", 
-                       tags$em("(more sources)."), 
+                       "Our goals are to: ",
+                       tags$br(),
+                       "1. Prevent Wildfires",
+                       tags$br(),
+                       "2. Mitigate Wildfire Impacts",
                        tags$br(), 
+                       "3. Aid Post-Fire Recovery",
                        tags$br(), 
-                       "And more.")))) }
+                       "4. Provide a collaborative environment among residents, communities, firefighters, decision makers, and natural resource managers to address wildfire management goals collaboratively and proactively.",
+                       tags$br(), 
+                       tags$em("www.hawaiiwildfire.org"))))) }
                )
   # load hidden text in welcome dialogue box
   observeEvent(input$go_button, {

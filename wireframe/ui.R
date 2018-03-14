@@ -63,9 +63,9 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                           )
                                         ),
                                tabPanel(title = "Take Action",
-                                        includeMarkdown("../take_action.md")),
+                                        includeMarkdown("../docs/take_action.md")),
                                tabPanel(title = "About",
-                                        includeMarkdown("../about.md")
+                                        includeMarkdown("../docs/about.md")
                                         )
                                )
                         )
