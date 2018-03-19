@@ -1,0 +1,118 @@
+---
+title: "leaflet_port"
+author: "VanMcG"
+date: "March 14, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+library(sf)
+library(geojsonio)
+library(rgdal)
+library(htmltools)
+```
+
+## Initialize the map
+```{js}
+var map = L.map('fire-map',{
+  layers: [WHA,WHA_hz,fires_M,fires_O]
+}).setView([20.35, -156.50], 8);
+```
+
+```{r}
+m <- leaflet() %>%
+  addProviderTiles(providers$OpenMapSurfer.Grayscale) %>%
+  setView(-156, 20.35, 8) %>% #long, lat, zoom level 
+  setMaxBounds(-162.6,23.6,-153.5,18.0) %>% 
+  # the two diagonal pts that limit panning (long1, lat1, long2, lat2)
+   addEasyButton(easyButton(
+    icon="fa-globe", title="Zoom to Level 8",
+    onClick=JS("function(btn, map){ map.setZoom(8); }")))
+
+  m
+```
+
+## Load test fire layer
+```{r}
+# fire_dat <- fire_dat
+# data(fire_dat)
+OFires <- geojsonio::geojson_read("../data/Fire History/Oahu_Wildfires.geojson", what = "sp")
+MFires <- geojsonio::geojson_read("../data/Fire History/Maui_Wildfires.geojson", what = "sp")
+
+addMarkers(m, lng = ~X, lat = ~Y, data = OFires@data, clusterOptions = markerClusterOptions()) %>% addMarkers(lng = -156.54, lat = 21.09)
+
+# m <- m %>% leaflet(OFires) %>%
+#   addTiles() %>%
+#   addMarkers(popup = ~Start_Date, clusterOptions = markerClusterOptions())
+# m
+```
+
+## Load tile layer
+```{r}
+# fire_dat <- fire_dat
+# data(fire_dat)
+OFires <- geojsonio::geojson_read("../data/Fire History/Oahu_Wildfires.geojson", what = "sp")
+
+leaflet(OFires) %>%
+  addTiles() %>%
+  addMarkers()
+```
+
+## Add layer control
+```{js}
+var ptMaps = {
+  "Maui Fires": fires_M,
+  "Oahu Fires": fires_O
+};
+var choroMaps = {
+  "WHA Fire Quintiles": WHA,
+  "Haz Assessment": WHA_hz
+};
+
+L.control.layers(choroMaps, ptMaps).addTo(map);
+```
+
+```{r}
+map <-- leaflet() %>%
+  addLayersControl(
+    overlayGroups = c(""),
+    baseGroups = c(""),
+    options = layersControlOptions( collapsed = FALSE)
+  )
+```
+
+## THE WHOLE THING
+```{r}
+m <- leaflet(OFires) %>%
+  # initialize the map, set boundaries
+  setView(-156, 20.35, 8) %>% #long, lat, zoom level 
+  setMaxBounds(-162.6,23.6,-153.5,18.0) %>% 
+     # the two diagonal pts that limit panning (long1, lat1, long2, lat2)
+ addEasyButton(easyButton(
+    icon="fa-globe", title="Zoom to Level 8",
+    onClick=JS("function(btn, map){ map.setZoom(8); }"))) %>%
+  
+  #Map tiles
+  addProviderTiles(providers$OpenMapSurfer.Grayscale, group = "Roads") %>%
+  #addProviderTiles(providers$OpenTopoMap, group = "Topo") %>%
+  
+  #Base groups (polygons)
+  
+  #Overlay groups (points)
+  addMarkers(popup = ~Start_Date, clusterOptions = markerClusterOptions())
+  
+  m
+```
+
+## load point layers
+```{r}
+map
+```
+
+## clustering?
+```{r}
+map
+```
+
