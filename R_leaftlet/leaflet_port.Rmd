@@ -1,0 +1,71 @@
+---
+title: "leaflet_port"
+author: "VanMcG"
+date: "March 14, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+```
+
+## Initialize the map
+```{js}
+var map = L.map('fire-map',{
+  layers: [WHA,WHA_hz,fires_M,fires_O]
+}).setView([20.35, -156.50], 8);
+```
+
+```{r}
+m <- leaflet() %>%
+  addProviderTiles(providers$OpenMapSurfer.Grayscale) %>%
+  setView(-156, 20.35, 8) %>% #long, lat, zoom level 
+  setMaxBounds(-162.6,23.6,-153.5,18.0)
+  m
+```
+
+
+## Load tile layer
+```{r}
+map
+```
+
+## Add layer control
+```{js}
+var ptMaps = {
+  "Maui Fires": fires_M,
+  "Oahu Fires": fires_O
+};
+var choroMaps = {
+  "WHA Fire Quintiles": WHA,
+  "Haz Assessment": WHA_hz
+};
+
+L.control.layers(choroMaps, ptMaps).addTo(map);
+```
+
+```{r}
+map <-- leaflet() %>%
+  addLayersControl(
+    overlayGroups = c(""),
+    baseGroups = c(""),
+    options = layersControlOptions( collapsed = FALSE)
+  )
+```
+
+## load polygon layers
+```{r}
+map
+```
+
+## load point layers
+```{r}
+map
+```
+
+## clustering?
+```{r}
+map
+```
+
