@@ -5,6 +5,7 @@ library(tidyverse)
 library(RColorBrewer)
 library(DT)
 library(shiny)
+library(leaflet)
 
 
   header <- dashboardHeader(
@@ -40,7 +41,7 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                         tags$style(
                                         type = "text/css", 
                                         "#map {height: calc(100vh - 100px) !important;}"),
-                                        plotOutput("map")
+                                        leafletOutput("leafmap")
                                         ),
                                tabPanel(title = "Community Strategy"),
                                tabPanel("Data",

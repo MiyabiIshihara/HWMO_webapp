@@ -67,56 +67,32 @@ function(input, output, session) {
   observeEvent(input$go_button, {
     show("element")
   })
-  
-  ## this first event is a hack that allows 
-  #observe( {
-  #  input$go_button
-  #  my_reactives$react_ind <- input$v_4
-  #})
 
   temp <- reactive( {     # filter dat by user input
     haz_data %>% filter(haz_category == input$haz_category) 
     })
 
   # Main Map
-  output$map <- renderPlot({
-    temp() %>%
-    ggplot() +
-      geom_sf() +
-      aes(fill = amount) + 
-      theme(panel.grid.major = element_line(color = "white")) +
-      scale_fill_gradientn(colors = sf.colors(20))
-    
-  })
+  #output$map <- renderPlot({
+  #  temp() %>%
+  #  ggplot() +
+  #    geom_sf() +
+  #    aes(fill = amount) + 
+  #    theme(panel.grid.major = element_line(color = "white")) +
+  #    scale_fill_gradientn(colors = sf.colors(20))
+  #})
   
   # Leaflet
-  #output$leafmap <- renderLeaflet({
-  #  leaflet() %>%
-  #    addTiles() %>%  # Add default OpenStreetMap map tiles
-  #    addMarkers(data = )
-  #})
-  
-  #output$map <- renderPlotly({
-  #  
-  #  plot_geo( temp()
-  #            ) %>% 
-  #    add_trace(
-  #      x = st_coordinates(temp())[,1],
-  #      y = st_coordinates(temp())[,2],
-  #      z = ~amount, 
-  #      zmin = 30,
-  #      zmax = 0,
-  #      color = ~amount, 
-  #      colors = 'Blues',
-  #      text = ~AreaName, 
-  #      locations = ~st_geometry(temp()),
-  #      marker = list(line = l)
-  #    ) %>%
-  #    colorbar(title = 'Score', 
-  #             tickprefix = '') %>%
-  #    layout(title = "Hazards in Hawaii",
-  #           geo = g)
-  #})
+  output$leafmap <- renderLeaflet({
+    leaflet() %>%
+      addProviderTiles(providers$OpenMapSurfer.Grayscale) %>%
+      setView(-156, 20.35, 8) %>% #long, lat, zoom level 
+      setMaxBounds(-162.6,23.6,-153.5,18.0) %>% 
+      # the two diagonal pts that limit panning (long1, lat1, long2, lat2)
+      addEasyButton(easyButton(
+        icon="fa-globe", title="Zoom to Level 8",
+        onClick=JS("function(btn, map){ map.setZoom(8); }")))
+  })
   
   # Plot
   output$dt <- DT::renderDataTable({ temp() })
