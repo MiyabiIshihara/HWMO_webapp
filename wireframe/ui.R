@@ -11,17 +11,7 @@ header <- dashboardHeader(
   title = "HWMO", titleWidth = 300
   )
   
-sidebar <- dashboardSidebar(width = 300,
-                            radioButtons("haz_category",
-                                         label = "Hazard Category",
-                                         choices = c('Fire Hazard' = 'FIREHAZTOT',
-                                                     'Fire Protection' = 'FIREPROTOT',
-                                                     'Building Hazard' = 'BLDG_TOT',
-                                                     'Vegetation Hazard' = 'VEG_TOT',
-                                                     'Subdivision Hazard' = 'SUBD_TOT'
-                                                      ),
-                                         selected = c("FIREHAZTOT")
-                                         )
+sidebar <- dashboardSidebar(
                             )
 
 body <- dashboardBody(tags$head(tags$style(HTML("
