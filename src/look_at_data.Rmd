@@ -43,43 +43,19 @@ haz_dat <- haz_dat %>%
 tidy_haz <- haz_dat %>%
   gather(key = haz_category, value = amount, -c(AreaName, Island, geometry))
 
-write_csv(tidy_haz, "../data/haz_dat.csv")
-```
 
-```{r leaflet}
-leaflet(haz_dat) %>%
-      addTiles() %>%  # Add default OpenStreetMap map tiles
-      addMarkers(~x, ~y) %>%
-  clearBounds()
-```
-
-`tidycensus`:
-<https://walkerke.github.io/tidycensus/articles/basic-usage.html>
-
-```{r load census data}
-# Load HWMO data
 census_dat = st_read("../data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
 # Check coordinate reference system
 st_crs(census_dat)
+#convert to factor as test
+census_dat$Homeowner <- as.integer(census_dat$Homeowner)
+census_dat$MedH_Inc <- as.integer(census_dat$MedH_Inc)
+
 # Plot
 plot(st_geometry(census_dat), col="white")
 # View data
 View(census_dat)
-head(census_dat)
 
-# Load any other census data
-library(tidycensus)
-# library(USAboundaries)
-census_api_key("49ee7d5aa193a489b9db1395a624d2813b9b4d5c")
-# get particular data
-m90 <- get_decennial(geography = "state", variables = "H043A001", year = 1990)
-vt <- get_acs(geography = "county", 
-              variables = c(medincome = "B19013_001"), 
-              state = "VT")
-# Look at all variables
-v15 <- load_variables(2016, "acs5", cache = TRUE)
-
-View(v15)
 
 
 ```
