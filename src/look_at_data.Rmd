@@ -32,18 +32,24 @@ View(haz_dat)
 # library(USAboundaries)
 
 # Load data
-census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
+census_dat = st_read("../data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
 # Check coordinate reference system
 st_crs(census_dat)
+#convert to factor as test
+census_dat$Homeowner <- as.integer(census_dat$Homeowner)
+census_dat$MedH_Inc <- as.integer(census_dat$MedH_Inc)
+
 # Plot
 plot(st_geometry(census_dat), col="white")
 # View data
 View(census_dat)
+
+
 ```
 
 ```{r load fire history data}
 # Load data
-fire_dat = st_read("data/Fire History/HI_Wildfires1.shp")
+fire_dat = st_read("../data/Fire History/HI_Wildfires1.shp")
 # Check coordinate reference system
 st_crs(fire_dat)
 # Plot
