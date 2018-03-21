@@ -1,26 +1,154 @@
-#
-# This is the server logic of a Shiny web application. You can run the 
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
-
+library(plotly)
+library(shinydashboard)
+library(shinyjs)
+library(tidyverse)
+library(RColorBrewer)
+library(DT)
 library(shiny)
+library(sf)
+#library(spdep)
+
+# load data
+haz_data = st_read("../data/WHA Metadata/WHA2015.shp") %>%
+  select(SUBD_TOT, VEG_TOT, BLDG_TOT, FIREHAZTOT,FIREPROTOT,
+         # Acres, AREA, PERIMETER, CAR_Rating, 
+         AreaName, Island, geometry) %>%
+  gather(key = haz_category, value = amount, -c(AreaName, Island, geometry))
+
+#haz_dat = read_csv("../data/haz_dat.csv")
+#census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
+#fire_dat = st_read("data/Fire History/HI_Wildfires1.shp")
+#comm_dat = read_csv("data/comm_input.csv")
+
+# light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+ showframe = FALSE,
+ showcoastlines = FALSE,
+ projection = list(type = '26904')
+)
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-   
-  output$distPlot <- renderPlot({
-    
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2] 
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-    
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
+function(input, output, session) {
+  # landing page
+  observeEvent(once = TRUE,
+               ignoreNULL = FALSE, 
+               ignoreInit = FALSE, 
+               eventExpr = haz_data, { 
+                 # event will be called when histdata changes, which only happens once, when it is initially calculated
+                 showModal(modalDialog(
+                   h1('Welcome!'),
+                   tags$p('This webapp displays information for the Hawaii Wildfire Management Organzation (HWMO)'),
+                   useShinyjs(),  # Set up shinyjs
+                   actionButton("go_button", "Read more..."),
+                   hidden(
+                     p(id = "element", 
+                       tags$br(), 
+                       tags$b(
+                         "HWMO is dedicated to outreach, education and technical assistance, project implementation, and research focused on proactive and collaborative wildfire prevention, mitigation and post-fire recovery in Hawaii and the Pacific."
+                         ),
+                       tags$br(), 
+                       tags$br(), 
+                       "Our goals are to: ",
+                       tags$br(),
+                       "1. Prevent Wildfires",
+                       tags$br(),
+                       "2. Mitigate Wildfire Impacts",
+                       tags$br(), 
+                       "3. Aid Post-Fire Recovery",
+                       tags$br(), 
+                       "4. Provide a collaborative environment among residents, communities, firefighters, decision makers, and natural resource managers to address wildfire management goals collaboratively and proactively.",
+                       tags$br(), 
+                       tags$em("www.hawaiiwildfire.org"))))) }
+               )
+  # load hidden text in welcome dialogue box
+  observeEvent(input$go_button, {
+    show("element")
+  })
+  
+  ## this first event is a hack that allows 
+  #observe( {
+  #  input$go_button
+  #  my_reactives$react_ind <- input$v_4
+  #})
+
+  temp <- reactive( {     # filter dat by user input
+    haz_data %>% filter(haz_category == input$haz_category) 
+    })
+
+  # Main Map
+  output$map <- renderPlot({
+    temp() %>%
+    ggplot() +
+      geom_sf() +
+      aes(fill = amount) + 
+      theme(panel.grid.major = element_line(color = "white")) +
+      scale_fill_gradientn(colors = sf.colors(20))
     
   })
   
-})
+  # Leaflet
+  #output$leafmap <- renderLeaflet({
+  #  leaflet() %>%
+  #    addTiles() %>%  # Add default OpenStreetMap map tiles
+  #    addMarkers(data = )
+  #})
+  
+  #output$map <- renderPlotly({
+  #  
+  #  plot_geo( temp()
+  #            ) %>% 
+  #    add_trace(
+  #      x = st_coordinates(temp())[,1],
+  #      y = st_coordinates(temp())[,2],
+  #      z = ~amount, 
+  #      zmin = 30,
+  #      zmax = 0,
+  #      color = ~amount, 
+  #      colors = 'Blues',
+  #      text = ~AreaName, 
+  #      locations = ~st_geometry(temp()),
+  #      marker = list(line = l)
+  #    ) %>%
+  #    colorbar(title = 'Score', 
+  #             tickprefix = '') %>%
+  #    layout(title = "Hazards in Hawaii",
+  #           geo = g)
+  #})
+  
+  # Plot
+  output$dt <- DT::renderDataTable({ temp() })
+  
+  # Download Selected Data
+  output$download_data <- downloadHandler(
+    # This function returns a string which tells the client browser what name to use when saving the file.
+    filename = function() {
+      paste0(
+        paste(input$haz_category),
+        ".csv")
+    },
+    
+    # This function should write data to a file given to it by the argument 'file'.
+    content = function(file) {
+      # Write to a file specified by the 'file' argument
+      write.table(temp(), file, sep = ",", row.names = FALSE)
+    }
+  )
+  
+  # Download All Data
+  output$download_all_data <- downloadHandler(
+    # This function returns a string which tells the client browser what name to use when saving the file.
+    filename = function() {
+      paste0("haz_dat", ".csv")
+    },
+    
+    # This function should write data to a file given to it by the argument 'file'.
+    content = function(file) {
+      # Write to a file specified by the 'file' argument
+      write.table(dat, file, sep = ",", row.names = FALSE)
+    }
+  )
+  
+}
