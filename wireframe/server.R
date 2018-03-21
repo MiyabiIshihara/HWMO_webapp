@@ -60,7 +60,8 @@ function(input, output, session) {
                        "3. Aid Post-Fire Recovery",
                        tags$br(), 
                        "4. Provide a collaborative environment among residents, communities, firefighters, decision makers, and natural resource managers to address wildfire management goals collaboratively and proactively.",
-                       tags$br(), 
+                       tags$br(),
+                       tags$br(),
                        tags$em("www.hawaiiwildfire.org"))))) }
                )
   # load hidden text in welcome dialogue box

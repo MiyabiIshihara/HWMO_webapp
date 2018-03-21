@@ -7,23 +7,22 @@ library(DT)
 library(shiny)
 library(leaflet)
 
-
-  header <- dashboardHeader(
-    title = "HWMO", titleWidth = 300
+header <- dashboardHeader(
+  title = "HWMO", titleWidth = 300
   )
   
-  sidebar <- dashboardSidebar(width = 300,
-                              radioButtons("haz_category",
-                                           label = "Hazard Category",
-                                           choices = c('Fire Hazard' = 'FIREHAZTOT',
-                                                       'Fire Protection' = 'FIREPROTOT',
-                                                       'Building Hazard' = 'BLDG_TOT',
-                                                       'Vegetation Hazard' = 'VEG_TOT',
-                                                       'Subdivision Hazard' = 'SUBD_TOT'
-                                                        ),
-                                           selected = c("FIREHAZTOT")
-                                           )
-                              )
+sidebar <- dashboardSidebar(width = 300,
+                            radioButtons("haz_category",
+                                         label = "Hazard Category",
+                                         choices = c('Fire Hazard' = 'FIREHAZTOT',
+                                                     'Fire Protection' = 'FIREPROTOT',
+                                                     'Building Hazard' = 'BLDG_TOT',
+                                                     'Vegetation Hazard' = 'VEG_TOT',
+                                                     'Subdivision Hazard' = 'SUBD_TOT'
+                                                      ),
+                                         selected = c("FIREHAZTOT")
+                                         )
+                            )
 
 body <- dashboardBody(tags$head(tags$style(HTML("
                                              blockquote {
@@ -43,7 +42,6 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                         "#map {height: calc(100vh - 100px) !important;}"),
                                         leafletOutput("leafmap")
                                         ),
-                               tabPanel(title = "Community Strategy"),
                                tabPanel("Data",
                                         fluidRow(
                                           column(width = 12,
@@ -65,7 +63,7 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                         ),
                                tabPanel(title = "Take Action",
                                         includeMarkdown("../docs/take_action.md")),
-                               tabPanel(title = "About",
+                               tabPanel(title = "FAQ",
                                         includeMarkdown("../docs/about.md")
                                         )
                                )
