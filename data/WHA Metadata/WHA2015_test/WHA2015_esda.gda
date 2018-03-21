@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+    <title>WHA2015_em</title>
+    <layers>
+        <layer>
+            <datasource>
+                <type>ESRI Shapefile</type>
+                <path>WHA2015_em.shp</path>
+            </datasource>
+            <layername>WHA2015_em</layername>
+            <title/>
+            <variable_order>
+                <time_ids>
+                    <id>time 0</id>
+                </time_ids>
+                <var>POLY_ID</var>
+                <var>AREA</var>
+                <var>PERIMETER</var>
+                <var>Ing_Eg</var>
+                <var>Rd_Maint</var>
+                <var>Rd_Width</var>
+                <var>Rd_Cond</var>
+                <var>Fire_Acc</var>
+                <var>St_Sign</var>
+                <var>Strc_Den</var>
+                <var>Hm_Set</var>
+                <var>Un_Lands</var>
+                <var>Priv_Act</var>
+                <var>Prox_Wild</var>
+                <var>SUBD_TOT</var>
+                <var>Prox_Flam</var>
+                <var>Veg_Type</var>
+                <var>Fuel_Load</var>
+                <var>Fuel_Strc</var>
+                <var>Def_Space</var>
+                <var>VEG_TOT</var>
+                <var>Roof_Asmb</var>
+                <var>Sid_Sof</var>
+                <var>Undr_Skrt</var>
+                <var>Utlty_Plmt</var>
+                <var>Strc_Ign</var>
+                <var>BLDG_TOT</var>
+                <var>Slope</var>
+                <var>Avg_Rain</var>
+                <var>Prev_Wind</var>
+                <var>Seas_Haz</var>
+                <var>Ign_Risk</var>
+                <var>Top_Adv</var>
+                <var>FIREHAZTOT</var>
+                <var>Wat_Avail</var>
+                <var>Ofst_Wat</var>
+                <var>Rspn_Time</var>
+                <var>Prox_Stn</var>
+                <var>FD_Trng</var>
+                <var>Wild_Cap</var>
+                <var>Loc_Ops</var>
+                <var>Com_Plan</var>
+                <var>Com_FirPrg</var>
+                <var>FIREPROTOT</var>
+                <var>OVRLHAZTOT</var>
+                <var>Acres</var>
+                <var>AreaName</var>
+                <var>Island</var>
+                <var>IntAgCoop</var>
+                <var>CAR_Rating</var>
+                <var>zone</var>
+                <var>CAR_Hawaii</var>
+                <var>CAR_adjtot</var>
+                <var>OHaz_deriv</var>
+            </variable_order>
+            <custom_classifications/>
+            <spatial_weights>
+                <weights>
+                    <path>WHA2015_qWgt.gal</path>
+                    <default/>
+                </weights>
+            </spatial_weights>
+            <default_vars>
+                <default_var>
+                    <name>OHaz_deriv</name>
+                    <time_id>time 0</time_id>
+                </default_var>
+                <default_var>
+                    <name/>
+                    <time_id>time 0</time_id>
+                </default_var>
+                <default_var>
+                    <name/>
+                    <time_id>time 0</time_id>
+                </default_var>
+                <default_var>
+                    <name/>
+                    <time_id>time 0</time_id>
+                </default_var>
+            </default_vars>
+        </layer>
+    </layers>
+</project>
