@@ -21,10 +21,9 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                         tabBox(width = 12,
                                height = NULL,
                                tabPanel("Map",
-                                        value = 1,
                                         tags$style(
                                         type = "text/css", 
-                                        "#map {height: calc(100vh - 100px) !important;}"),
+                                        "#leafmap {height: calc(100vh - 150px) !important;}"),
                                         leafletOutput("leafmap")
                                         ),
                                tabPanel("Data",
