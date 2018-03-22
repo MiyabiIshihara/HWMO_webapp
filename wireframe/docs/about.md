@@ -1,3 +1,11 @@
+HWMO is dedicated to outreach, education and technical assistance, project implementation, and research focused on proactive and collaborative wildfire prevention, mitigation and post-fire recovery in Hawaii and the Pacific.  
+
+Our goals are to: 
+  1. Prevent Wildfires  
+  2. Mitigate Wildfire Impacts  
+  3. Aid Post-Fire Recovery  
+  4. Provide a collaborative environment among residents, communities, firefighters, decision makers, and natural resource managers to address wildfire management goals collaboratively and proactively.  
+
 ## What does the HWMO webapp do?
 The HWMO webapp visualizes wildfire data across Hawai'i.  
 It has three types of data: fire history, community hazard assessments, and community input information.  

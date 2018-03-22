@@ -9,6 +9,7 @@ library(spdep)
 library(sp)
 library(Matrix)
 library(spData)
+library(tidyverse)
 
 # Load Oahu subset of fire point data
 OFires <- geojsonio::geojson_read("data/Oahu_Wildfires.geojson", what = "sp")
@@ -17,10 +18,10 @@ OFires <- geojsonio::geojson_read("data/Oahu_Wildfires.geojson", what = "sp")
 census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
 ## Check coordinate reference system
 census_dat <- st_transform(census_dat, 4326)
-#
 ## Load haz data from geojson
 haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 
+test_dat <- read_csv("data/comm_input.csv")
 
 function(input, output, session) {
   # landing page
@@ -60,9 +61,9 @@ function(input, output, session) {
   #  show("element")
   #})
 
-  #temp <- reactive( {     # filter dat by user input
-  #  haz_dat
-  #  })
+  temp <- reactive( {     # filter dat by user input
+    test_dat
+    })
   
   # Leaflet
   output$leafmap <- renderLeaflet({
@@ -171,36 +172,36 @@ function(input, output, session) {
   })
   
   # Plot
-  #output$dt <- DT::renderDataTable({ temp() })
+  output$dt <- DT::renderDataTable({ temp() })
   #
   ## Download Selected Data
-  #output$download_data <- downloadHandler(
-  #  # This function returns a string which tells the client browser what name to use when saving the file.
-  #  filename = function() {
-  #    paste0(
-  #      paste(input$haz_category),
-  #      ".csv")
-  #  },
+  output$download_data <- downloadHandler(
+    # This function returns a string which tells the client browser what name to use when saving the file.
+    filename = function() {
+      paste0(
+        paste(input$haz_category),
+        ".csv")
+    },
   #  
   #  # This function should write data to a file given to it by the argument 'file'.
-  #  content = function(file) {
-  #    # Write to a file specified by the 'file' argument
-  #    write.table(temp(), file, sep = ",", row.names = FALSE)
-  #  }
-  #)
+    content = function(file) {
+      # Write to a file specified by the 'file' argument
+      write.table(temp(), file, sep = ",", row.names = FALSE)
+    }
+  )
   
   # Download All Data
-  #output$download_all_data <- downloadHandler(
-  #  # This function returns a string which tells the client browser what name to use when saving the file.
-  #  filename = function() {
-  #    paste0("haz_dat", ".csv")
-  #  },
-  #  
-  #  # This function should write data to a file given to it by the argument 'file'.
-  #  content = function(file) {
-  #    # Write to a file specified by the 'file' argument
-  #    write.table(dat, file, sep = ",", row.names = FALSE)
-  #  }
-  #)
+  output$download_all_data <- downloadHandler(
+    # This function returns a string which tells the client browser what name to use when saving the file.
+    filename = function() {
+      paste0("haz_dat", ".csv")
+    },
+    
+    # This function should write data to a file given to it by the argument 'file'.
+    content = function(file) {
+      # Write to a file specified by the 'file' argument
+      write.table(dat, file, sep = ",", row.names = FALSE)
+    }
+  )
   
 }
