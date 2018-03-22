@@ -1,0 +1,12 @@
+name: HWMO_Prototype
+title: HWMO_Prototype
+username:
+account: lollon
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 304597
+bundleId: 1281552
+url: https://lollon.shinyapps.io/HWMO_Prototype/
+when: 1521682654.72586
+asMultiple: FALSE
+asStatic: FALSE

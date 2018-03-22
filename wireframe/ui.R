@@ -1,9 +1,4 @@
-library(plotly)
 library(shinydashboard)
-library(shinyjs)
-library(tidyverse)
-library(RColorBrewer)
-library(DT)
 library(shiny)
 library(leaflet)
 
@@ -11,8 +6,7 @@ header <- dashboardHeader(
   title = "HWMO", titleWidth = 300
   )
   
-sidebar <- dashboardSidebar(
-                            )
+sidebar <- dashboardSidebar(width = 300)
 
 body <- dashboardBody(tags$head(tags$style(HTML("
                                              blockquote {
@@ -32,29 +26,29 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                         "#map {height: calc(100vh - 100px) !important;}"),
                                         leafletOutput("leafmap")
                                         ),
-                               tabPanel("Data",
-                                        fluidRow(
-                                          column(width = 12,
-                                                 box(title = NULL,
-                                                     width = NULL,
-                                                     DT::dataTableOutput("dt")
-                                                     ),
-                                                 box(title = "Download Data",
-                                                     width = NULL,
-                                                     downloadButton("download_data",
-                                                                    "Download Selected Data"),
-                                                     tags$br(),
-                                                     tags$br(), 
-                                                     downloadButton("download_all_data",
-                                                                    "Download All Data")
-                                                     )
-                                                 )
-                                          )
-                                        ),
+                               #tabPanel("Data",
+                               #         fluidRow(
+                               #           column(width = 12,
+                               #                  box(title = NULL,
+                               #                      width = NULL,
+                               #                      DT::dataTableOutput("dt")
+                               #                      ),
+                               #                  box(title = "Download Data",
+                               #                      width = NULL,
+                               #                      downloadButton("download_data",
+                               #                                     "Download Selected Data"),
+                               #                      tags$br(),
+                               #                      tags$br(), 
+                               #                      downloadButton("download_all_data",
+                               #                                     "Download All Data")
+                               #                      )
+                               #                  )
+                               #           )
+                               #         ),
                                tabPanel(title = "Take Action",
-                                        includeMarkdown("../docs/take_action.md")),
+                                        includeMarkdown("docs/take_action.md")),
                                tabPanel(title = "FAQ",
-                                        includeMarkdown("../docs/about.md")
+                                        includeMarkdown("docs/about.md")
                                         )
                                )
                         )
