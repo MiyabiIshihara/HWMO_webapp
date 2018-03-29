@@ -22,12 +22,12 @@ library(spdep)
 ```{r}
 m <- leaflet() %>%
   addProviderTiles(providers$OpenMapSurfer.Grayscale) %>%
-  setView(-156, 20.35, 8) %>% #long, lat, zoom level 
+  setView(-156, 20.35, 7) %>% #long, lat, zoom level 
   setMaxBounds(-162.6,23.6,-153.5,18.0) %>% 
   # the two diagonal pts that limit panning (long1, lat1, long2, lat2)
    addEasyButton(easyButton(
-    icon="fa-globe", title="Zoom to Level 8",
-    onClick=JS("function(btn, map){ map.setZoom(8); }")))
+    icon="fa-globe", title="Zoom to Level 7",
+    onClick=JS("function(btn, map){ map.setZoom(7); }")))
 
 ```
 
@@ -248,10 +248,10 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
 # LAYER CONTROLS
   addLayersControl(
     # base groups = radio buttons
-    overlayGroups = c("Oahu fires","Subdivision Hazard Rating", "Vegetation Hazard Rating", "Building Hazard Rating", "Fire Environment Hazard Rating", "Fire Protection Score", "Median HH income",  
+    baseGroups = c("Subdivision Hazard Rating", "Vegetation Hazard Rating", "Building Hazard Rating", "Fire Environment Hazard Rating", "Fire Protection Score", "Median HH income",  
                    "Fire incidence", "NH_ac", "Homeowners"),
     # # overlay groups = check boxes
-    # overlayGroups = c("Oahu fires", "Test point"),
+    overlayGroups = c("Oahu fires", "Test point"),
     options = layersControlOptions(collapsed = FALSE,
                                    sortLayers = FALSE)
   ) %>%

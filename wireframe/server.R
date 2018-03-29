@@ -2,6 +2,7 @@ library(shinydashboard)
 library(shiny)
 library(sf)
 library(leaflet)
+library(leaflet.extras)
 library(geojsonio)
 library(rgdal)
 library(htmltools)
@@ -69,12 +70,12 @@ function(input, output, session) {
   output$leafmap <- renderLeaflet({
     leaflet() %>%
       addProviderTiles(providers$OpenMapSurfer.Grayscale) %>%
-      setView(-156, 20.35, 8) %>% #long, lat, zoom level 
+      setView(-156, 20.35, 7) %>% #long, lat, zoom level 
       setMaxBounds(-162.6,23.6,-153.5,18.0) %>% 
       # the two diagonal pts that limit panning (long1, lat1, long2, lat2)
       addEasyButton(easyButton(
-        icon="fa-globe", title="Zoom to Level 8",
-        onClick=JS("function(btn, map){ map.setZoom(8); }"))) %>%
+        icon="fa-globe", title="Zoom to Level 7",
+        onClick=JS("function(btn, map){ map.setZoom(7); }"))) %>%
       addMarkers(lng = -156.54, lat = 21.09, group = "Test point") %>% 
       
       # subset of fire data to test clustering
