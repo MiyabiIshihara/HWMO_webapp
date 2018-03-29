@@ -247,13 +247,15 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
 # LAYER CONTROLS
   addLayersControl(
     # base groups = radio buttons
-    baseGroups = c("Subdivision Hazard Rating", "Vegetation Hazard Rating", "Building Hazard Rating", "Fire Environment Hazard Rating", "Fire Protection Score", "Median HH income",  
+    overlayGroups = c("Oahu fires","Subdivision Hazard Rating", "Vegetation Hazard Rating", "Building Hazard Rating", "Fire Environment Hazard Rating", "Fire Protection Score", "Median HH income",  
                    "Fire incidence", "NH_ac", "Homeowners"),
-    # overlay groups = check boxes
-    overlayGroups = c("Oahu fires", "Test point"),
+    # # overlay groups = check boxes
+    # overlayGroups = c("Oahu fires", "Test point"),
     options = layersControlOptions(collapsed = FALSE,
                                    sortLayers = FALSE)
-  ) 
+  ) %>%
+  hideGroup("Subdivision Hazard Rating") %>%
+  hideGroup("NH_ac")
   
 
 
