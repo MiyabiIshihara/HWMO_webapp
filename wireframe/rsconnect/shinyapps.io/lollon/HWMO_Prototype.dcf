@@ -5,8 +5,8 @@ account: lollon
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 304597
-bundleId: 1282821
+bundleId: 1283149
 url: https://lollon.shinyapps.io/HWMO_Prototype/
-when: 1521736884.11303
+when: 1521750929.22883
 asMultiple: FALSE
 asStatic: FALSE
