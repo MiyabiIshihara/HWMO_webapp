@@ -34,11 +34,11 @@ m <- leaflet() %>%
 ## Load data
 ```{r}
 # Load Oahu subset of fire point data
-OFires <- geojsonio::geojson_read("../data/Fire History/Oahu_Wildfires.geojson", what = "sp")
+OFires <- geojsonio::geojson_read("../wireframe/data/Oahu_Wildfires.geojson", what = "sp")
 
 # Load census shp data
 # EM: this should have worked by just calling from look_at_data.rmd, but whatever
-census_dat = st_read("../data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
+census_dat = st_read("../wireframe/data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
 # Check coordinate reference system
 st_crs(census_dat)
 
@@ -70,7 +70,7 @@ palxyz <- colorQuantile(
 
 #Map data
 ```{r}
-
+m %>%
 # POINT DATA
   # test point for show
 addMarkers(m, lng = -156.54, lat = 21.09, group = "Test point") %>% 
@@ -180,16 +180,17 @@ addMarkers(m, lng = -156.54, lat = 21.09, group = "Test point") %>%
                                                   bringToFront = TRUE),
               #label = haz_dat$AreaName, #for test purposes
               popup = paste("<mark>",haz_dat$AreaName,
-                             "</mark></br><b>Water availability: </b>", haz_dat$Wat_Avail,
-                            "</mark></br><b>Response time: </b>", haz_dat$Rspn_Time,
-                            "</mark></br><b>Fire station proximity: </b>", haz_dat$Prox_Stn,
-                            "</mark></br><b>Fire dept training: </b>", haz_dat$FD_Trng,
-                            "</mark></br><b>Wildland firefighting capability: </b>", haz_dat$Wild_Cap,
-                            "</mark></br><b>Interagency cooperation: </b>", haz_dat$IntAgCoop,
-                            "</mark></br><b>Local emergency operations: </b>", haz_dat$Loc_Ops,
-                            "</mark></br><b>Community planning: </b>", haz_dat$Com_Plan,
+                            "</mark></br><b>Water availability: </b>", haz_dat$Wat_Avail,
+                            "</br><b>Response time: </b>", haz_dat$Rspn_Time,
+                            "</br><b>Fire station proximity: </b>", haz_dat$Prox_Stn,
+                            "</br><b>Fire dept training: </b>", haz_dat$FD_Trng,
+                            "</br><b>Wildland firefighting capability: </b>", haz_dat$Wild_Cap,
+                            "</br><b>Interagency cooperation: </b>", haz_dat$IntAgCoop,
+                            "</br><b>Local emergency operations: </b>", haz_dat$Loc_Ops,
+                            "</br><b>Community planning: </b>", haz_dat$Com_Plan,
                             "</br><b>Community fire programs: </b>", haz_dat$Com_FirPrg
                             ),
+              popupOptions = popupOptions(style = list("color" = "black")),
               group = "Fire Protection Score") %>%
 
   
@@ -228,7 +229,7 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
     #         labels = census_dat$NH_ac
     # 
     #       ) %>%
-popupOptions()
+#popupOptions()
 
   # homeowners
   addPolygons(data = census_dat, color = '#000000', weight = 1,
