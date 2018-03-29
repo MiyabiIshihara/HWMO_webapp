@@ -76,13 +76,20 @@ function(input, output, session) {
       addEasyButton(easyButton(
         icon="fa-globe", title="Zoom to Level 7",
         onClick=JS("function(btn, map){ map.setZoom(7); }"))) %>%
+      # test point for show
       addMarkers(lng = -156.54, lat = 21.09, group = "Test point") %>% 
       
-      # subset of fire data to test clustering
-      addMarkers(lng = ~X, lat = ~Y, data = OFires@data, 
-                 clusterOptions = markerClusterOptions(),
-                 popup = paste("<b>Date of fire: </b></br>", OFires$Start_Date),
-                 group = "Oahu fires") %>% 
+      ## subset of fire data to test clustering
+      #addMarkers(lng = ~X, lat = ~Y, data = OFires@data, 
+      #           clusterOptions = markerClusterOptions(),
+      #           popup = paste("<b>Date of fire: </b></br>", OFires$Start_Date),
+      #           group = "Oahu fires") %>% 
+      #Heatmap
+      addHeatmap(lng = ~X, lat = ~Y, data = OFires,
+                 blur = 20, max = 0.05, radius = 15,
+                 group = "Oahu fires"
+                 
+      ) %>%
       
       #Polygon data
       # MedH_Inc
