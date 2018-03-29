@@ -228,8 +228,9 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
     #         labels = census_dat$NH_ac
     # 
     #       ) %>%
-popupOptions()
 
+
+# I DON'T KNOW WHY THIS IS BROKEN
   # homeowners
   addPolygons(data = census_dat, color = '#000000', weight = 1,
               fillColor = ~colorQuantile("YlGnBu", n = 5, Homeowner) (Homeowner),
