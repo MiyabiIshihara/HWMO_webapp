@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(leaflet)
+library(leaflet.extras)
 library(sf)
 library(geojsonio)
 library(rgdal)
@@ -42,7 +43,13 @@ census_dat = st_read("../data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
 st_crs(census_dat)
 
 # Load haz data from geojson
-haz_dat <- geojsonio::geojson_read("../data/WHA Metadata/WHA_zones_choro.geojson", what = "sp")
+haz_dat <- geojsonio::geojson_read("../data/WHA Metadata/WHA_zones.geojson", what = "sp")
+st_crs(haz_dat)
+
+# # Load haz from "look at data"
+# haz_dat = st_read("../data/WHA Metadata/WHA2015.shp")
+# # Check coordinate reference system
+# st_crs(haz_dat)
 
 # Polygon test
 # addPolygons(m, data = census_dat) %>%
@@ -69,12 +76,123 @@ palxyz <- colorQuantile(
 addMarkers(m, lng = -156.54, lat = 21.09, group = "Test point") %>% 
 
   # subset of fire data to test clustering
-addMarkers(lng = ~X, lat = ~Y, data = OFires@data, 
-           clusterOptions = markerClusterOptions(),
-           popup = paste("<b>Date of fire: </b></br>", OFires$Start_Date),
-           group = "Oahu fires") %>% 
+# addMarkers(lng = ~X, lat = ~Y, data = OFires@data, 
+#            clusterOptions = markerClusterOptions(),
+#            popup = paste("<b>Date of fire: </b></br>", OFires$Start_Date),
+#            group = "Oahu fires") %>% 
+#   
+#Heatmap
+  addHeatmap(lng = ~X, lat = ~Y, data = OFires,
+             blur = 20, max = 0.05, radius = 15,
+             group = "Oahu fires"
+                  
+                  ) %>%
   
 #Polygon data
+  # Subdivision Hazard Rating
+  addPolygons(data = haz_dat, color = '#000000', weight = 1,
+              fillColor = ~colorQuantile("YlOrBr", n = 5, haz_dat$SUBD_TOT) (SUBD_TOT),
+              opacity = 1.0,
+              highlightOptions = highlightOptions(stroke = "#ff0505",
+                                                  weight = 4.0,
+                                                  opacity = 100.0,
+                                                  bringToFront = TRUE),
+              #label = haz_dat$AreaName, #for test purposes
+              popup = paste("<mark>",haz_dat$AreaName,
+                            "</mark></br><b>Ingress/Egress: </b>", haz_dat$Ing_Eg,
+                            "</br><b>Road maintenance: </b>", haz_dat$Rd_Maint,
+                            "</br><b>Road width: </b>", haz_dat$Rd_Width,
+                            "</br><b>Road condition: </b>", haz_dat$Rd_Cond,
+                            "</br><b>Fire service access: </b>", haz_dat$Fire_Acc,
+                            "</br><b>Street signs: </b>",  haz_dat$St_Sign,
+                            "</br><b>Structure density: </b>", haz_dat$Strc_Den,
+                            "</br><b>Home setbacks: </b>",haz_dat$Hm_Set,
+                            "</br><b>Unmanaged lands: </b>",haz_dat$Un_Lands,
+                            "</br><b>Private landowner action: </b>",haz_dat$Priv_Act,
+                            "</br><b>Wildland proximity: </b>",haz_dat$Prox_Wild
+               ),
+              group = "Subdivision Hazard Rating") %>%
+  #
+  # Vegetation Hazard
+  addPolygons(data = haz_dat, color = '#000000', weight = 1,
+              fillColor = ~colorQuantile("YlOrBr", n = 5, haz_dat$VEG_TOT) (VEG_TOT),
+              opacity = 1.0,
+              highlightOptions = highlightOptions(stroke = "#ff0505",
+                                                  weight = 4.0,
+                                                  opacity = 1.0,
+                                                  bringToFront = TRUE),
+              #label = haz_dat$AreaName,
+              popup = paste("<mark>",haz_dat$AreaName,
+                            "</mark></br><b>Proximity of flamable fuel: </b>", haz_dat$Prox_Flam,
+                            "</mark></br><b>Vegetation type: </b>", haz_dat$Veg_Type,
+                            "</mark></br><b>Fuel loading: </b>", haz_dat$Fuel_Load,
+                            "</mark></br><b>Fuel structure: </b>", haz_dat$Fuel_Strc,
+                            "</mark></br><b>Defensible space: </b>", haz_dat$Def_Space
+              ),
+              group = "Vegetation Hazard Rating") %>%
+
+  # Building Hazard Rating
+  # this one is broken and I don't know why
+  addPolygons(data = haz_dat, color = '#000000', weight = 1,
+              fillColor = ~colorQuantile("YlOrBr", n = 3, haz_dat$BLDG_TOT) (BLDG_TOT),
+              opacity = 1.0,
+              highlightOptions = highlightOptions(stroke = "#ff0505",
+                                                  weight = 4.0,
+                                                  opacity = 1.0,
+                                                  bringToFront = TRUE),
+              #label = haz_dat$AreaName,
+              popup = paste("<mark>",haz_dat$AreaName,
+                            "</mark></br><b>Proximity of flamable fuel: </b>", haz_dat$Prox_Flam,
+                            "</mark></br><b>Roofing: </b>", haz_dat$Roof_Asmb,
+                            "</mark></br><b>Siding: </b>", haz_dat$Sid_Sof,
+                            "</mark></br><b>Under-skirting: </b>", haz_dat$Undr_Skrt,
+                            "</mark></br><b>Utilities placement: </b>", haz_dat$Utlty_Plmt,
+                             "</mark></br><b>Structural ignitability: </b>", haz_dat$Strc_Ign
+              ),
+              group = "Building Hazard Rating") %>%
+
+  # Fire Environment
+  addPolygons(data = haz_dat, color = '#000000', weight = 1,
+              fillColor = ~colorQuantile("YlOrBr", n = 5, haz_dat$FIREHAZTOT) (FIREHAZTOT),
+              opacity = 1.0,
+              highlightOptions = highlightOptions(stroke = "#ff0505",
+                                                  weight = 4.0,
+                                                  opacity = 1.0,
+                                                  bringToFront = TRUE),
+              #label = haz_dat$AreaName,
+              popup = paste("<mark>",haz_dat$AreaName,
+                            "</mark></br><b>Slope: </b>", haz_dat$Slope,
+                            "</mark></br><b>Avg rain (1-6): </b>", haz_dat$Avg_Rain,
+                            "</mark></br><b>Prevailng wind (1-4): </b>", haz_dat$Prev_Wind,
+                            "</mark></br><b>Seasonal hazard condition: </b>", haz_dat$Seas_Haz,
+                            "</mark></br><b>Ignition risk: </b>", haz_dat$Ign_Risk,
+                             "</mark></br><b>Topography: </b>", haz_dat$Top_Adv
+              ),
+              group = "Fire Environment Hazard Rating") %>%
+  
+  # Fire Protection score
+   addPolygons(data = haz_dat, color = '#000000', weight = 1,
+              fillColor = ~colorQuantile("YlOrBr", n = 5, haz_dat$FIREPROTOT) (FIREPROTOT),
+              opacity = 1.0,
+              highlightOptions = highlightOptions(stroke = "#ff0505",
+                                                  weight = 4.0,
+                                                  opacity = 1.0,
+                                                  bringToFront = TRUE),
+              #label = haz_dat$AreaName, #for test purposes
+              popup = paste("<mark>",haz_dat$AreaName,
+                             "</mark></br><b>Water availability: </b>", haz_dat$Wat_Avail,
+                            "</mark></br><b>Response time: </b>", haz_dat$Rspn_Time,
+                            "</mark></br><b>Fire station proximity: </b>", haz_dat$Prox_Stn,
+                            "</mark></br><b>Fire dept training: </b>", haz_dat$FD_Trng,
+                            "</mark></br><b>Wildland firefighting capability: </b>", haz_dat$Wild_Cap,
+                            "</mark></br><b>Interagency cooperation: </b>", haz_dat$IntAgCoop,
+                            "</mark></br><b>Local emergency operations: </b>", haz_dat$Loc_Ops,
+                            "</mark></br><b>Community planning: </b>", haz_dat$Com_Plan,
+                            "</br><b>Community fire programs: </b>", haz_dat$Com_FirPrg
+                            ),
+              group = "Fire Protection Score") %>%
+
+  
   # MedH_Inc
 addPolygons(data = census_dat, color = '#000000', weight = 1,
               fillColor = ~colorQuantile("PuBuGn", n = 5, MedH_Inc) (MedH_Inc),
@@ -101,42 +219,17 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
     # NOTE: possible we have to add legends for each polygon layer 
     # however, switching functionality seems broken with base layers in library
     #
+
     # addLegend("bottomright", values = ~NH_ac,
-    #         colors = "Reds",
-    #         group = "NH_ac",
+    #         pal = "Reds",
+    #       #  group = "NH_ac",
     #        #group as unused argument. Don't understand the error here
     #         opacity = 1,
     #         labels = census_dat$NH_ac
-    #       
+    # 
     #       ) %>%
-  
-    # fire protection score
-   addPolygons(data = haz_dat, color = '#000000', weight = 1,
-              fillColor = ~colorQuantile("YlOrBr", n = 5, haz_dat$FIREPROTOT) (FIREPROTOT),
-              opacity = 1.0,
-              highlightOptions = highlightOptions(stroke = "#ff0505", 
-                                                  weight = 4.0,
-                                                  opacity = 1.0,
-                                                  bringToFront = TRUE),
-              #label = haz_dat$AreaName, #for test purposes
-              popup = paste("<mark>",haz_dat$AreaName,
-                            "</mark></br><b>Fire protection score: </b>",
-                            haz_dat$FIREPROTOT, "</br><b>Fire hazard score: </b>",
-                            haz_dat$FIREHAZTOT, "</br><b>CAR rating: </b>",
-                            haz_dat$CAR_Rating),
-              group = "Fire Protection Score") %>%
-  
-  # fire count (calculated in QGIS before creating geojson)
-  addPolygons(data = haz_dat, color = '#000000', weight = 1,
-              fillColor = ~colorQuantile("Oranges", n = 5, haz_dat$COUNT) (COUNT),
-              opacity = 1.0,
-              highlightOptions = highlightOptions(stroke = "#ff0505", 
-                                                  weight = 4.0,
-                                                  opacity = 1.0,
-                                                  bringToFront = TRUE),
-              popup = paste("<b>Number of fires: </b></br>", haz_dat$COUNT),
-              group = "Fire incidence") %>%
-  
+popupOptions()
+
   # homeowners
   addPolygons(data = census_dat, color = '#000000', weight = 1,
               fillColor = ~colorQuantile("YlGnBu", n = 5, Homeowner) (Homeowner),
@@ -153,7 +246,7 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
 # LAYER CONTROLS
   addLayersControl(
     # base groups = radio buttons
-    baseGroups = c("Median HH income", "Fire Protection Score", 
+    baseGroups = c("Subdivision Hazard Rating", "Vegetation Hazard Rating", "Building Hazard Rating", "Fire Environment Hazard Rating", "Fire Protection Score", "Median HH income",  
                    "Fire incidence", "NH_ac", "Homeowners"),
     # overlay groups = check boxes
     overlayGroups = c("Oahu fires", "Test point"),
