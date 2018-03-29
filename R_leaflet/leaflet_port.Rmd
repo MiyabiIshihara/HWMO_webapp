@@ -124,10 +124,10 @@ addMarkers(m, lng = -156.54, lat = 21.09, group = "Test point") %>%
               #label = haz_dat$AreaName,
               popup = paste("<mark>",haz_dat$AreaName,
                             "</mark></br><b>Proximity of flamable fuel: </b>", haz_dat$Prox_Flam,
-                            "</mark></br><b>Vegetation type: </b>", haz_dat$Veg_Type,
-                            "</mark></br><b>Fuel loading: </b>", haz_dat$Fuel_Load,
-                            "</mark></br><b>Fuel structure: </b>", haz_dat$Fuel_Strc,
-                            "</mark></br><b>Defensible space: </b>", haz_dat$Def_Space
+                            "</br><b>Vegetation type: </b>", haz_dat$Veg_Type,
+                            "</br><b>Fuel loading: </b>", haz_dat$Fuel_Load,
+                            "</br><b>Fuel structure: </b>", haz_dat$Fuel_Strc,
+                            "</br><b>Defensible space: </b>", haz_dat$Def_Space
               ),
               group = "Vegetation Hazard Rating") %>%
 
@@ -143,11 +143,11 @@ addMarkers(m, lng = -156.54, lat = 21.09, group = "Test point") %>%
               #label = haz_dat$AreaName,
               popup = paste("<mark>",haz_dat$AreaName,
                             "</mark></br><b>Proximity of flamable fuel: </b>", haz_dat$Prox_Flam,
-                            "</mark></br><b>Roofing: </b>", haz_dat$Roof_Asmb,
-                            "</mark></br><b>Siding: </b>", haz_dat$Sid_Sof,
-                            "</mark></br><b>Under-skirting: </b>", haz_dat$Undr_Skrt,
-                            "</mark></br><b>Utilities placement: </b>", haz_dat$Utlty_Plmt,
-                             "</mark></br><b>Structural ignitability: </b>", haz_dat$Strc_Ign
+                            "</br><b>Roofing: </b>", haz_dat$Roof_Asmb,
+                            "</br><b>Siding: </b>", haz_dat$Sid_Sof,
+                            "</br><b>Under-skirting: </b>", haz_dat$Undr_Skrt,
+                            "</br><b>Utilities placement: </b>", haz_dat$Utlty_Plmt,
+                             "</br><b>Structural ignitability: </b>", haz_dat$Strc_Ign
               ),
               group = "Building Hazard Rating") %>%
 
@@ -162,11 +162,11 @@ addMarkers(m, lng = -156.54, lat = 21.09, group = "Test point") %>%
               #label = haz_dat$AreaName,
               popup = paste("<mark>",haz_dat$AreaName,
                             "</mark></br><b>Slope: </b>", haz_dat$Slope,
-                            "</mark></br><b>Avg rain (1-6): </b>", haz_dat$Avg_Rain,
-                            "</mark></br><b>Prevailng wind (1-4): </b>", haz_dat$Prev_Wind,
-                            "</mark></br><b>Seasonal hazard condition: </b>", haz_dat$Seas_Haz,
-                            "</mark></br><b>Ignition risk: </b>", haz_dat$Ign_Risk,
-                             "</mark></br><b>Topography: </b>", haz_dat$Top_Adv
+                            "</br><b>Avg rain (1-6): </b>", haz_dat$Avg_Rain,
+                            "</br><b>Prevailng wind (1-4): </b>", haz_dat$Prev_Wind,
+                            "</br><b>Seasonal hazard condition: </b>", haz_dat$Seas_Haz,
+                            "</br><b>Ignition risk: </b>", haz_dat$Ign_Risk,
+                             "</br><b>Topography: </b>", haz_dat$Top_Adv
               ),
               group = "Fire Environment Hazard Rating") %>%
   
@@ -181,15 +181,16 @@ addMarkers(m, lng = -156.54, lat = 21.09, group = "Test point") %>%
               #label = haz_dat$AreaName, #for test purposes
               popup = paste("<mark>",haz_dat$AreaName,
                              "</mark></br><b>Water availability: </b>", haz_dat$Wat_Avail,
-                            "</mark></br><b>Response time: </b>", haz_dat$Rspn_Time,
-                            "</mark></br><b>Fire station proximity: </b>", haz_dat$Prox_Stn,
-                            "</mark></br><b>Fire dept training: </b>", haz_dat$FD_Trng,
-                            "</mark></br><b>Wildland firefighting capability: </b>", haz_dat$Wild_Cap,
-                            "</mark></br><b>Interagency cooperation: </b>", haz_dat$IntAgCoop,
-                            "</mark></br><b>Local emergency operations: </b>", haz_dat$Loc_Ops,
-                            "</mark></br><b>Community planning: </b>", haz_dat$Com_Plan,
+                            "</br><b>Response time: </b>", haz_dat$Rspn_Time,
+                            "</br><b>Fire station proximity: </b>", haz_dat$Prox_Stn,
+                            "</br><b>Fire dept training: </b>", haz_dat$FD_Trng,
+                            "</br><b>Wildland firefighting capability: </b>", haz_dat$Wild_Cap,
+                            "</br><b>Interagency cooperation: </b>", haz_dat$IntAgCoop,
+                            "</br><b>Local emergency operations: </b>", haz_dat$Loc_Ops,
+                            "</br><b>Community planning: </b>", haz_dat$Com_Plan,
                             "</br><b>Community fire programs: </b>", haz_dat$Com_FirPrg
                             ),
+              popupOptions = popupOptions(style = list("color" = "black")),
               group = "Fire Protection Score") %>%
 
   
