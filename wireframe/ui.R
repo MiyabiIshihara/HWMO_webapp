@@ -7,6 +7,8 @@ header <- dashboardHeader(
   )
   
 sidebar <- dashboardSidebar(width = 300,
+                            conditionalPanel(
+                              condition = "input.tabs == 'Map'",
                             radioButtons(inputId = "dataset",
                                          label = "Data to Display",
                                          choices = list(
@@ -19,7 +21,7 @@ sidebar <- dashboardSidebar(width = 300,
                                            "Native Hawaiians" = "NH_ac",
                                            "Homeowners" = "Homeowner"),
                                          selected = "FIREPROTOT" 
-                                         ))
+                                         )))
 
 body <- dashboardBody(tags$head(tags$style(HTML("
                                              blockquote {
@@ -30,7 +32,8 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                              }
                                              "))),
                       fluidRow(
-                        tabBox(width = 12,
+                        tabBox(id = "tabs",
+                               width = 12,
                                height = NULL,
                                tabPanel("Map",
                                         tags$style(

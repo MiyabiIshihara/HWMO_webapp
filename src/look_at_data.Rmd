@@ -24,15 +24,15 @@ st_crs(haz_dat)
 haz_dat <- st_transform(haz_dat, "+proj=longlat +datum=WGS84")
 
 # Plot
-plot(st_geometry(haz_dat), col="white")
-haz_dat %>%
-ggplot() +
-  geom_sf() +
-  aes(fill = SUBD_TOT) + 
-  theme(panel.grid.major = element_line(color = "white")) +
-  scale_fill_gradientn(colors = sf.colors(20))
+#plot(st_geometry(haz_dat), col="white")
+#haz_dat %>%
+#ggplot() +
+#  geom_sf() +
+#  aes(fill = SUBD_TOT) + 
+#  theme(panel.grid.major = element_line(color = "white")) +
+#  scale_fill_gradientn(colors = sf.colors(20))
 # View data
-View(haz_dat)
+#View(haz_dat)
 ```
 
 ```{r make hazard assessment tidy}
@@ -66,6 +66,19 @@ tidy_haz <- haz_dat %>%
     hazard %in% c("Slope", "Avg_Rain", "Prev_Wind",
                   "Seas_Haz", "Ign_Risk", "Top_Adv") ~ "Fire Environment"
   ))
+tidy_haz_test <- tidy_haz %>%
+  mutate(
+    reason =
+      case_when(
+        hazard == "Ing_Eg" & score == 1 ~ "Multiple entrances and exits are well equipped for fire trucks with turnarounds",
+        hazard == "Ing_Eg" & score == 2 ~ "Limited access routes. 2 ways in and 2 ways out. Moderate grades",
+        hazard == "Ing_Eg" & score == 3 ~ "Narrow, dead end roads or 1 way in, 1 way out. Steep grades",
+        hazard == "Rd_Maint" & score == 1 ~ "Wide loop roads that are maintained, paved or solid surface with shoulders",
+        hazard == "Rd_Maint" & score == 2 ~ "Roads maintained. Some narrow two lane roads with no shoulders",
+        hazard == "Rd_Maint" & score == 3 ~ "Narrow and or single lane, minimally maintained, no shoulders"
+      )
+  )
+levels(as.factor(tidy_haz_test$reason))
 
 write_csv(tidy_haz, "../wireframe/data/tidy_haz.csv")
 
