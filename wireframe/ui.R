@@ -85,8 +85,8 @@ sidebar <- dashboardSidebar(width = 300,
                                                                 label = "Area", 
                                                                 choices = c("All areas"=""), 
                                                                 multiple=TRUE)),
-                            numericInput("minScore", "Min score", min=0, max=118, value=0),
-                            numericInput("maxScore", "Max score", min=0, max=118, value=50)
+                            numericInput("minScore", "Min score", min=0, max=29, value=0),
+                            numericInput("maxScore", "Max score", min=0, max=29, value=29)
                             )
                             )
 
