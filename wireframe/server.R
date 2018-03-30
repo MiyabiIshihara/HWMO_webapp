@@ -52,25 +52,72 @@ function(input, output, session) {
     } else {
       the_data = haz_dat
     }
-    
+    # For use in the palette
     color_domain <- the_data[[user_choice]]
-    
-    # Bring this in with multiple datasets
-    #if (user_domain == "superzip") {
-    #  # Color and palette are treated specially in the "superzip" case, because
-    #  # the values are categorical instead of continuous.
-    #  colorData <- ifelse(zipdata$centile >= (100 - input$threshold), "yes", "no")
-    #  pal <- colorFactor("viridis", colorData)
-    #} else {
-    #  colorData <- zipdata[[colorBy]]
-    #  pal <- colorBin("viridis", colorData, 7, pretty = FALSE)
-    #}
     
     # colorNumeric is a continuous palette for integers
     pal <- colorNumeric(
       palette = c("yellow", "red"),
       domain = color_domain
     )
+    # Popup content
+    if (user_choice == "MedH_Inc") {
+      popup = paste0(haz_dat$AreaName,
+                    "</br><b>Median Household Income: </b> $", census_dat$MedH_Inc)
+      } else if (user_choice == "NH_ac") {
+        popup = paste0(haz_dat$AreaName,
+                      "</br><b>NH_ac: </b>", census_dat$NH_ac)
+      } else if (user_choice == "Homeowner") {
+        popup = paste0(haz_dat$AreaName,
+                      "</br><b>Homeowners: </b>", census_dat$Homeowner,"%")
+      } else if (user_choice == "FIREPROTOT") {
+        popup = paste0(haz_dat$AreaName,
+                      "</br><b>Water availability: </b>", haz_dat$Wat_Avail,
+                      "</br><b>Response time: </b>", haz_dat$Rspn_Time,
+                      "</br><b>Fire station proximity: </b>", haz_dat$Prox_Stn,
+                      "</br><b>Fire dept training: </b>", haz_dat$FD_Trng,
+                      "</br><b>Wildland firefighting capability: </b>", haz_dat$Wild_Cap,
+                      "</br><b>Interagency cooperation: </b>", haz_dat$IntAgCoop,
+                      "</br><b>Local emergency operations: </b>", haz_dat$Loc_Ops,
+                      "</br><b>Community planning: </b>", haz_dat$Com_Plan,
+                      "</br><b>Community fire programs: </b>", haz_dat$Com_FirPrg)
+      } else if (user_choice == "SUBD_TOT") {
+        popup = paste0(haz_dat$AreaName,
+                      "</br><b>Ingress/Egress: </b>", haz_dat$Ing_Eg,
+                      "</br><b>Road maintenance: </b>", haz_dat$Rd_Maint,
+                      "</br><b>Road width: </b>", haz_dat$Rd_Width,
+                      "</br><b>Road condition: </b>", haz_dat$Rd_Cond,
+                      "</br><b>Fire service access: </b>", haz_dat$Fire_Acc,
+                      "</br><b>Street signs: </b>",  haz_dat$St_Sign,
+                      "</br><b>Structure density: </b>", haz_dat$Strc_Den,
+                      "</br><b>Home setbacks: </b>", haz_dat$Hm_Set,
+                      "</br><b>Unmanaged lands: </b>",haz_dat$Un_Lands,
+                      "</br><b>Private landowner action: </b>",haz_dat$Priv_Act,
+                      "</br><b>Wildland proximity: </b>",haz_dat$Prox_Wild)
+      } else if (user_choice == "VEG_TOT") {
+        popup = paste0(haz_dat$AreaName,
+                      "</br><b>Proximity of flamable fuel: </b>", haz_dat$Prox_Flam,
+                      "</br><b>Vegetation type: </b>", haz_dat$Veg_Type,
+                      "</br><b>Fuel loading: </b>", haz_dat$Fuel_Load,
+                      "</br><b>Fuel structure: </b>", haz_dat$Fuel_Strc,
+                      "</br><b>Defensible space: </b>", haz_dat$Def_Space)
+      } else if (user_choice == "BLDG_TOT") {
+        popup = paste0(haz_dat$AreaName,
+                      "</br><b>Proximity of flamable fuel: </b>", haz_dat$Prox_Flam,
+                      "</br><b>Roofing: </b>", haz_dat$Roof_Asmb,
+                      "</br><b>Siding: </b>", haz_dat$Sid_Sof,
+                      "</br><b>Under-skirting: </b>", haz_dat$Undr_Skrt,
+                      "</br><b>Utilities placement: </b>", haz_dat$Utlty_Plmt,
+                      "</br><b>Structural ignitability: </b>", haz_dat$Strc_Ign)
+      } else {
+        popup = paste0(haz_dat$AreaName,
+                      "</br><b>Slope: </b>", haz_dat$Slope,
+                      "</br><b>Avg rain (1-6): </b>", haz_dat$Avg_Rain,
+                      "</br><b>Prevailng wind (1-4): </b>", haz_dat$Prev_Wind,
+                      "</br><b>Seasonal hazard condition: </b>", haz_dat$Seas_Haz,
+                      "</br><b>Ignition risk: </b>", haz_dat$Ign_Risk,
+                      "</br><b>Topography: </b>", haz_dat$Top_Adv)
+      }
     
     leafletProxy("leafmap", data = the_data) %>%
       addPolygons(weight = 1,
@@ -81,7 +128,7 @@ function(input, output, session) {
                                                       weight = 4.0,
                                                       opacity = 1.0,
                                                       bringToFront = TRUE),
-                  popup = paste(haz_dat$AreaName),
+                  popup = popup,
                   popupOptions = popupOptions(style = list("color" = "black"))) %>%
       addLegend("bottomleft", 
                 pal = pal, 
