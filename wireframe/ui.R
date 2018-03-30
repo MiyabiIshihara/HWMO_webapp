@@ -11,11 +11,13 @@ sidebar <- dashboardSidebar(width = 300,
                                          label = "Data to Display",
                                          choices = list(
                                            "Fire Protection" = "FIREPROTOT",
-                                           "Subdivision" = "SUBD_TOT"
-                                         ),
+                                           "Subdivision" = "SUBD_TOT",
+                                           "Vegetation" = "VEG_TOT",
+                                           "Buildings" = "BLDG_TOT",
+                                           "Fire Hazard" = "FIREHAZTOT"
+                                           ),
                                          selected = "FIREPROTOT" 
-                                         ),
-                            "map legends & information here")
+                                         ))
 
 body <- dashboardBody(tags$head(tags$style(HTML("
                                              blockquote {

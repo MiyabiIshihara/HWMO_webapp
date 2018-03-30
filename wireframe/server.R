@@ -16,20 +16,13 @@ library(tidyverse)
 OFires <- geojsonio::geojson_read("data/Oahu_Wildfires.geojson", what = "sp")
 ## Load census shp data
 ## EM: this should have worked by just calling from look_at_data.rmd, but whatever
-#census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
+census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
 ### Check coordinate reference system
-#census_dat <- st_transform(census_dat, 4326)
+census_dat <- st_transform(census_dat, 4326)
 ## Load haz data from geojson
 haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 ## Load Community Input data
 comm_dat <- read_csv("data/comm_input.csv")
-
-# Color palettes
-
-pal2 <- colorQuantile(
-  palette = "RdBu",
-  domain = haz_dat$VEG_TOT
-)
 
 function(input, output, session) {
   
@@ -49,20 +42,31 @@ function(input, output, session) {
                  group = "Oahu fires")
       })
   
-  # This observer is responsible for maintaining the circles and legend,
-  # according to the variables the user has chosen to map to color and size.
+  # This observer is responsible for maintaining the polygons and legend,
+  # according to the variables the user has chosen
   observe({
     user_choice <- input$dataset
-    colorBy <- input$dataset
-    color_domain <-haz_dat[[colorBy]]
     
-    pal <- colorQuantile(
-      palette = "RdBu",
+    color_domain <-haz_dat[[user_choice]]
+    
+    # Bring this in with multiple datasets
+    #if (user_domain == "superzip") {
+    #  # Color and palette are treated specially in the "superzip" case, because
+    #  # the values are categorical instead of continuous.
+    #  colorData <- ifelse(zipdata$centile >= (100 - input$threshold), "yes", "no")
+    #  pal <- colorFactor("viridis", colorData)
+    #} else {
+    #  colorData <- zipdata[[colorBy]]
+    #  pal <- colorBin("viridis", colorData, 7, pretty = FALSE)
+    #}
+    
+    # colorNumeric is a continuous palette for integers
+    pal <- colorNumeric(
+      palette = c("yellow", "red"),
       domain = color_domain
     )
     
     leafletProxy("leafmap", data = haz_dat) %>%
-      clearShapes() %>%
       addPolygons(weight = 1,
                   color = '#aaaaaa',
                   fillColor = pal(color_domain),
@@ -76,10 +80,9 @@ function(input, output, session) {
       addLegend("bottomleft", 
                 pal = pal, 
                 values = color_domain,
-                title = colorBy,
+                title = user_choice,
                 layerId="colorLegend")
   })
-  
   
   
   # Data tab ##############################################
