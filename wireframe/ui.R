@@ -7,6 +7,14 @@ header <- dashboardHeader(
   )
   
 sidebar <- dashboardSidebar(width = 300,
+                            radioButtons(inputId = "dataset",
+                                         label = "Data to Display",
+                                         choices = list(
+                                           "Fire Protection" = "FIREPROTOT",
+                                           "Subdivision" = "SUBD_TOT"
+                                         ),
+                                         selected = "FIREPROTOT" 
+                                         ),
                             "map legends & information here")
 
 body <- dashboardBody(tags$head(tags$style(HTML("
