@@ -138,9 +138,11 @@ function(input, output, session) {
   })
   
   # Data tab ##############################################
+  temp <- reactive({ comm_dat })
+  
   observe({
     meetings <- if (is.null(input$region)) character(0) else {
-      filter(comm_input_dat, cwpp_region %in% input$region) %>%
+      filter(temp(), cwpp_region %in% input$region) %>%
         `$`('meeting_location') %>%
         unique() %>%
         sort()
@@ -150,9 +152,8 @@ function(input, output, session) {
                       selected = stillSelected)
   })
   
-  
   output$dt <- DT::renderDataTable({ 
-    comm_input_dat %>%
+    temp() %>%
       filter(
         total_votes >= input$minScore,
         total_votes <= input$maxScore,
@@ -164,8 +165,8 @@ function(input, output, session) {
   output$download_data <- downloadHandler(
     # This function returns a string which tells the client browser what name to use when saving the file.
     filename = function() {
-      paste0(
-        paste(input$haz_category),
+      paste0("comm_input_",
+        paste(input$focus, input$region, input$meeting, sep = "_"),
         ".csv")
     },
   # This function should write data to a file given to it by the argument 'file'.
@@ -179,13 +180,13 @@ function(input, output, session) {
   output$download_all_data <- downloadHandler(
     # This function returns a string which tells the client browser what name to use when saving the file.
     filename = function() {
-      paste0("haz_dat", ".csv")
+      paste0("comm_input", ".csv")
     },
     
     # This function should write data to a file given to it by the argument 'file'.
     content = function(file) {
       # Write to a file specified by the 'file' argument
-      write.table(dat, file, sep = ",", row.names = FALSE)
+      write.table(comm_dat, file, sep = ",", row.names = FALSE)
     }
   )
 }
