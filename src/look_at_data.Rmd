@@ -124,7 +124,7 @@ write_csv(comm_input_dat,"../data/comm_input.csv")
 
 ```{r read clean community input data}
 
-comm_input_dat <- read_csv("../data/comm_input.csv")
+comm_input_dat <- read_csv("../wireframe/data/comm_input.csv")
 ```
 
 

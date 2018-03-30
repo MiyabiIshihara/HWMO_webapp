@@ -137,10 +137,29 @@ function(input, output, session) {
                 layerId="colorLegend")
   })
   
-  
   # Data tab ##############################################
-  temp <- reactive( { comm_dat } )
-  output$dt <- DT::renderDataTable({ temp() })
+  observe({
+    meetings <- if (is.null(input$region)) character(0) else {
+      filter(comm_input_dat, cwpp_region %in% input$region) %>%
+        `$`('meeting_location') %>%
+        unique() %>%
+        sort()
+    }
+    stillSelected <- isolate(input$meeting[input$meeting %in% meetings])
+    updateSelectInput(session, "meeting", choices = meetings,
+                      selected = stillSelected)
+  })
+  
+  
+  output$dt <- DT::renderDataTable({ 
+    comm_input_dat %>%
+      filter(
+        total_votes >= input$minScore,
+        total_votes <= input$maxScore,
+        is.null(input$focus) | timing_focus %in% input$focus,
+        is.null(input$region) | cwpp_region %in% input$region,
+        is.null(input$meeting) | meeting_location %in% input$meeting
+      )})
   ## Download Selected Data
   output$download_data <- downloadHandler(
     # This function returns a string which tells the client browser what name to use when saving the file.

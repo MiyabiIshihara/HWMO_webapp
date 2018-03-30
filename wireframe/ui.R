@@ -40,6 +40,46 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                         ),
                                tabPanel("Data",
                                         fluidRow(
+                                          fluidRow(
+                                            column(3,
+                                                   selectInput(inputId = "focus", 
+                                                               label = "Strategic Focus", 
+                                                               choices = c("All types"="",
+                                                                           "Prevention" = "P",
+                                                                           "Pre-suppression" = "PS",
+                                                                           "Suppression" = "S",
+                                                                           "Post-fire" = "PF"), 
+                                                               multiple=TRUE)
+                                            ),
+                                            column(3,
+                                                   selectInput(inputId = "region", 
+                                                               label = "Region(s)", 
+                                                               choices = c("All regions"="", 
+                                                                           "Kauai" = "Kauai",
+                                                                           "Molokai" = "Molokai",
+                                                                           "South Maui" = "South Maui",
+                                                                           "Upcountry Maui" = "Upcountry Maui",
+                                                                           "Western Oahu" = "W. Oahu"), 
+                                                               multiple=TRUE)
+                                            ),
+                                            column(3,
+                                                   conditionalPanel("input.region",
+                                                                    selectInput(inputId = "meeting", 
+                                                                                label = "Meeting Location(s)", 
+                                                                                choices = c("All meeting locations"=""), 
+                                                                                multiple=TRUE)
+                                                                    )
+                                                   )
+                                            ),
+                                          fluidRow(
+                                            column(1,
+                                                   numericInput("minScore", "Min votes", min=0, max=12, value=0)
+                                            ),
+                                            column(1,
+                                                   numericInput("maxScore", "Max votes", min=0, max=12, value=12)
+                                            )
+                                          ),
+                                          hr(),
                                           column(width = 12,
                                                  box(title = NULL,
                                                      width = NULL,
