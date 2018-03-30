@@ -3,10 +3,14 @@ library(shiny)
 library(leaflet)
 
 header <- dashboardHeader(
-  title = "HWMO", titleWidth = 300
+  title = "Hawaii Wildfire", titleWidth = 300
   )
   
 sidebar <- dashboardSidebar(width = 300,
+                            menuItem("Hawaii Wildfire", icon = icon("home"), 
+                                     href = "https://hawaiiwildfire.org"),
+                            menuItem("Source code", icon = icon("file-code-o"), 
+                                     href = "https://github.com/niklaslollo/hwmo_data_tool"),
                             conditionalPanel(
                               condition = "input.tabs == 'Map'",
                             radioButtons(inputId = "dataset",
