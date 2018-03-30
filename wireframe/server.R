@@ -24,7 +24,8 @@ haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 ## Load Community Input data
 comm_dat <- read_csv("data/comm_input.csv")
 ## Load hazard data for data explorer
-haz_tidy <- read_csv("data/tidy_haz.csv")
+haz_tidy <- read_csv("data/tidy_haz.csv") %>%
+  select(-c(AREA, PERIMETER, Acres, zone, CAR_Hawaii, CAR_adjtot))
 
 function(input, output, session) {
   
