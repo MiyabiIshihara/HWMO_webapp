@@ -113,8 +113,8 @@ pal2 <- colorQuantile(
                                                   opacity = 1.0,
                                                   bringToFront = TRUE),
               #label = haz_dat$AreaName, #for test purposes
-              popup = paste("<mark>",haz_dat$AreaName,
-                             "</mark></br><b>Water availability: </b>", haz_dat$Wat_Avail,
+              popup = paste("<style",haz_dat$AreaName,
+                             "</br><b>Water availability: </b>", haz_dat$Wat_Avail,
                             "</br><b>Response time: </b>", haz_dat$Rspn_Time,
                             "</br><b>Fire station proximity: </b>", haz_dat$Prox_Stn,
                             "</br><b>Fire dept training: </b>", haz_dat$FD_Trng,
