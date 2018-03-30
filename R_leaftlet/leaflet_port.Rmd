@@ -101,13 +101,14 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
     # NOTE: possible we have to add legends for each polygon layer 
     # however, switching functionality seems broken with base layers in library
     #
+
     # addLegend("bottomright", values = ~NH_ac,
-    #         colors = "Reds",
-    #         group = "NH_ac",
+    #         pal = "Reds",
+    #       #  group = "NH_ac",
     #        #group as unused argument. Don't understand the error here
     #         opacity = 1,
     #         labels = census_dat$NH_ac
-    #       
+    # 
     #       ) %>%
   
     # fire protection score
