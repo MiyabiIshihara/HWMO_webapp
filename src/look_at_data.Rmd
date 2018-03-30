@@ -20,6 +20,7 @@ library(leaflet)
 haz_dat = st_read("../data/WHA Metadata/WHA2015.shp")
 # Check coordinate reference system
 st_crs(haz_dat)
+?st_crs
 haz_dat <- st_transform(haz_dat, "+proj=longlat +datum=WGS84")
 
 # Plot

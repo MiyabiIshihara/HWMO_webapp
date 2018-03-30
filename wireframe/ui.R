@@ -1,28 +1,13 @@
-library(plotly)
 library(shinydashboard)
-library(shinyjs)
-library(tidyverse)
-library(RColorBrewer)
-library(DT)
 library(shiny)
+library(leaflet)
 
-
-  header <- dashboardHeader(
-    title = "HWMO", titleWidth = 300
+header <- dashboardHeader(
+  title = "HWMO", titleWidth = 300
   )
   
-  sidebar <- dashboardSidebar(width = 300,
-                              radioButtons("haz_category",
-                                           label = "Hazard Category",
-                                           choices = c('Fire Hazard' = 'FIREHAZTOT',
-                                                       'Fire Protection' = 'FIREPROTOT',
-                                                       'Building Hazard' = 'BLDG_TOT',
-                                                       'Vegetation Hazard' = 'VEG_TOT',
-                                                       'Subdivision Hazard' = 'SUBD_TOT'
-                                                        ),
-                                           selected = c("FIREHAZTOT")
-                                           )
-                              )
+sidebar <- dashboardSidebar(width = 300,
+                            "map legends & information here")
 
 body <- dashboardBody(tags$head(tags$style(HTML("
                                              blockquote {
@@ -36,13 +21,11 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                         tabBox(width = 12,
                                height = NULL,
                                tabPanel("Map",
-                                        value = 1,
                                         tags$style(
                                         type = "text/css", 
-                                        "#map {height: calc(100vh - 100px) !important;}"),
-                                        plotOutput("map")
+                                        "#leafmap {height: calc(100vh - 150px) !important;}"),
+                                        leafletOutput("leafmap")
                                         ),
-                               tabPanel(title = "Community Strategy"),
                                tabPanel("Data",
                                         fluidRow(
                                           column(width = 12,
@@ -63,9 +46,9 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                           )
                                         ),
                                tabPanel(title = "Take Action",
-                                        includeMarkdown("../docs/take_action.md")),
-                               tabPanel(title = "About",
-                                        includeMarkdown("../docs/about.md")
+                                        includeMarkdown("docs/take_action.md")),
+                               tabPanel(title = "FAQ",
+                                        includeMarkdown("docs/about.md")
                                         )
                                )
                         )
