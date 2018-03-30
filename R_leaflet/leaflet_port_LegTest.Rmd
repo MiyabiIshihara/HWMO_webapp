@@ -50,7 +50,7 @@ st_crs(haz_dat)
 
 # color palette for use in legends
 pal1 <- colorNumeric(
-  palette = "PuBuGn",
+  palette = "YlGn",
   domain = haz_dat$SUBD_TOT
 )
 
@@ -77,8 +77,12 @@ pal2 <- colorQuantile(
 # the map
 ```{r}
   # Subdivision Hazard Rating
+
+#fillColor = ~pal2(haz_dat$FIREPROTOT)
+
   addPolygons(m, data = haz_dat, color = '#000000', weight = 1,
-              fillColor = ~colorQuantile(pal1, n = 3, haz_dat$SUBD_TOT) (SUBD_TOT),
+             # fillColor = ~colorNumeric(pal = pal1, n = 4, haz_dat$SUBD_TOT),
+              fillColor = ~pal1(haz_dat$SUBD_TOT),
               opacity = 1.0,
               highlightOptions = highlightOptions(stroke = "#ff0505",
                                                   weight = 4.0,
@@ -86,8 +90,9 @@ pal2 <- colorQuantile(
                                                   bringToFront = TRUE),
               #label = haz_dat$AreaName, #for test purposes
               # temporary style until build a proper css file
-              popup = paste("<h3 align = 'right'><b>",haz_dat$AreaName, "</b></h3><h5 align ='right'>Total score: <b>", haz_dat$SUBD_TOT, "</font></b>",
-                            "</mark></h5><p align ='right'></br>Ingress/Egress: <b>", haz_dat$Ing_Eg,
+              popup = paste("<p align = 'right'><font size = '3'><b>",haz_dat$AreaName, 
+                            "</b></font> </br><font size = '2'><mark>Total score: <b>", haz_dat$SUBD_TOT, "</font></mark></b>",
+                            "</br>Ingress/Egress: <b>", haz_dat$Ing_Eg,
                             "</br></b>Road maintenance: <b>", haz_dat$Rd_Maint,
                             "</br></b>Road width: <b>", haz_dat$Rd_Width,
                             "</br></b>Road condition: <b>", haz_dat$Rd_Cond,
@@ -105,15 +110,15 @@ pal2 <- colorQuantile(
               ) %>%
   
     # Fire Protection score
-   addPolygons(data = haz_dat, color = '#000000', weight = 1,
-              fillColor = ~colorQuantile(pal2, n = 5, haz_dat$FIREPROTOT) (FIREPROTOT),
+   addPolygons(data = haz_dat, weight = 1, color = '#aaaaaa',
+              fillColor = ~pal2(haz_dat$FIREPROTOT),
               opacity = 1.0,
               highlightOptions = highlightOptions(stroke = "#ff0505",
                                                   weight = 4.0,
                                                   opacity = 1.0,
                                                   bringToFront = TRUE),
               #label = haz_dat$AreaName, #for test purposes
-              popup = paste("<style",haz_dat$AreaName,
+              popup = paste(haz_dat$AreaName,
                              "</br><b>Water availability: </b>", haz_dat$Wat_Avail,
                             "</br><b>Response time: </b>", haz_dat$Rspn_Time,
                             "</br><b>Fire station proximity: </b>", haz_dat$Prox_Stn,
@@ -128,7 +133,7 @@ pal2 <- colorQuantile(
               group = "FProt"
               ) %>%
   
-    addLegend(pal = pal2, labels = haz_dat$FIREPROTOT, values = haz_dat$FIREPROTOT
+    addLegend(pal = pal2, labels = haz_dat$FIREPROTOT, values = haz_dat$FIREPROTOT, title = "Fire Prot"
               #, group = "FProt" #this only will work with a dev version of the library, I think. Checking with my roommate the data scientist when he gets home.
               ) %>%
   
