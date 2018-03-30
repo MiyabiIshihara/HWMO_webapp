@@ -38,7 +38,7 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                         "#leafmap {height: calc(100vh - 150px) !important;}"),
                                         leafletOutput("leafmap")
                                         ),
-                               tabPanel("Data",
+                               tabPanel("Community Meetings Data Explorer",
                                         fluidRow(
                                           fluidRow(
                                             column(3,
@@ -49,8 +49,7 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                                                            "Pre-suppression" = "PS",
                                                                            "Suppression" = "S",
                                                                            "Post-fire" = "PF"), 
-                                                               multiple=TRUE)
-                                            ),
+                                                               multiple=TRUE)),
                                             column(3,
                                                    selectInput(inputId = "region", 
                                                                label = "Region(s)", 
@@ -60,31 +59,23 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                                                            "South Maui" = "South Maui",
                                                                            "Upcountry Maui" = "Upcountry Maui",
                                                                            "Western Oahu" = "W. Oahu"), 
-                                                               multiple=TRUE)
-                                            ),
+                                                               multiple=TRUE)),
                                             column(3,
                                                    conditionalPanel("input.region",
                                                                     selectInput(inputId = "meeting", 
                                                                                 label = "Meeting Location(s)", 
                                                                                 choices = c("All meeting locations"=""), 
-                                                                                multiple=TRUE)
-                                                                    )
-                                                   )
-                                            ),
+                                                                                multiple=TRUE)))),
                                           fluidRow(
                                             column(1,
-                                                   numericInput("minScore", "Min votes", min=0, max=12, value=0)
-                                            ),
+                                                   numericInput("minVotes", "Min votes", min=0, max=12, value=0)),
                                             column(1,
-                                                   numericInput("maxScore", "Max votes", min=0, max=12, value=12)
-                                            )
-                                          ),
+                                                   numericInput("maxVotes", "Max votes", min=0, max=12, value=12))),
                                           hr(),
                                           column(width = 12,
                                                  box(title = NULL,
                                                      width = NULL,
-                                                     DT::dataTableOutput("dt")
-                                                     ),
+                                                     DT::dataTableOutput("dt")),
                                                  box(title = "Download Data",
                                                      width = NULL,
                                                      downloadButton("download_data",
@@ -92,23 +83,76 @@ body <- dashboardBody(tags$head(tags$style(HTML("
                                                      tags$br(),
                                                      tags$br(), 
                                                      downloadButton("download_all_data",
-                                                                    "Download All Data")
-                                                     )
-                                                 )
-                                          )
+                                                                    "Download All Data"))))),
+                               tabPanel(title = "Take Action Today",
+                                      
+                                        fluidRow(
+                                        fluidRow(
+                                          column(3,
+                                                 selectInput(inputId = "category", 
+                                                             label = "Hazard Category", 
+                                                             choices = c("All categories"="",
+                                                                         "Subdivision" = "Subdivision",
+                                                                         "Fire Protection" = "Fire Protection",
+                                                                         "Vegetation" = "Vegetation",
+                                                                         "Building" = "Building",
+                                                                         "Fire Environment" = "Fire Environment"), 
+                                                             multiple=TRUE)),
+                                          column(3,
+                                                 conditionalPanel("input.category",
+                                                                  selectInput(inputId = "hazard", 
+                                                                              label = "Hazard(s)", 
+                                                                              choices = c("All hazards"=""), 
+                                                                              multiple=TRUE))),
+                                          column(3,
+                                                 selectInput(inputId = "island",
+                                                             label = "Island",
+                                                             choices = c("All islands"="",
+                                                                         "Hawaii Island" = "Hawaii Island",
+                                                                         "Kahoolawe" = "Kahoolawe",
+                                                                         "Kauai" = "Kauai",
+                                                                         "Lanai" = "Lanai",
+                                                                         "Lehua" = "Lehua",
+                                                                         "Maui" = "Maui",
+                                                                         "Molokai" = "Molokai",
+                                                                         "Molokini Atoll" = "Molokini Atoll",
+                                                                         "Niihau" = "Niihau",
+                                                                         "Oahu" = "Oahu"
+                                                                         ),
+                                                             multiple = TRUE)),
+                                          column(3,
+                                                 conditionalPanel("input.island",
+                                                                  selectInput(inputId = "areaname", 
+                                                                              label = "Area", 
+                                                                              choices = c("All areas"=""), 
+                                                                              multiple=TRUE)))),
+                                        fluidRow(
+                                          column(1,
+                                                 numericInput("minScore", "Min score", min=0, max=118, value=0)),
+                                          column(1,
+                                                 numericInput("maxScore", "Max score", min=0, max=118, value=50))),
+                                        hr(),
+                                        column(width = 12,
+                                               box(title = NULL,
+                                                   width = NULL,
+                                                   DT::dataTableOutput("dt_haz")),
+                                               box(title = "Download Data",
+                                                   width = NULL,
+                                                   downloadButton("download_haz",
+                                                                  "Download Selected Data"),
+                                                   tags$br(),
+                                                   tags$br(), 
+                                                   downloadButton("download_all_haz",
+                                                                  "Download All Data"))
+                                        ))
                                         ),
                                tabPanel(title = "Take Action",
                                         includeMarkdown("docs/take_action.md")),
                                tabPanel(title = "FAQ",
-                                        includeMarkdown("docs/about.md")
-                                        )
-                               )
-                        )
-                      )
+                                        includeMarkdown("docs/about.md")))))
                     
 dashboardPage(
   skin = "black",
   header,
   sidebar,
-  body
-)
+  body)

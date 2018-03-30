@@ -23,6 +23,8 @@ census_dat <- st_transform(census_dat, 4326)
 haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 ## Load Community Input data
 comm_dat <- read_csv("data/comm_input.csv")
+## Load hazard data for data explorer
+haz_tidy <- read_csv("data/tidy_haz.csv")
 
 function(input, output, session) {
   
@@ -103,7 +105,6 @@ function(input, output, session) {
                       "</br><b>Defensible space: </b>", haz_dat$Def_Space)
       } else if (user_choice == "BLDG_TOT") {
         popup = paste0(haz_dat$AreaName,
-                      "</br><b>Proximity of flamable fuel: </b>", haz_dat$Prox_Flam,
                       "</br><b>Roofing: </b>", haz_dat$Roof_Asmb,
                       "</br><b>Siding: </b>", haz_dat$Sid_Sof,
                       "</br><b>Under-skirting: </b>", haz_dat$Undr_Skrt,
@@ -137,12 +138,12 @@ function(input, output, session) {
                 layerId="colorLegend")
   })
   
-  # Data tab ##############################################
-  temp <- reactive({ comm_dat })
+  # Community Meetings Data Explorer tab ##############################################
+  comm_temp <- reactive({ comm_dat })
   
   observe({
     meetings <- if (is.null(input$region)) character(0) else {
-      filter(temp(), cwpp_region %in% input$region) %>%
+      filter(comm_temp(), cwpp_region %in% input$region) %>%
         `$`('meeting_location') %>%
         unique() %>%
         sort()
@@ -153,10 +154,10 @@ function(input, output, session) {
   })
   
   output$dt <- DT::renderDataTable({ 
-    temp() %>%
+    comm_temp() %>%
       filter(
-        total_votes >= input$minScore,
-        total_votes <= input$maxScore,
+        total_votes >= input$minVotes,
+        total_votes <= input$maxVotes,
         is.null(input$focus) | timing_focus %in% input$focus,
         is.null(input$region) | cwpp_region %in% input$region,
         is.null(input$meeting) | meeting_location %in% input$meeting
@@ -172,7 +173,7 @@ function(input, output, session) {
   # This function should write data to a file given to it by the argument 'file'.
     content = function(file) {
       # Write to a file specified by the 'file' argument
-      write.table(temp(), file, sep = ",", row.names = FALSE)
+      write.table(comm_temp(), file, sep = ",", row.names = FALSE)
     }
   )
   
@@ -187,6 +188,73 @@ function(input, output, session) {
     content = function(file) {
       # Write to a file specified by the 'file' argument
       write.table(comm_dat, file, sep = ",", row.names = FALSE)
+    }
+  )
+  
+  # Take Action Data Explorer tab ##############################################
+  haz_temp <- reactive({ haz_tidy })
+  # hazards
+  observe({
+    hazards <- if (is.null(input$category)) character(0) else {
+      filter(haz_temp(), hazard_category %in% input$category) %>%
+        `$`('hazard') %>%
+        unique() %>%
+        sort()
+    }
+    hazSelected <- isolate(input$hazard[input$hazard %in% hazards])
+    updateSelectInput(session, "hazard", choices = hazards,
+                      selected = hazSelected)
+  })
+  # Areas
+  observe({
+    areanames <- if (is.null(input$island)) character(0) else {
+      filter(haz_temp(), Island %in% input$island) %>%
+        `$`('AreaName') %>%
+        unique() %>%
+        sort()
+    }
+    areaSelected <- isolate(input$areaname[input$areaname %in% areanames])
+    updateSelectInput(session, "areaname", choices = areanames,
+                      selected = areaSelected)
+  })
+  
+  output$dt_haz <- DT::renderDataTable({ 
+    haz_temp() %>%
+      filter(
+        score >= input$minScore,
+        score <= input$maxScore,
+        is.null(input$category) | hazard_category %in% input$category,
+        is.null(input$hazard) | hazard %in% input$hazard,
+        is.null(input$island) | Island %in% input$island,
+        is.null(input$areaname) | AreaName %in% input$areaname
+      )})
+  ## Download Selected Data
+  output$download_haz <- downloadHandler(
+    # This function returns a string which tells the client browser what name to use when saving the file.
+    filename = function() {
+      paste0("hazards_",
+             paste(input$category, input$hazard,
+                   input$island, input$areaname, sep = "_"),
+             ".csv")
+    },
+    # This function should write data to a file given to it by the argument 'file'.
+    content = function(file) {
+      # Write to a file specified by the 'file' argument
+      write.table(haz_temp(), file, sep = ",", row.names = FALSE)
+    }
+  )
+ 
+  # Download All Data
+  output$download_all_haz <- downloadHandler(
+    # This function returns a string which tells the client browser what name to use when saving the file.
+    filename = function() {
+      paste0("hazards", ".csv")
+    },
+    
+    # This function should write data to a file given to it by the argument 'file'.
+    content = function(file) {
+      # Write to a file specified by the 'file' argument
+      write.table(haz_tidy, file, sep = ",", row.names = FALSE)
     }
   )
 }

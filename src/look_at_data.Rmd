@@ -20,7 +20,7 @@ library(leaflet)
 haz_dat = st_read("../data/WHA Metadata/WHA2015.shp")
 # Check coordinate reference system
 st_crs(haz_dat)
-?st_crs
+
 haz_dat <- st_transform(haz_dat, "+proj=longlat +datum=WGS84")
 
 # Plot
@@ -36,13 +36,38 @@ View(haz_dat)
 ```
 
 ```{r make hazard assessment tidy}
-haz_dat <- haz_dat %>%
-  select(SUBD_TOT, VEG_TOT, BLDG_TOT, FIREHAZTOT,FIREPROTOT,
-         # Acres, AREA, PERIMETER, CAR_Rating, 
-         AreaName, Island, geometry)
+#haz_dat <- haz_dat %>%
+#  select(SUBD_TOT, VEG_TOT, BLDG_TOT, FIREHAZTOT,FIREPROTOT,
+#         # Acres, AREA, PERIMETER, CAR_Rating, 
+#         AreaName, Island, -geometry)
 
-tidy_haz <- haz_dat %>%
-  gather(key = haz_category, value = amount, -c(AreaName, Island, geometry))
+tidy_haz <- haz_dat %>% 
+  as.data.frame %>%
+  select(-c(geometry)) %>%
+  gather(key = hazard, 
+         value = score, 
+         -c(AreaName, Island,AREA, PERIMETER,
+            Acres, IntAgCoop, CAR_Rating, zone, 
+            CAR_Hawaii, CAR_adjtot)) %>%
+  mutate(
+    hazard_category = 
+    case_when(
+    hazard %in% c("Wat_Avail", "Rspn_Time", "Prox_Stn",
+                  "FD_Trng", "Wild_Cap", "IntAgCoop",
+                  "Loc_Ops", "Com_Plan", "Com_FirPrg") ~ "Fire Protection",
+    hazard %in% c("Ing_Eg", "Rd_Maint","Rd_Width",
+                  "Rd_Cond", "Fire_Acc", "St_Sign",
+                  "Strc_Den", "Hm_Set", "Un_Lands",
+                  "Priv_Act", "Prox_Wild") ~ "Subdivision",
+    hazard %in% c("Veg_Type", "Fuel_Load", "Fuel_Strc",
+                  "Def_Space", "Prox_Flam") ~ "Vegetation",
+    hazard %in% c("Roof_Asmb", "Sid_Sof", "Undr_Skrt",
+                  "Utlty_Plmt", "Strc_Ign") ~ "Building",
+    hazard %in% c("Slope", "Avg_Rain", "Prev_Wind",
+                  "Seas_Haz", "Ign_Risk", "Top_Adv") ~ "Fire Environment"
+  ))
+
+write_csv(tidy_haz, "../wireframe/data/tidy_haz.csv")
 
 
 census_dat = st_read("../data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
