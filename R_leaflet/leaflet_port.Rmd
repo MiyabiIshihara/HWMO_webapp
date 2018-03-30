@@ -191,7 +191,9 @@ addMarkers(m, lng = -156.54, lat = 21.09, group = "Test point") %>%
                             "</br><b>Community fire programs: </b>", haz_dat$Com_FirPrg
                             ),
               popupOptions = popupOptions(style = list("color" = "black")),
-              group = "Fire Protection Score") %>%
+              group = "Fire Protection Score"
+              ) %>%
+  addLegend(pal = palxyz, values = haz_dat$FIREPROTOT, title = "Fire Protection", position = "bottomright", group = 'Fire Protection Score') %>%
 
   
   # MedH_Inc
@@ -216,22 +218,24 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
                                                   bringToFront = TRUE),
               label = paste("NH_ac: ", census_dat$NH_ac), #for test purposes
               group = "NH_ac"
+              
   ) %>%
     # NOTE: possible we have to add legends for each polygon layer 
     # however, switching functionality seems broken with base layers in library
     #
 
-    # addLegend("bottomright", values = ~NH_ac,
-    #         pal = "Reds",
-    #       #  group = "NH_ac",
-    #        #group as unused argument. Don't understand the error here
-    #         opacity = 1,
-    #         labels = census_dat$NH_ac
-    # 
-    #       ) %>%
+    # addLegend(pal = palxyz, values = census_dat$NH_ac, title = "people", position = "bottomright", group = 'NH_ac') %>%
+      
+      # "bottomright", values = ~NH_ac,
+      #       pal = "Reds",
+      #     #  group = "NH_ac",
+      #      #group as unused argument. Don't understand the error here
+      #       opacity = 1,
+      #       labels = census_dat$NH_ac
+# EXAMPLE
+#   addLegend(pal = factpalA, values = dens_pop$dens_pop, opacity = 0.7, title = "Hab./Km2", position = "bottomright", group = 'Densidade Populacional')
+  
 
-
-# I DON'T KNOW WHY THIS IS BROKEN
   # homeowners
   addPolygons(data = census_dat, color = '#000000', weight = 1,
               fillColor = ~colorQuantile("YlGnBu", n = 5, Homeowner) (Homeowner),
@@ -243,20 +247,27 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
               popup = paste("<b>Homeowners: </b>", census_dat$Homeowner,"%"), #for test purposes
               group = "Homeowners"
   ) %>%
+
   
 
 # LAYER CONTROLS
   addLayersControl(
     # base groups = radio buttons
-    baseGroups = c("Subdivision Hazard Rating", "Vegetation Hazard Rating", "Building Hazard Rating", "Fire Environment Hazard Rating", "Fire Protection Score", "Median HH income",  
-                   "Fire incidence", "NH_ac", "Homeowners"),
-    # # overlay groups = check boxes
-    overlayGroups = c("Oahu fires", "Test point"),
+    overlayGroups = c("Oahu fires", "Subdivision Hazard Rating", "Vegetation Hazard Rating", "Building Hazard Rating", "Fire Environment Hazard Rating", "Fire Protection Score", "Median HH income",  
+                  "NH_ac", "Homeowners"),
+    # #  overlay groups = check boxes
+    # overlayGroups = c("Oahu fires", "Test point"),
     options = layersControlOptions(collapsed = FALSE,
                                    sortLayers = FALSE)
   ) %>%
   hideGroup("Subdivision Hazard Rating") %>%
-  hideGroup("NH_ac")
+  hideGroup("Vegetation Hazard Rating") %>%
+  hideGroup("Building Hazard Rating") %>%
+  hideGroup("Fire Environment Hazard Rating") %>%
+  hideGroup("Fire Protection Score") %>%
+  hideGroup("Median HH income") %>%
+  hideGroup("NH_ac") %>%
+  hideGroup("Homeowners")
   
 
 
