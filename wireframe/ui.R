@@ -14,8 +14,10 @@ sidebar <- dashboardSidebar(width = 300,
                                            "Subdivision" = "SUBD_TOT",
                                            "Vegetation" = "VEG_TOT",
                                            "Buildings" = "BLDG_TOT",
-                                           "Fire Hazard" = "FIREHAZTOT"
-                                           ),
+                                           "Fire Hazard" = "FIREHAZTOT",
+                                           "Median HH Income" = "MedH_Inc",
+                                           "Native Hawaiians" = "NH_ac",
+                                           "Homeowners" = "Homeowner"),
                                          selected = "FIREPROTOT" 
                                          ))
 

@@ -47,7 +47,13 @@ function(input, output, session) {
   observe({
     user_choice <- input$dataset
     
-    color_domain <-haz_dat[[user_choice]]
+    if (user_choice %in% c("MedH_Inc", "NH_ac", "Homeowner")) {
+      the_data = census_dat
+    } else {
+      the_data = haz_dat
+    }
+    
+    color_domain <- the_data[[user_choice]]
     
     # Bring this in with multiple datasets
     #if (user_domain == "superzip") {
@@ -66,7 +72,7 @@ function(input, output, session) {
       domain = color_domain
     )
     
-    leafletProxy("leafmap", data = haz_dat) %>%
+    leafletProxy("leafmap", data = the_data) %>%
       addPolygons(weight = 1,
                   color = '#aaaaaa',
                   fillColor = pal(color_domain),
