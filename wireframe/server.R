@@ -12,8 +12,8 @@ library(Matrix)
 library(spData)
 library(tidyverse)
 
-# Load Oahu subset of fire point data
-OFires <- geojsonio::geojson_read("data/Oahu_Wildfires.geojson", what = "sp")
+# Load fire point data for use in heatmap
+HFires <- geojsonio::geojson_read("data/HI_Wildfires.geojson", what = "sp")
 ## Load census shp data
 ## EM: this should have worked by just calling from look_at_data.rmd, but whatever
 census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
@@ -40,10 +40,21 @@ function(input, output, session) {
         icon="fa-globe", title="Zoom to Level 7",
         onClick=JS("function(btn, map){ map.setZoom(7); }"))) %>%
       #Heatmap
-      addHeatmap(lng = ~X, lat = ~Y, data = OFires,
-                 blur = 20, max = 0.05, radius = 15,
-                 group = "Oahu fires")
+      ## this will have to move if we want to shut it off, no?
+      addHeatmap(lng = ~Long, lat = ~Lat, data = HFires,
+                 blur = 25, max = 0.05, radius = 15,
+                 minOpacity = 0.02,
+                 intensity = 0.5*(HFires$Total_Ac), # based on (half of) reported acreage, about 8% of data is null values
+                 group = "Fire Heatmap"
+                  ) %>%
+      addLayersControl(
+        overlayGroups = c("Fire Heatmap"),
+        options = layersControlOptions(collapsed = FALSE)
+      ) %>%
+      hideGroup("Fire Heatmap")
       })
+  
+
   
   # This observer is responsible for maintaining the polygons and legend,
   # according to the variables the user has chosen
