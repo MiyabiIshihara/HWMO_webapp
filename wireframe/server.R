@@ -11,6 +11,7 @@ library(sp)
 library(Matrix)
 library(spData)
 library(tidyverse)
+library(DT)
 
 # Load fire point data for use in heatmap
 HFires <- geojsonio::geojson_read("data/HI_Wildfires.geojson", what = "sp")
@@ -19,6 +20,14 @@ HFires <- geojsonio::geojson_read("data/HI_Wildfires.geojson", what = "sp")
 census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
 ### Check coordinate reference system
 census_dat <- st_transform(census_dat, 4326)
+
+#### data format placeholder for either here or within popups; 
+#### broken so far
+# DT::formatCurrency(table = census_dat, columns = 'MedH_Inc', currency = "$", interval = 3, mark = ",", 
+#                    digits = 2, dec.mark = getOption("OutDec"), before = TRUE)
+#census_dat$MedH_Inc <--  formatCurrency(census_dat$MedH_Inc, '$')
+
+
 ## Load haz data from geojson
 haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 ## Load Community Input data
@@ -53,8 +62,6 @@ function(input, output, session) {
       ) %>%
       hideGroup("Fire Heatmap")
       })
- 
-# # # ## ## ## # # # 
 
   
   # This observer is responsible for maintaining the polygons and legend,
@@ -80,7 +87,8 @@ function(input, output, session) {
     # Popup content
     if (user_choice == "MedH_Inc") {
       popup = paste0(haz_dat$AreaName,
-                    "</br><b>Median Household Income: </b> $", census_dat$MedH_Inc)
+                    "</br><b>Median Household Income: </b> $", census_dat$MedH_Inc
+                    )
       } else if (user_choice == "NH_ac") {
         popup = paste0(haz_dat$AreaName,
                       "</br><b>NH_ac: </b>", census_dat$NH_ac)
