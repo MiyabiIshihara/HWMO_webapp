@@ -78,8 +78,7 @@ function(input, output, session) {
     color_domain <- the_data[[user_choice]]
     
     # colorNumeric is a continuous palette for integers
-    pal <- colorQuantile(
-      n = 5,
+    pal <- colorNumeric(
       palette = c("yellow", "red"),
       domain = color_domain
     )
@@ -91,10 +90,10 @@ function(input, output, session) {
                     )
       } else if (user_choice == "NH_ac") {
         popup = paste0(haz_dat$AreaName,
-                      "</br><b>NH_ac: </b>", census_dat$NH_ac)
+                      "</br><b>Native Hawaiian count: </b>", census_dat$NH_ac)
       } else if (user_choice == "Homeowner") {
         popup = paste0(haz_dat$AreaName,
-                      "</br><b>Homeowners: </b>", census_dat$Homeowner,"%")
+                      "</br><b>Homeownership: </b>", round(census_dat$Homeowner, digits = 2),"%")
       } else if (user_choice == "FIREPROTOT") {
         popup = paste0(haz_dat$AreaName,
                       "</br><b>Water availability: </b>", haz_dat$Wat_Avail,

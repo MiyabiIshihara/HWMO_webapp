@@ -22,8 +22,8 @@ sidebar <- dashboardSidebar(width = 300,
                                            "Buildings" = "BLDG_TOT",
                                            "Fire Hazard" = "FIREHAZTOT",
                                            "Median HH Income" = "MedH_Inc",
-                                           "Native Hawaiians" = "NH_ac",
-                                           "Homeowners" = "Homeowner"),
+                                           "Native Hawaiian Count" = "NH_ac",
+                                           "Homeownership" = "Homeowner"),
                                          selected = "FIREPROTOT" 
                                          ),########remove comma when histo out
                             # histogram
