@@ -15,6 +15,13 @@ library(DT)
 
 # Load fire point data for use in heatmap
 HFires <- geojsonio::geojson_read("data/HI_Wildfires.geojson", what = "sp")
+hawaiiFiresdf <- as.data.frame(HFires) %>%
+  mutate(
+    datechar = as.character(Start_Date),
+    date = as.POSIXct(strptime(datechar, tz = "HST", format = "%Y/%m/%d")),
+    year = format(date,'%Y'),
+    month = format(date,'%m')) %>%
+  select(-datechar)
 ## Load census shp data
 ## EM: this should have worked by just calling from look_at_data.rmd, but whatever
 census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
@@ -47,20 +54,7 @@ function(input, output, session) {
       # the two diagonal pts that limit panning (long1, lat1, long2, lat2)
       addEasyButton(easyButton(
         icon="fa-globe", title="Zoom to Level 7",
-        onClick=JS("function(btn, map){ map.setZoom(7); }"))) %>%
-      #Heatmap
-      ## this will have to move if we want to shut it off, no?
-      addHeatmap(lng = ~Long, lat = ~Lat, data = HFires,
-                 blur = 25, max = 0.05, radius = 15,
-                 minOpacity = 0.02,
-                 intensity = 0.5*(HFires$Total_Ac), # based on (half of) reported acreage, about 8% of data is null values
-                 group = "Fire Heatmap"
-                  ) %>%
-      addLayersControl(
-        overlayGroups = c("Fire Heatmap"),
-        options = layersControlOptions(collapsed = FALSE)
-      ) %>%
-      hideGroup("Fire Heatmap")
+        onClick=JS("function(btn, map){ map.setZoom(7); }")))
       })
 
   
@@ -157,14 +151,29 @@ function(input, output, session) {
                 pal = pal, 
                 values = color_domain,
                 title = user_choice,
-                layerId="colorLegend")
+                layerId="colorLegend") %>%
+      #Heatmap
+      ## this will have to move if we want to shut it off, no?
+      addHeatmap(lng = ~Long, lat = ~Lat, data = HFires,
+                 blur = 25, max = 0.05, radius = 15,
+                 minOpacity = 0.02,
+                 intensity = 0.5*(HFires$Total_Ac), # based on (half of) reported acreage, about 8% of data is null values
+                 group = "Fire Heatmap"
+      ) %>%
+      addLayersControl(
+        overlayGroups = c("Fire Heatmap"),
+        options = layersControlOptions(collapsed = FALSE)
+      ) %>%
+      hideGroup("Fire Heatmap")
     
     
     # this is where we set up the histogram
     output$histMap <- renderPlot({
       par(bg = "#222d32")
+      #ggplot(hawaiiFiresdf) + 
+      #  geom_bar(aes(x = input$histX, y = input$histY))
       hist(color_domain,
-           xlab = "score",
+           xlab = "scores",
            main = user_choice,
            freq = TRUE,
           #breaks = color_domain,
@@ -174,8 +183,8 @@ function(input, output, session) {
            col.main = "white",
            col.lab = "white",
            col.axis = "white",
-           fg = "white"
-      )
+           fg = "white")
+      
     })
     
   })

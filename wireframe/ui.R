@@ -13,8 +13,8 @@ sidebar <- dashboardSidebar(width = 300,
                                      href = "https://github.com/niklaslollo/hwmo_data_tool"),
                             conditionalPanel(
                               condition = "input.tabs == 'Map'",
-                            radioButtons(inputId = "dataset",
-                                         label = "Data to Display",
+                            selectInput(inputId = "dataset",
+                                         label = "Map Data",
                                          choices = list(
                                            "Fire Protection" = "FIREPROTOT",
                                            "Subdivision" = "SUBD_TOT",
@@ -25,12 +25,27 @@ sidebar <- dashboardSidebar(width = 300,
                                            "Native Hawaiian Count" = "NH_ac",
                                            "Homeownership" = "Homeowner"),
                                          selected = "FIREPROTOT" 
-                                         ),########remove comma when histo out
+                                         ),
+                            selectInput(inputId = "histX",
+                                        label = "X axis",
+                                        choices = c("Month"= "month",
+                                                    "Year" = "year"),
+                                        selected = "month"),
+                            selectInput(inputId = "histY",
+                                        label = "Y axis",
+                                        choices = c("Acres Burned" = "Total_Ac",
+                                                    "Count" = ""),
+                                        selected = "Total_Ac"),
+                            # What is the best way to add controls to the heatmap (e.g. buffer size)?
+                            #sliderInput(inputId = "heatRadius",
+                            #            label = "Heatmap Buffer Size",
+                            #            min= 0,
+                            #            max= 5,
+                            #            value = 0.5,
+                            #            step = 0.1),
                             # histogram
-                            plotOutput("histMap", 
-                                       height = 300
-                                      
-                                       )
+                            plotOutput(outputId = "histMap",
+                                       height = 200)
                             ),
                             ###################
                             
