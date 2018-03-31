@@ -25,7 +25,15 @@ sidebar <- dashboardSidebar(width = 300,
                                            "Native Hawaiians" = "NH_ac",
                                            "Homeowners" = "Homeowner"),
                                          selected = "FIREPROTOT" 
-                                         )),
+                                         ),########remove comma when histo out
+                            # histogram
+                            plotOutput("histMap", 
+                                       height = 300
+                                      
+                                       )
+                            ),
+                            ###################
+                            
                             conditionalPanel(
                               condition = "input.tabs == 'Community Meeting Results'",
                               selectInput(inputId = "focus", 

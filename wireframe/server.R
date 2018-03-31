@@ -53,7 +53,8 @@ function(input, output, session) {
       ) %>%
       hideGroup("Fire Heatmap")
       })
-  
+ 
+# # # ## ## ## # # # 
 
   
   # This observer is responsible for maintaining the polygons and legend,
@@ -70,10 +71,12 @@ function(input, output, session) {
     color_domain <- the_data[[user_choice]]
     
     # colorNumeric is a continuous palette for integers
-    pal <- colorNumeric(
+    pal <- colorQuantile(
+      n = 5,
       palette = c("yellow", "red"),
       domain = color_domain
     )
+    
     # Popup content
     if (user_choice == "MedH_Inc") {
       popup = paste0(haz_dat$AreaName,
@@ -148,6 +151,26 @@ function(input, output, session) {
                 values = color_domain,
                 title = user_choice,
                 layerId="colorLegend")
+    
+    
+    # this is where we set up the histogram
+    output$histMap <- renderPlot({
+      par(bg = "#222d32")
+      hist(color_domain,
+           xlab = "score",
+           main = user_choice,
+           freq = TRUE,
+          #breaks = color_domain,
+           breaks = 5,
+           border = "#222d32",
+           col = "brown1",
+           col.main = "white",
+           col.lab = "white",
+           col.axis = "white",
+           fg = "white"
+      )
+    })
+    
   })
   
   # Community Meetings Data Explorer tab ##############################################
