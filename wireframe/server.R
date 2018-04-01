@@ -70,9 +70,13 @@ function(input, output, session) {
     }
     # For use in the palette
     color_domain <- the_data[[user_choice]]
+    color_domain[color_domain==0] <- NA
     
     # colorNumeric is a continuous palette for integers
-    pal <- colorNumeric(
+    pal <- colorBin(
+      bins =  5,
+      na.color = alpha("blue",0.0),
+      pretty = FALSE,
       palette = c("yellow", "red"),
       domain = color_domain
     )
@@ -151,6 +155,7 @@ function(input, output, session) {
                 pal = pal, 
                 values = color_domain,
                 title = user_choice,
+                labels = color_domain,
                 layerId="colorLegend") %>%
       #Heatmap
       ## this will have to move if we want to shut it off, no?
