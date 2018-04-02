@@ -35,10 +35,12 @@ census_dat <- st_transform(census_dat, 4326)
 #census_dat$MedH_Inc <--  formatCurrency(census_dat$MedH_Inc, '$')
 
 
-## Load haz data from geojson
-haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 ## Load Community Input data
 comm_dat <- read_csv("data/comm_input.csv")
+## Load haz data from geojson
+#haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
+haz_dat <- st_read("data/hazard/WHA2015.shp")
+haz_dat <- st_transform(haz_dat, 4326)
 ## Load hazard data for data explorer
 haz_tidy <- read_csv("data/tidy_haz.csv") %>%
   select(-c(AREA, PERIMETER, Acres, zone, CAR_Hawaii, CAR_adjtot))
@@ -141,6 +143,8 @@ function(input, output, session) {
       }
     
     leafletProxy("leafmap", data = the_data) %>%
+      clearShapes() %>%
+      clearControls() %>%
       addPolygons(weight = 1,
                   color = '#aaaaaa',
                   fillColor = pal(color_domain),
@@ -158,18 +162,23 @@ function(input, output, session) {
                 labels = color_domain,
                 layerId="colorLegend") %>%
       #Heatmap
-      ## this will have to move if we want to shut it off, no?
       addHeatmap(lng = ~Long, lat = ~Lat, data = HFires,
                  blur = 25, max = 0.05, radius = 15,
                  minOpacity = 0.02,
                  intensity = 0.5*(HFires$Total_Ac), # based on (half of) reported acreage, about 8% of data is null values
                  group = "Fire Heatmap"
       ) %>%
+      addMarkers(lng = ~Long, lat = ~Lat, data = HFires,
+                 clusterOptions = markerClusterOptions(),
+                 popup = paste("<b>Date of fire: </b>", HFires$Start_Date, "<br>",
+                               "<b>Acres burned</b>", HFires$Total_Ac),
+                 group = "Fire Points"
+      ) %>%
       addLayersControl(
-        overlayGroups = c("Fire Heatmap"),
+        overlayGroups = c("Fire Heatmap", "Fire Points"),
         options = layersControlOptions(collapsed = FALSE)
       ) %>%
-      hideGroup("Fire Heatmap")
+      hideGroup(c("Fire Heatmap", "Fire Points"))
     
     
     # this is where we set up the histogram
@@ -191,7 +200,6 @@ function(input, output, session) {
            fg = "white")
       
     })
-    
   })
   
   # Community Meetings Data Explorer tab ##############################################

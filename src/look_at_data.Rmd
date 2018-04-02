@@ -17,11 +17,11 @@ library(leaflet)
 
 ```{r load hazard assessment data}
 # Load data
-haz_dat = st_read("../data/WHA Metadata/WHA2015.shp")
+haz_dat = st_read("../wireframe/data/hazard/WHA2015.shp")
 # Check coordinate reference system
 st_crs(haz_dat)
 
-haz_dat <- st_transform(haz_dat, "+proj=longlat +datum=WGS84")
+haz_dat <- st_transform(haz_dat, 4326)
 
 # Plot
 #plot(st_geometry(haz_dat), col="white")
@@ -188,7 +188,6 @@ community.",
         hazard == "Com_FirPrg" & score == 3 ~ "No interest or participation in educational programs. No prevention education by local fire department."
       )
   )
-levels(as.factor(tidy_haz_test$reason))
 
 write_csv(tidy_haz, "../wireframe/data/tidy_haz.csv")
 
