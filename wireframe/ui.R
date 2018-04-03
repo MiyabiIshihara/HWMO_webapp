@@ -26,14 +26,13 @@ sidebar <- dashboardSidebar(width = 300,
                                            "Homeownership" = "Homeowner"),
                                          selected = "FIREPROTOT" 
                                          ),
-                            selectInput(inputId = "histX",
-                                        label = "X axis",
-                                        choices = c(12,30),
-                                        selected = 12),
-                            selectInput(inputId = "histY",
-                                        label = "Y axis",
-                                        choices = c("Acres Burned" = "Total_Ac",
-                                                    "Count" = ""),
+                           ## a manual solution for selecting breaks
+
+                            ### taking out until we decide to use it
+                            # selectInput(inputId = "histY",
+                            #             label = "Y axis",
+                            #             choices = c("Acres Burned" = "Total_Ac",
+                            #                         "Count" = ""),
                                         selected = "Total_Ac"),
                             # What is the best way to add controls to the heatmap (e.g. buffer size)?
                             #sliderInput(inputId = "heatRadius",
@@ -46,8 +45,19 @@ sidebar <- dashboardSidebar(width = 300,
                             plotOutput(outputId = "histMap",
                                        height = 200),
                             plotOutput(outputId = "histFire",
-                                       height = 200)
+                                       height = 200),
+                            ## current code works by determining breaks based on x axis
+                            # selectInput(inputId = "histBreaks",
+                            #             label = "Breaks",
+                            #             choices = c(12,30),
+                            #             selected = 12),
+                            selectInput(inputId = "histX",
+                                        label = "Unit of time",
+                                        choices = c("Month" = "Month",
+                                                    "Year" = "year"),
+                                        selected = "Year"
                             ),
+
                             ###################
                             
                             conditionalPanel(

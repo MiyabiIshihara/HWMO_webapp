@@ -12,6 +12,9 @@ library(Matrix)
 library(spData)
 library(tidyverse)
 library(DT)
+library(dplyr)
+library(viridis)
+
 
 # Load fire point data for use in heatmap
 HFires <- geojsonio::geojson_read("data/HI_Wildfires.geojson", what = "sp")
@@ -19,7 +22,7 @@ hawaiiFiresdf <- as.data.frame(HFires) %>%
   mutate(
     datechar = as.character(Start_Date),
     date = as.POSIXct(strptime(datechar, tz = "HST", format = "%Y/%m/%d")),
-    year = format(date,'%Y'),
+    year = as.integer(format(date,'%Y')),
     month = format(date,'%m')) %>%
   select(-datechar)
 ## Load census shp data
@@ -179,7 +182,8 @@ function(input, output, session) {
       addHeatmap(lng = ~Long, lat = ~Lat, data = HFires,
                  blur = 25, max = 0.05, radius = 15,
                  minOpacity = 0.02,
-                 intensity = 0.5*(HFires$Total_Ac), # based on (half of) reported acreage, about 8% of data is null values
+                 intensity = 0.5*(HFires$Total_Ac), # based on (half of) reported acreage, about 8% of data is null values,
+                 gradient = "magma",
                  group = "Fire Heatmap"
       ) %>%
       addMarkers(lng = ~Long, lat = ~Lat, data = HFires,
@@ -219,19 +223,37 @@ function(input, output, session) {
     # building fire histogram separately at first
     # to test different functionality
     output$histFire <- renderPlot({
+      par(bg = "#222d32")
       # test if in bounds
       #if (nrow(firesInBounds() == 0))
-      
-      #hist(firesInBounds()$Month,
-      #hist(input$histX,
-      hist(HFires$Month,
+      F_xlab = as.character("TEST")
+     if (input$histX == "Year") {
+        F_xlab = "Year"
+      } else if (input$histX == "Month") {
+        F_xlab <- "Month"
+      } else { F_xlab = "Year"} #this is really dumb, but it's how switching back and forth seems to work
+      F_breaks = as.integer(3)
+      if (input$histX == "Year") {
+        F_breaks <- as.numeric(length(unique(hawaiiFiresdf["Year"]))) # this is broken, but how we should do it
+      } else if (input$histX == "Month") {
+        F_breaks <- 12
+      }  else {F_breaks <- 30}
+  
+
+      hist(hawaiiFiresdf[[input$histX]],
            #xlab = hawaiiFiresdf$month,
-           xlab = "month",
+           xlab = F_xlab,
            freq = TRUE,
-           breaks = as.numeric(input$histX),
-           main = "Fire Freq",
-           plot = TRUE
-          # xlab = "J","F","M","A","M","J","J","A","S","O","N","D"
+           #breaks = as.numeric(input$histBreaks),
+           breaks = F_breaks,
+           main = "Historical Fire Frequency, 1900-2013",
+           plot = TRUE,
+           border = "#222d32",
+           col = "palegreen",
+           col.main = "white",
+           col.lab = "white",
+           col.axis = "white",
+           fg = "white"
            )
     })
   })
