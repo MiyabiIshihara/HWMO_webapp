@@ -24,8 +24,7 @@ sidebar <- dashboardSidebar(width = 300,
                                            "Median HH Income" = "MedH_Inc",
                                            "Native Hawaiian Count" = "NH_ac",
                                            "Homeownership" = "Homeowner"),
-                                         selected = "FIREPROTOT" 
-                                         ),
+                                         selected = "FIREPROTOT"),
                            ## a manual solution for selecting breaks
 
                             ### taking out until we decide to use it
@@ -53,10 +52,15 @@ sidebar <- dashboardSidebar(width = 300,
                             #             selected = 12),
                             selectInput(inputId = "histX",
                                         label = "Unit of time",
-                                        choices = c("Month" = "Month",
+                                        choices = c("Month" = "month",
                                                     "Year" = "year"),
-                                        selected = "Year"
-                            ),
+                                        selected = "year"),
+                           selectInput(inputId = "histY",
+                                       label = "Statistic",
+                                       choices = c("Number of fires" = "count",
+                                                   "Total acres burned" = "total_acres",
+                                                   "Avg acres burned per fire" = "avg_acres"),
+                                       selected = "count"),
 
                             ###################
                             

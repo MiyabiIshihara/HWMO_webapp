@@ -12,8 +12,8 @@ library(Matrix)
 library(spData)
 library(tidyverse)
 library(DT)
-library(dplyr)
 library(viridis)
+library(widyr)
 
 
 # Load fire point data for use in heatmap
@@ -23,8 +23,13 @@ hawaiiFiresdf <- as.data.frame(HFires) %>%
     datechar = as.character(Start_Date),
     date = as.POSIXct(strptime(datechar, tz = "HST", format = "%Y/%m/%d")),
     year = as.integer(format(date,'%Y')),
-    month = format(date,'%m')) %>%
-  select(-datechar)
+    month = as.factor(format(date,'%b')), #this collects the abbreviated month
+    month_num = format(date,'%m')) %>%
+  select(-datechar) %>% 
+  arrange(year)
+
+hawaiiFiresdf <- hawaiiFiresdf[-1,] # removes 1900 fire (typo?)
+
 ## Load census shp data
 ## EM: this should have worked by just calling from look_at_data.rmd, but whatever
 census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
@@ -219,42 +224,68 @@ function(input, output, session) {
 
     })
 
-    
+  })   
+  
+  observe({
     # building fire histogram separately at first
     # to test different functionality
     output$histFire <- renderPlot({
-      par(bg = "#222d32")
+      
+      tbl <- hawaiiFiresdf %>%
+        group_by_(input$histX) %>% 
+        summarize(count = n(),
+                  total_acres = sum(Total_Ac),
+                  avg_acres = mean(Total_Ac, na.rm=T)) 
+      
+      if (input$histX == "month") {
+      tbl$month <- ordered(tbl$month, levels = c("Jan", "Feb", "Mar",
+                                                 "Apr", "May", "Jun",
+                                                 "Jul", "Aug", "Sep",
+                                                 "Oct", "Nov", "Dec"))
+      }
+      
+      ggplot(tbl) +
+        geom_col(mapping= aes_string(input$histX, input$histY))
+      
+      #par(bg = "#222d32")
       # test if in bounds
       #if (nrow(firesInBounds() == 0))
-      F_xlab = as.character("TEST")
-     if (input$histX == "Year") {
-        F_xlab = "Year"
-      } else if (input$histX == "Month") {
-        F_xlab <- "Month"
-      } else { F_xlab = "Year"} #this is really dumb, but it's how switching back and forth seems to work
-      F_breaks = as.integer(3)
-      if (input$histX == "Year") {
-        F_breaks <- as.numeric(length(unique(hawaiiFiresdf["Year"]))) # this is broken, but how we should do it
-      } else if (input$histX == "Month") {
-        F_breaks <- 12
-      }  else {F_breaks <- 30}
+      #F_xlab = as.character("TEST")
+     
+      #if (input$histX == "Year") {
+      #  F_xlab = "Year"
+      #} else if (input$histX == "Month") {
+      #  F_xlab = "Month"
+      #} else { 
+      #  F_xlab = "Year"
+      #  } #this is really dumb, but it's how switching back and forth seems to work
+        
+      #F_breaks = as.integer(3)
+      #if (input$histX == "Year") {
+      #  F_breaks <- as.numeric(length(unique(hawaiiFiresdf["Year"]))) # this is broken, but how we should do it
+      #} else if (input$histX == "Month") {
+      #  F_breaks <- 12
+      #}  else {
+      #  F_breaks <- 30
+      #  }
   
 
-      hist(hawaiiFiresdf[[input$histX]],
-           #xlab = hawaiiFiresdf$month,
-           xlab = F_xlab,
-           freq = TRUE,
-           #breaks = as.numeric(input$histBreaks),
-           breaks = F_breaks,
-           main = "Historical Fire Frequency, 1900-2013",
-           plot = TRUE,
-           border = "#222d32",
-           col = "palegreen",
-           col.main = "white",
-           col.lab = "white",
-           col.axis = "white",
-           fg = "white"
-           )
+      #hist(hawaiiFiresdf[[input$histX]],
+      #     #xlab = hawaiiFiresdf$month,
+      #     xlab = F_xlab,
+      #     freq = TRUE,
+      #     #breaks = as.numeric(input$histBreaks),
+      #     breaks = F_breaks,
+      #     main = "Historical Fire Frequency, 2000-2013",
+      #     plot = TRUE,
+      #     border = "#222d32",
+      #     col = "palegreen",
+      #     col.main = "white",
+      #     col.lab = "white",
+      #     col.axis = "white",
+      #     fg = "white"
+      #     )
+      
     })
   })
   
