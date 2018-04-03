@@ -58,7 +58,21 @@ function(input, output, session) {
         icon="fa-globe", title="Zoom to Level 7",
         onClick=JS("function(btn, map){ map.setZoom(7); }")))
       })
-
+  
+  # reactive element to test which fires in view
+  firesInBounds <- reactive({
+    mb <- input$map_bounds
+    
+    if (is.null(mb))
+      return(hawaiiFiresdf[FALSE,])
+    bounds <- input$map_bounds
+    latRng <- range(bounds$north, bounds$south)
+    lngRng <- range(bounds$east, bounds$west)
+    
+    subset(hawaiiFiresdf,
+           lat >= latRng[1] & lat <= latRng[2] &
+             long >= lngRng[1] & long <= lngRng[2])
+  })
   
   # This observer is responsible for maintaining the polygons and legend,
   # according to the variables the user has chosen
@@ -184,7 +198,7 @@ function(input, output, session) {
     # this is where we set up the histogram
     output$histMap <- renderPlot({
       par(bg = "#222d32")
-      #ggplot(hawaiiFiresdf) + 
+      #ggplot(hawaiiFiresdf) +
       #  geom_bar(aes(x = input$histX, y = input$histY))
       hist(color_domain,
            xlab = "scores",
@@ -198,7 +212,27 @@ function(input, output, session) {
            col.lab = "white",
            col.axis = "white",
            fg = "white")
+
+    })
+
+    
+    # building fire histogram separately at first
+    # to test different functionality
+    output$histFire <- renderPlot({
+      # test if in bounds
+      #if (nrow(firesInBounds() == 0))
       
+      #hist(firesInBounds()$Month,
+      #hist(input$histX,
+      hist(HFires$Month,
+           #xlab = hawaiiFiresdf$month,
+           xlab = "month",
+           freq = TRUE,
+           breaks = as.numeric(input$histX),
+           main = "Fire Freq",
+           plot = TRUE
+          # xlab = "J","F","M","A","M","J","J","A","S","O","N","D"
+           )
     })
   })
   
