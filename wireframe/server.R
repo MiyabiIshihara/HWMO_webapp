@@ -13,8 +13,6 @@ library(spData)
 library(tidyverse)
 library(DT)
 library(viridis)
-library(widyr)
-
 
 # Load fire point data for use in heatmap
 HFires <- geojsonio::geojson_read("data/HI_Wildfires.geojson", what = "sp")
@@ -103,8 +101,12 @@ function(input, output, session) {
     
     ggplot(tbl) +
       geom_col(mapping= aes_string(input$histX, input$histY), fill = "brown1") +
-      theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), panel.background = element_blank(), panel.grid = element_blank(),
-            axis.line = element_line(color = "white"), text = element_text(color = "white"), axis.text = element_text(color = "white"),
+      theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), 
+            panel.background = element_blank(), 
+            panel.grid = element_blank(),
+            axis.line = element_line(color = "white"), 
+            text = element_text(color = "white"), 
+            axis.text = element_text(color = "white"),
             axis.ticks = element_line(color = "white"))
       
     
