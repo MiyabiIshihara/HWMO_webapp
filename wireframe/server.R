@@ -107,7 +107,8 @@ function(input, output, session) {
             axis.line = element_line(color = "white"), 
             text = element_text(color = "white"), 
             axis.text = element_text(color = "white"),
-            axis.ticks = element_line(color = "white"))
+            axis.ticks = element_line(color = "white"),
+            axis.title.x=element_blank())
       
     
     #par(bg = "#222d32")
@@ -165,8 +166,9 @@ function(input, output, session) {
     pal <- colorBin(
       bins =  5,
       na.color = alpha("blue",0.0),
-      pretty = FALSE,
-      palette = c("yellow", "red"),
+      pretty = F,
+      palette = "YlGnBu",
+      alpha = T,
       domain = color_domain
     )
     
