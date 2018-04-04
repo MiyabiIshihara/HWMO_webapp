@@ -25,14 +25,7 @@ sidebar <- dashboardSidebar(width = 300,
                                            "Native Hawaiian Count" = "NH_ac",
                                            "Homeownership" = "Homeowner"),
                                          selected = "FIREPROTOT"),
-                           ## a manual solution for selecting breaks
 
-                            ### taking out until we decide to use it
-                            # selectInput(inputId = "histY",
-                            #             label = "Y axis",
-                            #             choices = c("Acres Burned" = "Total_Ac",
-                            #                         "Count" = ""),
-                                        selected = "Total_Ac"),
                             # What is the best way to add controls to the heatmap (e.g. buffer size)?
                             #sliderInput(inputId = "heatRadius",
                             #            label = "Heatmap Buffer Size",
@@ -40,11 +33,12 @@ sidebar <- dashboardSidebar(width = 300,
                             #            max= 5,
                             #            value = 0.5,
                             #            step = 0.1),
-                            # histogram
+                            ## histogram
                             plotOutput(outputId = "histMap",
                                        height = 200),
                             plotOutput(outputId = "histFire",
                                        height = 200),
+                            ## a manual solution for selecting breaks
                             ## current code works by determining breaks based on x axis
                             # selectInput(inputId = "histBreaks",
                             #             label = "Breaks",
@@ -60,7 +54,7 @@ sidebar <- dashboardSidebar(width = 300,
                                        choices = c("Number of fires" = "count",
                                                    "Total acres burned" = "total_acres",
                                                    "Avg acres burned per fire" = "avg_acres"),
-                                       selected = "count"),
+                                       selected = "count")),
 
                             ###################
                             

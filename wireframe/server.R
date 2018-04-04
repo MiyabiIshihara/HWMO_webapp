@@ -26,9 +26,8 @@ hawaiiFiresdf <- as.data.frame(HFires) %>%
     month = as.factor(format(date,'%b')), #this collects the abbreviated month
     month_num = format(date,'%m')) %>%
   select(-datechar) %>% 
-  arrange(year)
+  filter(year >= 2000) # remove some fires from 1988 and 1900
 
-hawaiiFiresdf <- hawaiiFiresdf[-1,] # removes 1900 fire (typo?)
 
 ## Load census shp data
 ## EM: this should have worked by just calling from look_at_data.rmd, but whatever
@@ -59,7 +58,7 @@ function(input, output, session) {
   output$leafmap <- renderLeaflet({
     leaflet() %>%
       addProviderTiles(providers$OpenMapSurfer.Grayscale) %>%
-      setView(-156, 20.35, 7) %>% #long, lat, zoom level 
+      setView(lng = -156, lat = 20.35, zoom = 7) %>%
       setMaxBounds(-162.6,23.6,-153.5,18.0) %>% 
       # the two diagonal pts that limit panning (long1, lat1, long2, lat2)
       addEasyButton(easyButton(
@@ -68,19 +67,79 @@ function(input, output, session) {
       })
   
   # reactive element to test which fires in view
-  firesInBounds <- reactive({
-    mb <- input$map_bounds
-    
-    if (is.null(mb))
+  firesInBounds <- eventReactive(input$leafmap_bounds,{
+    if (is.null(input$leafmap_bounds))
       return(hawaiiFiresdf[FALSE,])
-    bounds <- input$map_bounds
-    latRng <- range(bounds$north, bounds$south)
-    lngRng <- range(bounds$east, bounds$west)
     
-    subset(hawaiiFiresdf,
-           lat >= latRng[1] & lat <= latRng[2] &
-             long >= lngRng[1] & long <= lngRng[2])
+      bounds <- input$leafmap_bounds
+      latRng <- range(bounds$north, bounds$south)
+      lngRng <- range(bounds$east, bounds$west)
+      
+      subset(hawaiiFiresdf,
+             Lat >= latRng[[1]] & Lat <= latRng[[2]] &
+             Long >= lngRng[[1]] & Long <= lngRng[[2]])
+    
+  }, ignoreNULL = T)
+  
+  
+  # building fire histogram separately at first
+  # to test different functionality
+  output$histFire <- renderPlot({
+    if (nrow(firesInBounds()) == 0)
+      return(NULL)
+    
+    tbl <- firesInBounds() %>%
+      group_by_(input$histX) %>% 
+      summarize(count = n(),
+                total_acres = sum(Total_Ac),
+                avg_acres = mean(Total_Ac, na.rm=T)) 
+    
+    if (input$histX == "month") {
+      tbl$month <- ordered(tbl$month, levels = c("Jan", "Feb", "Mar",
+                                                 "Apr", "May", "Jun",
+                                                 "Jul", "Aug", "Sep",
+                                                 "Oct", "Nov", "Dec"))
+    }
+    
+    ggplot(tbl) +
+      geom_col(mapping= aes_string(input$histX, input$histY))
+    
+    #par(bg = "#222d32")
+    # test if in bounds
+    #if (nrow(firesInBounds() == 0))
+    #F_xlab = as.character("TEST")
+    
+    #if (input$histX == "Year") {
+    #  F_xlab = "Year"
+    #} else {
+    #  F_xlab = "Month"
+    #}
+    
+    #F_breaks = as.integer(3)
+    #if (input$histX == "Year") {
+    #  F_breaks <- as.numeric(length(unique(hawaiiFiresdf["Year"]))) # this is broken, but how we should do it
+    #} else {
+    #  F_breaks <- 12
+    #}
+    
+    
+    #hist(hawaiiFiresdf[[input$histX]],
+    #     #xlab = hawaiiFiresdf$month,
+    #     xlab = F_xlab,
+    #     freq = TRUE,
+    #     #breaks = as.numeric(input$histBreaks),
+    #     breaks = F_breaks,
+    #     main = "Historical Fire Frequency, 2000-2013",
+    #     plot = TRUE,
+    #     border = "#222d32",
+    #     col = "palegreen",
+    #     col.main = "white",
+    #     col.lab = "white",
+    #     col.axis = "white",
+    #     fg = "white")
+    
   })
+  
   
   # This observer is responsible for maintaining the polygons and legend,
   # according to the variables the user has chosen
@@ -182,33 +241,31 @@ function(input, output, session) {
                 values = color_domain,
                 title = user_choice,
                 labels = color_domain,
-                layerId="colorLegend") %>%
+                layerId="colorLegend"
+                ) %>%
       #Heatmap
-      addHeatmap(lng = ~Long, lat = ~Lat, data = HFires,
+      addHeatmap(lng = ~Long, lat = ~Lat, data = hawaiiFiresdf,
                  blur = 25, max = 0.05, radius = 15,
                  minOpacity = 0.02,
-                 intensity = 0.5*(HFires$Total_Ac), # based on (half of) reported acreage, about 8% of data is null values,
+                 intensity = 0.5*(hawaiiFiresdf$Total_Ac), # based on (half of) reported acreage, about 8% of data is null values,
                  gradient = "magma",
                  group = "Fire Heatmap"
-      ) %>%
-      addMarkers(lng = ~Long, lat = ~Lat, data = HFires,
+                 ) %>%
+      addMarkers(lng = ~Long, lat = ~Lat, data = hawaiiFiresdf,
                  clusterOptions = markerClusterOptions(),
-                 popup = paste("<b>Date of fire: </b>", HFires$Start_Date, "<br>",
-                               "<b>Acres burned</b>", HFires$Total_Ac),
+                 popup = paste("<b>Date of fire: </b>", hawaiiFiresdf$Start_Date, "<br>",
+                               "<b>Acres burned</b>", hawaiiFiresdf$Total_Ac),
                  group = "Fire Points"
-      ) %>%
+                 ) %>%
       addLayersControl(
         overlayGroups = c("Fire Heatmap", "Fire Points"),
         options = layersControlOptions(collapsed = FALSE)
-      ) %>%
+        ) %>%
       hideGroup(c("Fire Heatmap", "Fire Points"))
-    
     
     # this is where we set up the histogram
     output$histMap <- renderPlot({
       par(bg = "#222d32")
-      #ggplot(hawaiiFiresdf) +
-      #  geom_bar(aes(x = input$histX, y = input$histY))
       hist(color_domain,
            xlab = "scores",
            main = user_choice,
@@ -221,72 +278,8 @@ function(input, output, session) {
            col.lab = "white",
            col.axis = "white",
            fg = "white")
-
     })
-
-  })   
-  
-  observe({
-    # building fire histogram separately at first
-    # to test different functionality
-    output$histFire <- renderPlot({
-      
-      tbl <- hawaiiFiresdf %>%
-        group_by_(input$histX) %>% 
-        summarize(count = n(),
-                  total_acres = sum(Total_Ac),
-                  avg_acres = mean(Total_Ac, na.rm=T)) 
-      
-      if (input$histX == "month") {
-      tbl$month <- ordered(tbl$month, levels = c("Jan", "Feb", "Mar",
-                                                 "Apr", "May", "Jun",
-                                                 "Jul", "Aug", "Sep",
-                                                 "Oct", "Nov", "Dec"))
-      }
-      
-      ggplot(tbl) +
-        geom_col(mapping= aes_string(input$histX, input$histY))
-      
-      #par(bg = "#222d32")
-      # test if in bounds
-      #if (nrow(firesInBounds() == 0))
-      #F_xlab = as.character("TEST")
-     
-      #if (input$histX == "Year") {
-      #  F_xlab = "Year"
-      #} else if (input$histX == "Month") {
-      #  F_xlab = "Month"
-      #} else { 
-      #  F_xlab = "Year"
-      #  } #this is really dumb, but it's how switching back and forth seems to work
-        
-      #F_breaks = as.integer(3)
-      #if (input$histX == "Year") {
-      #  F_breaks <- as.numeric(length(unique(hawaiiFiresdf["Year"]))) # this is broken, but how we should do it
-      #} else if (input$histX == "Month") {
-      #  F_breaks <- 12
-      #}  else {
-      #  F_breaks <- 30
-      #  }
-  
-
-      #hist(hawaiiFiresdf[[input$histX]],
-      #     #xlab = hawaiiFiresdf$month,
-      #     xlab = F_xlab,
-      #     freq = TRUE,
-      #     #breaks = as.numeric(input$histBreaks),
-      #     breaks = F_breaks,
-      #     main = "Historical Fire Frequency, 2000-2013",
-      #     plot = TRUE,
-      #     border = "#222d32",
-      #     col = "palegreen",
-      #     col.main = "white",
-      #     col.lab = "white",
-      #     col.axis = "white",
-      #     fg = "white"
-      #     )
-      
-    })
+    
   })
   
   # Community Meetings Data Explorer tab ##############################################
