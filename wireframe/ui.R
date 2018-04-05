@@ -26,7 +26,8 @@ body <- dashboardBody(
     tabItem(tabName = "Map",
             fluidRow(
               column(width = 3,
-                     box(width=NULL,
+                     box(width=NULL, 
+                         status = "warning", # Makes header yellow
                          selectInput(inputId = "dataset",
                                      label = "Map Data",
                                      choices = list(
@@ -40,39 +41,46 @@ body <- dashboardBody(
                                        "Homeownership" = "Homeowner"),
                                      selected = "FIREPROTOT"))),
               column(width = 4,
-                     box(width= NULL,
-                         plotOutput(outputId = "histMap",
+                     box(width= NULL, 
+                         solidHeader = TRUE, # removes header
+                         title = "Scores showing in map",
+                         plotOutput(outputId = "histScores",
                                     height = 200))
             )),
             fluidRow(
               #tags$style(
               #type = "text/css", 
               #"#leafmap {height: calc(100vh - 150px) !important;}"),
-                box(width = 12, solidHeader = F,
+              column(width = 9,  
+              box(width = NULL, 
+                    solidHeader = T,
                     leafletOutput("leafmap", height = 500))),
-            fluidRow(
               column(width = 3,
-                     box(width = NULL,
+                     box(width=NULL, 
+                         solidHeader = T, title = "Fires showing in map",
+                         plotOutput(outputId = "timeFire",
+                                    height = 200)),
+                     box(width = NULL, 
+                         status = "warning",
                          selectInput(inputId = "histX",
                                      label = "Unit of time",
                                      choices = c("Month" = "month",
                                                  "Year" = "year"),
                                      selected = "year")),
                      box(width=NULL,
+                         status = "warning",
                          selectInput(inputId = "histY",
                                      label = "Statistic",
                                      choices = c("Number of fires" = "count",
                                                  "Total acres burned" = "total_acres",
                                                  "Avg acres burned per fire" = "avg_acres"),
-                                     selected = "count"))),
-              column(width = 4,
-                     box(width=NULL,
-                       plotOutput(outputId = "histFire",
-                                  height = 200)))
+                                     selected = "count")))       
               )),
     ### Second tab ######
      tabItem(tabName = "community",
              fluidRow(
+               box(width = 3, 
+                   status = "warning",
                selectInput(inputId = "focus", 
                            label = "Strategic Focus", 
                            choices = c("Pick a focus..."="",
@@ -80,7 +88,9 @@ body <- dashboardBody(
                                        "Pre-suppression" = "PS",
                                        "Suppression" = "S",
                                        "Post-fire" = "PF"), 
-                           multiple=TRUE),
+                           multiple=TRUE)),
+               box(width = 3, 
+                   status = "warning",
                selectInput(inputId = "region",
                            label = "Region(s)", 
                            choices = c("Pick a region..."="", 
@@ -89,25 +99,32 @@ body <- dashboardBody(
                                        "South Maui" = "South Maui",
                                        "Upcountry Maui" = "Upcountry Maui",
                                        "Western Oahu" = "W. Oahu"), 
-                           multiple=TRUE),
+                           multiple=TRUE)),
+               box(width = 3, 
+                   status = "warning",
                conditionalPanel("input.region",
                                 selectInput(inputId = "meeting", 
                                             label = "Meeting Location(s)", 
                                             choices = c("Pick a meeting location"=""), 
-                                            multiple=TRUE))
+                                            multiple=TRUE)))
              ),
              fluidRow(
-               DT::dataTableOutput("dt")
+               box(width = 12, solidHeader = T,
+               DT::dataTableOutput("dt"))
                ),
              fluidRow(
+               box(width = 5, status = "primary",
                downloadButton("download_data",
-                              "Download Selected Data"),
+                              "Download Selected Data")),
+               box(width = 5, status = "primary",
                downloadButton("download_all_data",
-                              "Download All Data"))
+                              "Download All Data")))
              ),
     ################### Third tab ##########
      tabItem(tabName = "explore",
              fluidRow(
+               box(width = 3, 
+                   status = "warning",
                selectInput(inputId = "category", 
                            label = "Hazard Category", 
                            choices = c("Pick a hazard category..."="",
@@ -116,12 +133,16 @@ body <- dashboardBody(
                                        "Vegetation" = "Vegetation",
                                        "Building" = "Building",
                                        "Fire Environment" = "Fire Environment"), 
-                           multiple=TRUE),
+                           multiple=TRUE)),
+               box(width = 3, 
+                   status = "warning",
                conditionalPanel("input.category",
                                 selectInput(inputId = "hazard", 
                                             label = "Hazard(s)", 
                                             choices = c("Pick a hazard..."=""), 
-                                            multiple=TRUE)),
+                                            multiple=TRUE))),
+               box(width = 3, 
+                   status = "warning",
                selectInput(inputId = "island",
                            label = "Island",
                            choices = c("Pick an island..."="",
@@ -135,27 +156,36 @@ body <- dashboardBody(
                                        "Molokini Atoll" = "Molokini Atoll",
                                        "Niihau" = "Niihau",
                                        "Oahu" = "Oahu"),
-                           multiple = TRUE),
+                           multiple = TRUE)),
+               box(width = 3, 
+                   status = "warning",
                conditionalPanel("input.island",
                                 selectInput(inputId = "areaname", 
                                             label = "Area", 
                                             choices = c("Pick an area..."=""), 
-                                            multiple=TRUE))
+                                            multiple=TRUE)))
                ),
-             fluidRow(
-               actionButton(inputId = "risky",
-                            label = "Show me high risk hazards"),
-               actionButton(inputId = "allRisks",
-                            label = "Show me everything")
-               ),
+             #fluidRow(
+             #  box(width = 5, 
+             #      status = "warning",
+             #  actionButton(inputId = "risky",
+             #               label = "Show me high risk hazards")),
+             #  box(width = 5, 
+             #      status = "warning",
+             #  actionButton(inputId = "allRisks",
+             #               label = "Show me everything"))
+             #  ),
               fluidRow(
-                DT::dataTableOutput("dt_haz")
+                box(width = 12, solidHeader = T,
+                DT::dataTableOutput("dt_haz"))
                 ),
              fluidRow(
+               box(width = 5, status = "primary",
                downloadButton("download_haz",
-                              "Download Selected Data"),
+                              "Download Selected Data")),
+               box(width = 5, status = "primary",
                downloadButton("download_all_haz",
-                              "Download All Data")
+                              "Download All Data"))
                           )),
      tabItem(tabName = "action",
               includeMarkdown("docs/take_action.md")),

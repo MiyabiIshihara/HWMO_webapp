@@ -64,7 +64,7 @@ function(input, output, session) {
         onClick=JS("function(btn, map){ map.setZoom(7); }")))
       })
   
-  # reactive element to test which fires in view
+  #### Which Fires are in view? #####
   firesInBounds <- eventReactive(input$leafmap_bounds,{
     if (is.null(input$leafmap_bounds))
       return(hawaiiFiresdf[FALSE,])
@@ -75,14 +75,11 @@ function(input, output, session) {
       
       subset(hawaiiFiresdf,
              Lat >= latRng[[1]] & Lat <= latRng[[2]] &
-             Long >= lngRng[[1]] & Long <= lngRng[[2]])
-    
+             Long >= lngRng[[1]] & Long <= lngRng[[2]])  
   }, ignoreNULL = T)
   
-  
-  # building fire histogram separately at first
-  # to test different functionality
-  output$histFire <- renderPlot({
+  # Plot of fires in view #########
+  output$timeFire <- renderPlot({
     if (nrow(firesInBounds()) == 0)
       return(NULL)
     
@@ -110,6 +107,60 @@ function(input, output, session) {
             axis.ticks = element_line(color = "white"),
             axis.title.x=element_blank())
   })
+  
+  #### Which data are in view? #####
+  # Need to determine how to capture long/lat from sf object
+  #dataInBounds <- eventReactive(input$leafmap_bounds,{
+  #  if (is.null(input$leafmap_bounds))
+  #    return(hawaiiFiresdf[FALSE,])
+  #  
+  #  bounds <- input$leafmap_bounds
+  #  latRng <- range(bounds$north, bounds$south)
+  #  lngRng <- range(bounds$east, bounds$west)
+  #  
+  #  user_choice <- input$dataset
+  #  
+  #  if (user_choice %in% c("MedH_Inc", "NH_ac", "Homeowner")) {
+  #    the_data = census_dat
+  #  } else {
+  #    the_data = haz_dat
+  #  }
+  #  subset(the_data,
+  #         Lat >= latRng[[1]] & Lat <= latRng[[2]] &
+  #         Long >= lngRng[[1]] & Long <= lngRng[[2]])  
+  #}, ignoreNULL = T)
+  
+  # Plot of scores in view ########
+  #output$histScores <- renderPlot({
+  #  if (nrow(firesInBounds()) == 0)
+  #    return(NULL)
+  #  
+  #  tbl <- firesInBounds() 
+#
+  #  # Histogram
+  #    ggplot(the_data) +
+  #      geom_histogram(aes_string(x = user_choice), fill = "brown1",bins = 5) +
+  #      theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), 
+  #            panel.background = element_blank(), 
+  #            panel.grid = element_blank(),
+  #            axis.line = element_line(color = "white"), 
+  #            text = element_text(color = "white"), 
+  #            axis.text = element_text(color = "white"),
+  #            axis.ticks = element_line(color = "white"),
+  #            axis.title.x=element_blank()) + 
+  #      scale_fill_brewer()
+  #  
+  #  ggplot(tbl) +
+  #    geom_col(mapping= aes_string(input$histX, input$histY), fill = "brown1") +
+  #    theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), 
+  #          panel.background = element_blank(), 
+  #          panel.grid = element_blank(),
+  #          axis.line = element_line(color = "white"), 
+  #          text = element_text(color = "white"), 
+  #          axis.text = element_text(color = "white"),
+  #          axis.ticks = element_line(color = "white"),
+  #          axis.title.x=element_blank())
+  #})
   
   
   # This observer is responsible for maintaining the polygons and legend,
@@ -243,20 +294,20 @@ function(input, output, session) {
         ) %>%
       hideGroup(c("Fire Heatmap", "Fire Points"))
     
-    # Histogram
-    output$histMap <- renderPlot({
+    output$histScores <- renderPlot({
       ggplot(the_data) +
-        geom_histogram(aes_string(x = user_choice), fill = "brown1",bins = 5) +
-        theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), 
-              panel.background = element_blank(), 
-              panel.grid = element_blank(),
-              axis.line = element_line(color = "white"), 
-              text = element_text(color = "white"), 
-              axis.text = element_text(color = "white"),
-              axis.ticks = element_line(color = "white"),
-              axis.title.x=element_blank()) + 
-        scale_fill_brewer()
+            geom_histogram(aes_string(x = user_choice), fill = "brown1",bins = 5) +
+            theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), 
+                  panel.background = element_blank(), 
+                  panel.grid = element_blank(),
+                  axis.line = element_line(color = "white"), 
+                  text = element_text(color = "white"), 
+                  axis.text = element_text(color = "white"),
+                  axis.ticks = element_line(color = "white"),
+                  axis.title.x=element_blank()) + 
+            scale_fill_brewer()
     })
+
   })
   
   # Community Meetings Data Explorer tab ##############################################
