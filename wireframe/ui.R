@@ -64,7 +64,7 @@ sidebar <- dashboardSidebar(
     condition = "input.tabs == 'Community Meeting Results'",
     selectInput(inputId = "focus", 
                 label = "Strategic Focus", 
-                choices = c("All types"="",
+                choices = c("Pick a focus..."="",
                             "Prevention" = "P",
                             "Pre-suppression" = "PS",
                             "Suppression" = "S",
@@ -72,7 +72,7 @@ sidebar <- dashboardSidebar(
                 multiple=TRUE),
   selectInput(inputId = "region",
               label = "Region(s)", 
-               choices = c("All regions"="", 
+               choices = c("Pick a region..."="", 
                            "Kauai" = "Kauai",
                            "Molokai" = "Molokai",
                            "South Maui" = "South Maui",
@@ -82,17 +82,17 @@ sidebar <- dashboardSidebar(
    conditionalPanel("input.region",
                     selectInput(inputId = "meeting", 
                                 label = "Meeting Location(s)", 
-                                choices = c("All meeting locations"=""), 
-                                multiple=TRUE)),
-  numericInput("minVotes", "Min votes", min=0, max=12, value=0),
-  numericInput("maxVotes", "Max votes", min=0, max=12, value=12) 
+                                choices = c("Pick a meeting location"=""), 
+                                multiple=TRUE))
+  #numericInput("minVotes", "Min votes", min=0, max=12, value=0),
+  #numericInput("maxVotes", "Max votes", min=0, max=12, value=12) 
     ),
  ################### Third tab ##########
   conditionalPanel(
-    condition = "input.tabs == 'Take Action Today'",
+    condition = "input.tabs == 'Explore your area'",
     selectInput(inputId = "category", 
                 label = "Hazard Category", 
-                choices = c("All categories"="",
+                choices = c("Pick a hazard category..."="",
                             "Subdivision" = "Subdivision",
                             "Fire Protection" = "Fire Protection",
                             "Vegetation" = "Vegetation",
@@ -102,11 +102,11 @@ sidebar <- dashboardSidebar(
     conditionalPanel("input.category",
                           selectInput(inputId = "hazard", 
                                       label = "Hazard(s)", 
-                                      choices = c("All hazards"=""), 
+                                      choices = c("Pick a hazard..."=""), 
                                       multiple=TRUE)),
     selectInput(inputId = "island",
                      label = "Island",
-                     choices = c("All islands"="",
+                     choices = c("Pick an island..."="",
                                  "Hawaii Island" = "Hawaii Island",
                                  "Kahoolawe" = "Kahoolawe",
                                  "Kauai" = "Kauai",
@@ -121,10 +121,15 @@ sidebar <- dashboardSidebar(
   conditionalPanel("input.island",
                    selectInput(inputId = "areaname", 
                                       label = "Area", 
-                                      choices = c("All areas"=""), 
+                                      choices = c("Pick an area..."=""), 
                                       multiple=TRUE)),
-  numericInput("minScore", "Min score", min=0, max=29, value=0),
-  numericInput("maxScore", "Max score", min=0, max=29, value=29)
+  tags$br(),
+  actionButton(inputId = "risky",
+               label = "Show me high risk hazards"),
+  actionButton(inputId = "allRisks",
+               label = "Show me everything")
+  #numericInput("minScore", "Min score", min=0, max=29, value=0),
+  #numericInput("maxScore", "Max score", min=0, max=29, value=29)
   )
   )
 

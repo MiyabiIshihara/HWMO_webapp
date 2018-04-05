@@ -128,10 +128,14 @@ function(input, output, session) {
     
     # colorNumeric is a continuous palette for integers
     pal <- colorBin(
-      bins =  5,
+      bins =  3,
       na.color = alpha("blue",0.0),
       pretty = F,
-      palette = "YlOrRd",
+      #Green Yellow Red
+      palette = c(
+        "#1a9641",
+        '#ffffbf',
+        "#ca0020"),
       alpha = T,
       domain = color_domain
     )
@@ -208,13 +212,14 @@ function(input, output, session) {
                                                       bringToFront = TRUE),
                   popup = popup,
                   popupOptions = popupOptions(
-                    style = list("color" = "black")
+                    style = list("color" = "black"),
+                    maxHeight = 150
                     )) %>%
       addLegend("bottomleft", 
                 pal = pal, 
-                values = color_domain,
+                values = list("Low", "Medium", "High"),
                 title = user_choice,
-                labels = color_domain,
+                labels = list("Low", "Medium", "High"),
                 layerId="colorLegend"
                 ) %>%
       # Heatmap
@@ -272,8 +277,8 @@ function(input, output, session) {
   output$dt <- DT::renderDataTable({ 
     comm_temp() %>%
       filter(
-        total_votes >= input$minVotes,
-        total_votes <= input$maxVotes,
+        #total_votes >= input$minVotes,
+        #total_votes <= input$maxVotes,
         is.null(input$focus) | timing_focus %in% input$focus,
         is.null(input$region) | cwpp_region %in% input$region,
         is.null(input$meeting) | meeting_location %in% input$meeting
@@ -307,7 +312,7 @@ function(input, output, session) {
     }
   )
   
-  # Take Action Data Explorer tab ##############################################
+  # Explore your Area tab ##############################################
   haz_temp <- reactive({ haz_tidy })
   # hazards
   observe({
@@ -333,17 +338,40 @@ function(input, output, session) {
     updateSelectInput(session, "areaname", choices = areanames,
                       selected = areaSelected)
   })
-  
-  output$dt_haz <- DT::renderDataTable({ 
-    haz_temp() %>%
-      filter(
-        score >= input$minScore,
-        score <= input$maxScore,
-        is.null(input$category) | hazard_category %in% input$category,
-        is.null(input$hazard) | hazard %in% input$hazard,
-        is.null(input$island) | Island %in% input$island,
-        is.null(input$areaname) | AreaName %in% input$areaname
-      )})
+  # action button
+  observeEvent(input$risky, {
+    output$dt_haz <- DT::renderDataTable({ 
+      haz_temp() %>%
+        filter(
+          score >= 3,
+          is.null(input$category) | hazard_category %in% input$category,
+          is.null(input$hazard) | hazard %in% input$hazard,
+          is.null(input$island) | Island %in% input$island,
+          is.null(input$areaname) | AreaName %in% input$areaname
+        )}
+      )
+  })
+  observeEvent(input$allRisks, {
+    output$dt_haz <- DT::renderDataTable({ 
+      haz_temp() %>%
+        filter(
+          score >= 3,
+          is.null(input$category) | hazard_category %in% input$category,
+          is.null(input$hazard) | hazard %in% input$hazard,
+          is.null(input$island) | Island %in% input$island,
+          is.null(input$areaname) | AreaName %in% input$areaname
+        )}
+      )
+  }) 
+    output$dt_haz <- DT::renderDataTable({ 
+      haz_temp() %>%
+        filter(
+          is.null(input$category) | hazard_category %in% input$category,
+          is.null(input$hazard) | hazard %in% input$hazard,
+          is.null(input$island) | Island %in% input$island,
+          is.null(input$areaname) | AreaName %in% input$areaname
+        )}
+   )
   ## Download Selected Data
   output$download_haz <- downloadHandler(
     # This function returns a string which tells the client browser what name to use when saving the file.
