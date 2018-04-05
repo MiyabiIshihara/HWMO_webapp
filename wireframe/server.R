@@ -41,7 +41,8 @@ census_dat <- st_transform(census_dat, 4326)
 
 
 ## Load Community Input data
-comm_dat <- read_csv("data/comm_input.csv")
+comm_dat <- read_csv("data/comm_input.csv") %>%
+  select(-c(cohesive_strategy, key_codes, sec_desc1, sec_desc2, sec_desc3))
 ## Load haz data from geojson
 #haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 haz_dat <- st_read("data/hazard/WHA2015.shp")
