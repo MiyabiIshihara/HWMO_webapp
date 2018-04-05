@@ -109,42 +109,6 @@ function(input, output, session) {
             axis.text = element_text(color = "white"),
             axis.ticks = element_line(color = "white"),
             axis.title.x=element_blank())
-      
-    
-    #par(bg = "#222d32")
-    # test if in bounds
-    #if (nrow(firesInBounds() == 0))
-    #F_xlab = as.character("TEST")
-    
-    #if (input$histX == "Year") {
-    #  F_xlab = "Year"
-    #} else {
-    #  F_xlab = "Month"
-    #}
-    
-    #F_breaks = as.integer(3)
-    #if (input$histX == "Year") {
-    #  F_breaks <- as.numeric(length(unique(hawaiiFiresdf["Year"]))) # this is broken, but how we should do it
-    #} else {
-    #  F_breaks <- 12
-    #}
-    
-    
-    #hist(hawaiiFiresdf[[input$histX]],
-    #     #xlab = hawaiiFiresdf$month,
-    #     xlab = F_xlab,
-    #     freq = TRUE,
-    #     #breaks = as.numeric(input$histBreaks),
-    #     breaks = F_breaks,
-    #     main = "Historical Fire Frequency, 2000-2013",
-    #     plot = TRUE,
-    #     border = "#222d32",
-    #     col = "palegreen",
-    #     col.main = "white",
-    #     col.lab = "white",
-    #     col.axis = "white",
-    #     fg = "white")
-    
   })
   
   
@@ -167,68 +131,68 @@ function(input, output, session) {
       bins =  5,
       na.color = alpha("blue",0.0),
       pretty = F,
-      palette = "YlGnBu",
+      palette = "YlOrRd",
       alpha = T,
       domain = color_domain
     )
     
     # Popup content
     if (user_choice == "MedH_Inc") {
-      popup = paste0(haz_dat$AreaName,
-                    "</br><b>Median Household Income: </b> $", census_dat$MedH_Inc
+      popup = paste0("<h4>", haz_dat$AreaName, "</h4>", tags$br(),
+                    tags$em("Median Household Income: "),"$", census_dat$MedH_Inc
                     )
       } else if (user_choice == "NH_ac") {
-        popup = paste0(haz_dat$AreaName,
-                      "</br><b>Native Hawaiian count: </b>", census_dat$NH_ac)
+        popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
+                      tags$em("Native Hawaiian count: "), census_dat$NH_ac)
       } else if (user_choice == "Homeowner") {
-        popup = paste0(haz_dat$AreaName,
-                      "</br><b>Homeownership: </b>", round(census_dat$Homeowner, digits = 2),"%")
+        popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
+                      tags$em("Homeownership: "), round(census_dat$Homeowner, digits = 2),"%")
       } else if (user_choice == "FIREPROTOT") {
-        popup = paste0(haz_dat$AreaName,
-                      "</br><b>Water availability: </b>", haz_dat$Wat_Avail,
-                      "</br><b>Response time: </b>", haz_dat$Rspn_Time,
-                      "</br><b>Fire station proximity: </b>", haz_dat$Prox_Stn,
-                      "</br><b>Fire dept training: </b>", haz_dat$FD_Trng,
-                      "</br><b>Wildland firefighting capability: </b>", haz_dat$Wild_Cap,
-                      "</br><b>Interagency cooperation: </b>", haz_dat$IntAgCoop,
-                      "</br><b>Local emergency operations: </b>", haz_dat$Loc_Ops,
-                      "</br><b>Community planning: </b>", haz_dat$Com_Plan,
-                      "</br><b>Community fire programs: </b>", haz_dat$Com_FirPrg)
+        popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
+                      tags$em("Water availability: "), haz_dat$Wat_Avail, tags$br(),
+                      tags$em("Response time: "), haz_dat$Rspn_Time, tags$br(),
+                      tags$em("Fire station proximity: "), haz_dat$Prox_Stn,tags$br(),
+                      tags$em("Fire dept training: "), haz_dat$FD_Trng,tags$br(),
+                      tags$em("Wildland firefighting capability: "), haz_dat$Wild_Cap,tags$br(),
+                      tags$em("Interagency cooperation: "), haz_dat$IntAgCoop,tags$br(),
+                      tags$em("Local emergency operations: "), haz_dat$Loc_Ops,tags$br(),
+                      tags$em("Community planning: "), haz_dat$Com_Plan,tags$br(),
+                      tags$em("Community fire programs: "), haz_dat$Com_FirPrg)
       } else if (user_choice == "SUBD_TOT") {
-        popup = paste0(haz_dat$AreaName,
-                      "</br><b>Ingress/Egress: </b>", haz_dat$Ing_Eg,
-                      "</br><b>Road maintenance: </b>", haz_dat$Rd_Maint,
-                      "</br><b>Road width: </b>", haz_dat$Rd_Width,
-                      "</br><b>Road condition: </b>", haz_dat$Rd_Cond,
-                      "</br><b>Fire service access: </b>", haz_dat$Fire_Acc,
-                      "</br><b>Street signs: </b>",  haz_dat$St_Sign,
-                      "</br><b>Structure density: </b>", haz_dat$Strc_Den,
-                      "</br><b>Home setbacks: </b>", haz_dat$Hm_Set,
-                      "</br><b>Unmanaged lands: </b>",haz_dat$Un_Lands,
-                      "</br><b>Private landowner action: </b>",haz_dat$Priv_Act,
-                      "</br><b>Wildland proximity: </b>",haz_dat$Prox_Wild)
+        popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
+                      tags$em("Ingress/Egress: "), haz_dat$Ing_Eg, tags$br(),
+                      tags$em("Road maintenance: "), haz_dat$Rd_Maint, tags$br(),
+                      tags$em("Road width: "), haz_dat$Rd_Width, tags$br(),
+                      tags$em("Road condition: "), haz_dat$Rd_Cond, tags$br(),
+                      tags$em("Fire service access: "), haz_dat$Fire_Acc, tags$br(),
+                      tags$em("Street signs: "),  haz_dat$St_Sign, tags$br(),
+                      tags$em("Structure density: "), haz_dat$Strc_Den, tags$br(),
+                      tags$em("Home setbacks: "), haz_dat$Hm_Set, tags$br(),
+                      tags$em("Unmanaged lands: "),haz_dat$Un_Lands, tags$br(),
+                      tags$em("Private landowner action: "),haz_dat$Priv_Act, tags$br(),
+                      tags$em("Wildland proximity: "),haz_dat$Prox_Wild)
       } else if (user_choice == "VEG_TOT") {
-        popup = paste0(haz_dat$AreaName,
-                      "</br><b>Proximity of flamable fuel: </b>", haz_dat$Prox_Flam,
-                      "</br><b>Vegetation type: </b>", haz_dat$Veg_Type,
-                      "</br><b>Fuel loading: </b>", haz_dat$Fuel_Load,
-                      "</br><b>Fuel structure: </b>", haz_dat$Fuel_Strc,
-                      "</br><b>Defensible space: </b>", haz_dat$Def_Space)
+        popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
+                      tags$em("Proximity of flamable fuel: "), haz_dat$Prox_Flam, tags$br(),
+                      tags$em("Vegetation type: "), haz_dat$Veg_Type, tags$br(),
+                      tags$em("Fuel loading: "), haz_dat$Fuel_Load, tags$br(),
+                      tags$em("Fuel structure: "), haz_dat$Fuel_Strc, tags$br(),
+                      tags$em("Defensible space: "), haz_dat$Def_Space)
       } else if (user_choice == "BLDG_TOT") {
-        popup = paste0(haz_dat$AreaName,
-                      "</br><b>Roofing: </b>", haz_dat$Roof_Asmb,
-                      "</br><b>Siding: </b>", haz_dat$Sid_Sof,
-                      "</br><b>Under-skirting: </b>", haz_dat$Undr_Skrt,
-                      "</br><b>Utilities placement: </b>", haz_dat$Utlty_Plmt,
-                      "</br><b>Structural ignitability: </b>", haz_dat$Strc_Ign)
+        popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
+                      tags$em("Roofing: "), haz_dat$Roof_Asmb, tags$br(),
+                      tags$em("Siding: "), haz_dat$Sid_Sof, tags$br(),
+                      tags$em("Under-skirting: "), haz_dat$Undr_Skrt, tags$br(),
+                      tags$em("Utilities placement: "), haz_dat$Utlty_Plmt, tags$br(),
+                      tags$em("Structural ignitability: "), haz_dat$Strc_Ign)
       } else {
-        popup = paste0(haz_dat$AreaName,
-                      "</br><b>Slope: </b>", haz_dat$Slope,
-                      "</br><b>Avg rain (1-6): </b>", haz_dat$Avg_Rain,
-                      "</br><b>Prevailng wind (1-4): </b>", haz_dat$Prev_Wind,
-                      "</br><b>Seasonal hazard condition: </b>", haz_dat$Seas_Haz,
-                      "</br><b>Ignition risk: </b>", haz_dat$Ign_Risk,
-                      "</br><b>Topography: </b>", haz_dat$Top_Adv)
+        popup = paste0("<h4>",haz_dat$AreaName, "</h4>",tags$br(),
+                      tags$em("Slope: "), haz_dat$Slope, tags$br(),
+                      tags$em("Avg rain (1-6): "), haz_dat$Avg_Rain, tags$br(),
+                      tags$em("Prevailng wind (1-4): "), haz_dat$Prev_Wind, tags$br(),
+                      tags$em("Seasonal hazard condition: "), haz_dat$Seas_Haz, tags$br(),
+                      tags$em("Ignition risk: "), haz_dat$Ign_Risk, tags$br(),
+                      tags$em("Topography: "), haz_dat$Top_Adv)
       }
     
     leafletProxy("leafmap", data = the_data) %>%
@@ -243,7 +207,9 @@ function(input, output, session) {
                                                       opacity = 1.0,
                                                       bringToFront = TRUE),
                   popup = popup,
-                  popupOptions = popupOptions(style = list("color" = "black"))) %>%
+                  popupOptions = popupOptions(
+                    style = list("color" = "black")
+                    )) %>%
       addLegend("bottomleft", 
                 pal = pal, 
                 values = color_domain,
@@ -251,7 +217,7 @@ function(input, output, session) {
                 labels = color_domain,
                 layerId="colorLegend"
                 ) %>%
-      #Heatmap
+      # Heatmap
       addHeatmap(lng = ~Long, lat = ~Lat, data = hawaiiFiresdf,
                  blur = 25, max = 0.05, radius = 15,
                  minOpacity = 0.02,
@@ -259,10 +225,11 @@ function(input, output, session) {
                  gradient = "magma",
                  group = "Fire Heatmap"
                  ) %>%
+      # Fire Points
       addMarkers(lng = ~Long, lat = ~Lat, data = hawaiiFiresdf,
                  clusterOptions = markerClusterOptions(),
-                 popup = paste("<b>Date of fire: </b>", hawaiiFiresdf$Start_Date, "<br>",
-                               "<b>Acres burned</b>", hawaiiFiresdf$Total_Ac),
+                 popup = paste(tags$em("Date of fire: "), hawaiiFiresdf$Start_Date, tags$br(),
+                               tags$em("Acres burned"), hawaiiFiresdf$Total_Ac),
                  group = "Fire Points"
                  ) %>%
       addLayersControl(
@@ -271,23 +238,20 @@ function(input, output, session) {
         ) %>%
       hideGroup(c("Fire Heatmap", "Fire Points"))
     
-    # this is where we set up the histogram
+    # Histogram
     output$histMap <- renderPlot({
-      par(bg = "#222d32")
-      hist(color_domain,
-           xlab = "scores",
-           main = user_choice,
-           freq = TRUE,
-          #breaks = color_domain,
-           breaks = 5,
-           border = "#222d32",
-           col = "brown1",
-           col.main = "white",
-           col.lab = "white",
-           col.axis = "white",
-           fg = "white")
+      ggplot(the_data) +
+        geom_histogram(aes_string(x = user_choice), fill = "brown1",bins = 5) +
+        theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), 
+              panel.background = element_blank(), 
+              panel.grid = element_blank(),
+              axis.line = element_line(color = "white"), 
+              text = element_text(color = "white"), 
+              axis.text = element_text(color = "white"),
+              axis.ticks = element_line(color = "white"),
+              axis.title.x=element_blank()) + 
+        scale_fill_brewer()
     })
-    
   })
   
   # Community Meetings Data Explorer tab ##############################################
