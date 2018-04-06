@@ -6,15 +6,17 @@ input[type = "histY"] {
 }
 
 /* Customize fonts */
-  body, label, input, button, select { 
-    font-family: 'Helvetica Neue', Helvetica;
-    font-weight: bold;
+body, label, input, button, select { 
+    font-family: 'Gustan', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 200;
+    color: #666666;
   }
 h1, h2, h3, h4 { font-weight: 400; }
 
 .main-header .logo {
   font-family: 'Helvetica Neue', Helvetica;
-  font-weight: bold;
+  font-weight: 300;
   font-size: 24px;
 }
 
@@ -26,3 +28,4 @@ h1, h2, h3, h4 { font-weight: 400; }
             height: 10px;
             margin-top: 4px;
          }
+         

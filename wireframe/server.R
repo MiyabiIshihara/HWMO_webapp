@@ -391,39 +391,40 @@ function(input, output, session) {
                       selected = areaSelected)
   })
   # action button
-  observeEvent(input$risky, {
+  #observeEvent(input$risky, {
+  #  output$dt_haz <- DT::renderDataTable({ 
+  #    haz_temp() %>%
+  #      filter(
+  #        score >= 3,
+  #        is.null(input$category) | hazard_category %in% input$category,
+  #        is.null(input$hazard) | hazard %in% input$hazard,
+  #        is.null(input$island) | Island %in% input$island,
+  #        is.null(input$areaname) | AreaName %in% input$areaname
+  #      )}
+  #    )
+  #})
+  #
+  #observeEvent(input$allRisks, {
+  #  output$dt_haz <- DT::renderDataTable({ 
+  #    haz_temp() %>%
+  #      filter(
+  #        score >= 3,
+  #        is.null(input$category) | hazard_category %in% input$category,
+  #        is.null(input$hazard) | hazard %in% input$hazard,
+  #        is.null(input$island) | Island %in% input$island,
+  #        is.null(input$areaname) | AreaName %in% input$areaname
+  #      )}
+  #    )
+  #}) 
     output$dt_haz <- DT::renderDataTable({ 
       haz_temp() %>%
         filter(
-          score >= 3,
           is.null(input$category) | hazard_category %in% input$category,
           is.null(input$hazard) | hazard %in% input$hazard,
           is.null(input$island) | Island %in% input$island,
           is.null(input$areaname) | AreaName %in% input$areaname
-        )}
-      )
-  })
-  observeEvent(input$allRisks, {
-    output$dt_haz <- DT::renderDataTable({ 
-      haz_temp() %>%
-        filter(
-          score >= 3,
-          is.null(input$category) | hazard_category %in% input$category,
-          is.null(input$hazard) | hazard %in% input$hazard,
-          is.null(input$island) | Island %in% input$island,
-          is.null(input$areaname) | AreaName %in% input$areaname
-        )}
-      )
-  }) 
-    output$dt_haz <- DT::renderDataTable({ 
-      haz_temp() %>%
-        filter(
-          is.null(input$category) | hazard_category %in% input$category,
-          is.null(input$hazard) | hazard %in% input$hazard,
-          is.null(input$island) | Island %in% input$island,
-          is.null(input$areaname) | AreaName %in% input$areaname
-        )}
-   )
+        )
+      })
   ## Download Selected Data
   output$download_haz <- downloadHandler(
     # This function returns a string which tells the client browser what name to use when saving the file.
@@ -453,4 +454,69 @@ function(input, output, session) {
       write.table(haz_tidy, file, sep = ",", row.names = FALSE)
     }
   )
-}
+
+  #### How is my area? ####
+  
+  
+  
+  # hazards
+  observe({
+    hazards <- if (is.null(input$category2)) character(0) else {
+      filter(haz_temp(), hazard_category %in% input$category2) %>%
+        `$`('hazard') %>%
+        unique() %>%
+        sort()
+    }
+    hazSelected <- isolate(input$hazard2[input$hazard2 %in% hazards])
+    updateSelectInput(session, "hazard2", choices = hazards,
+                      selected = hazSelected)
+  })
+  # Areas
+  observe({
+    areanames <- if (is.null(input$island2)) character(0) else {
+      filter(haz_temp(), Island %in% input$island2) %>%
+        `$`('AreaName') %>%
+        unique() %>%
+        sort()
+    }
+    areaSelected <- isolate(input$areaname2[input$areaname2 %in% areanames])
+    updateSelectInput(session, "areaname2", choices = areanames,
+                      selected = areaSelected)
+  })
+  
+  
+  
+  output$scoreBox <- renderValueBox({
+    
+    haz_temp() %>%
+      filter(
+        is.null(input$category2) | hazard_category %in% input$category2,
+        is.null(input$hazard2) | hazard %in% input$hazard2,
+        is.null(input$island2) | Island %in% input$island2,
+        is.null(input$areaname2) | AreaName %in% input$areaname2) -> row
+    score <- row$score[1]
+    
+    # Conditional icon
+    if (score == 1){
+      icon = "thumbs-down"
+    } else if (score == 2){
+      icon = "cog"
+    } else {
+      icon = "thumbs-up"
+    }
+    # Conditional color
+    if (score == 1){
+      color = "red"
+    } else if (score == 2){
+      color = "yellow"
+    } else {
+      color = "green"
+    }
+    
+    valueBox(value = paste0(score), 
+             subtitle = "Hazard", 
+             icon = icon(icon, lib= "glyphicon"),
+             color = color)
+  })
+}  
+  

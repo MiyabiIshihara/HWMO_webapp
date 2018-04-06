@@ -17,12 +17,15 @@ sidebar <- dashboardSidebar(
     menuItem("Map", tabName = "Map"),
     menuItem("Community Meeting Results", tabName = "community"),
     menuItem("Explore your area", tabName = "explore"),
+    menuItem("How am I?", tabName = "area"),
     menuItem("Take Action", tabName = "action"),
     menuItem("FAQ", tabName = "FAQ")
   ))
 
 body <- dashboardBody(
-  tags$head(includeCSS("style.css")),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+  ),
   tabItems(
     ### First Tab ####
     tabItem(tabName = "Map",
@@ -189,12 +192,66 @@ body <- dashboardBody(
                downloadButton("download_all_haz",
                               "Download All Data"))
                           )),
+    #### Fourth Tab ######
+    tabItem(tabName = "area",
+            fluidRow(
+              box(width = 3, 
+                  status = "warning",
+                  selectInput(inputId = "category2", 
+                              label = "Hazard Category", 
+                              choices = c("Pick a hazard category..."="",
+                                          "Subdivision" = "Subdivision",
+                                          "Fire Protection" = "Fire Protection",
+                                          "Vegetation" = "Vegetation",
+                                          "Building" = "Building",
+                                          "Fire Environment" = "Fire Environment"), 
+                              multiple=F)),
+              box(width = 3, 
+                  status = "warning",
+                  conditionalPanel("input.category2",
+                                   selectInput(inputId = "hazard2", 
+                                               label = "Hazard", 
+                                               choices = c("Pick a hazard..."=""), 
+                                               multiple=F))),
+              box(width = 3, 
+                  status = "warning",
+                  selectInput(inputId = "island2",
+                              label = "Island",
+                              choices = c("Pick an island..."="",
+                                          "Hawaii Island" = "Hawaii Island",
+                                          "Kahoolawe" = "Kahoolawe",
+                                          "Kauai" = "Kauai",
+                                          "Lanai" = "Lanai",
+                                          "Lehua" = "Lehua",
+                                          "Maui" = "Maui",
+                                          "Molokai" = "Molokai",
+                                          "Molokini Atoll" = "Molokini Atoll",
+                                          "Niihau" = "Niihau",
+                                          "Oahu" = "Oahu"),
+                              multiple = F)),
+              box(width = 3, 
+                  status = "warning",
+                  conditionalPanel("input.island2",
+                                   selectInput(inputId = "areaname2", 
+                                               label = "Area", 
+                                               choices = c("Pick an area..."=""), 
+                                               multiple=F)))
+            ),
+            fluidRow(
+              valueBoxOutput("scoreBox", width = 4)
+            )
+            ),
+    #### Fifth Tab #######
      tabItem(tabName = "action",
+             fluidRow(
              box(width = 12, solidHeader = T,
-                 includeMarkdown("docs/take_action.md"))),
+                 includeMarkdown("docs/take_action.md")))
+             ),
+    #### Last Tab #####
      tabItem(tabName = "FAQ",
+             fluidRow(
              box(width = 12, solidHeader = T,
-                 includeMarkdown("docs/about.md"))))
+                 includeMarkdown("docs/about.md")))))
   )
                     
 dashboardPage(
