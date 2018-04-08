@@ -5,9 +5,9 @@ account: lollon
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 304597
-bundleId: 1308635
+bundleId: 1308769
 url: https://lollon.shinyapps.io/HWMO_Prototype/
-when: 1523218375.74634
+when: 1523224413.0786
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: .Rapp.history
+ignoredFiles: .Rapp.history|docs/2014_3_31_Community Hazard Assessment_Key Final_HWMO.pdf
