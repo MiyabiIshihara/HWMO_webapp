@@ -43,13 +43,16 @@ census_dat <- st_transform(census_dat, 4326)
 ## Load Community Input data
 comm_dat <- read_csv("data/comm_input.csv") %>%
   select(-c(cohesive_strategy, key_codes, sec_desc1, sec_desc2, sec_desc3))
-## Load haz data from geojson
+
+## Load haz data
 #haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 haz_dat <- st_read("data/hazard/WHA2015.shp")
 haz_dat <- st_transform(haz_dat, 4326)
 ## Load hazard data for data explorer
 haz_tidy <- read_csv("data/tidy_haz.csv") %>%
   select(-c(AREA, PERIMETER, Acres, zone, CAR_Hawaii, CAR_adjtot))
+## Load hazard scoring system
+haz_scoring <- read_csv("data/hazard_scoring_system.csv")
 
 function(input, output, session) {
   
@@ -463,7 +466,7 @@ function(input, output, session) {
   observe({
     hazards <- if (is.null(input$category2)) character(0) else {
       filter(haz_temp(), hazard_category %in% input$category2) %>%
-        `$`('hazard') %>%
+        `$`('hazard_full') %>%
         unique() %>%
         sort()
     }
@@ -485,13 +488,12 @@ function(input, output, session) {
   })
   
   
-  
   output$scoreBox <- renderValueBox({
     
     haz_temp() %>%
       filter(
         is.null(input$category2) | hazard_category %in% input$category2,
-        is.null(input$hazard2) | hazard %in% input$hazard2,
+        is.null(input$hazard2) | hazard_full %in% input$hazard2,
         is.null(input$island2) | Island %in% input$island2,
         is.null(input$areaname2) | AreaName %in% input$areaname2) -> row
     score <- row$score[1]
@@ -514,9 +516,80 @@ function(input, output, session) {
     }
     
     valueBox(value = paste0(score), 
-             subtitle = "Hazard", 
+             subtitle = paste0(input$areaname2, ": ", input$hazard2), 
              icon = icon(icon, lib= "glyphicon"),
              color = color)
   })
+  
+  ## Scores 1
+  output$lowScoreBox <- renderInfoBox({
+    
+    haz_temp() %>%
+      filter(
+        is.null(input$hazard2) | hazard_full %in% input$hazard2) %>%
+      filter(!is.na(reason)) %>%
+      arrange(score) -> temp1
+    
+    temp2 <- t(unique(temp1$reason))
+    
+    end_data <- data_frame(low = temp2[1], 
+                           medium = temp2[2], 
+                           high = temp2[3])
+    
+    infoBox(
+      "Low Hazard", 
+      paste0(end_data[[1]]), 
+      icon = icon("thumbs-up", lib = "glyphicon"),
+      color = "green", fill = FALSE
+    )
+  })
+  
+  ## Scores 2
+  output$medScoreBox <- renderInfoBox({
+    
+    haz_temp() %>%
+      filter(
+        is.null(input$hazard2) | hazard_full %in% input$hazard2) %>%
+      filter(!is.na(reason)) %>%
+      arrange(score) -> temp1
+    
+    temp2 <- t(unique(temp1$reason))
+    
+    end_data <- data_frame(low = temp2[1], 
+                           medium = temp2[2], 
+                           high = temp2[3])
+    
+    infoBox(
+      "Medium Hazard", 
+      paste0(end_data$medium[1]), 
+      icon = icon("cog", lib = "glyphicon"),
+      color = "yellow", fill = FALSE
+    )
+  })
+  
+  ## Scores 3
+  output$hiScoreBox <- renderInfoBox({
+    
+    haz_temp() %>%
+      filter(
+        is.null(input$hazard2) | hazard_full %in% input$hazard2) %>%
+      filter(!is.na(reason)) %>%
+      arrange(score) -> temp1
+    
+    temp2 <- t(unique(temp1$reason))
+    
+    end_data <- data_frame(low = temp2[1], 
+                           medium = temp2[2], 
+                           high = temp2[3])
+    
+    infoBox(
+      "High Hazard", 
+      paste0(end_data$high[1]), 
+      icon = icon("thumbs-down", lib = "glyphicon"),
+      color = "red", fill = FALSE
+    )
+  })
+  
+  
 }  
   

@@ -195,6 +195,9 @@ body <- dashboardBody(
     #### Fourth Tab ######
     tabItem(tabName = "area",
             fluidRow(
+              box(width = 6, solidHeader = T,
+                  tags$h4("Pick an area and hazard to see the hazard score."))),
+            fluidRow(
               box(width = 3, 
                   status = "warning",
                   selectInput(inputId = "category2", 
@@ -239,6 +242,14 @@ body <- dashboardBody(
             ),
             fluidRow(
               valueBoxOutput("scoreBox", width = 4)
+            ),
+            fluidRow(
+              box(width = 3, solidHeader = T,
+                tags$h4("How was this scored?"))),
+            fluidRow(
+              infoBoxOutput("lowScoreBox", width = 4),
+              infoBoxOutput("medScoreBox", width = 4),
+              infoBoxOutput("hiScoreBox", width = 4)
             )
             ),
     #### Fifth Tab #######

@@ -1,0 +1,73 @@
+Category,Rating Element,Low_1,Moderate_2,High_3
+Subdivision,Ingress_Egress,Multiple entrances and exits are well equipped for fire trucks with turnarounds.,Limited access routes. 2 ways in and 2 ways out. Moderate grades.,"Narrow, dead end roads or 1 way in, 1 way out. Steep grades"
+Subdivision,Road Maintenance,"Wide loop roads that are maintained, paved or solid surface with shoulders.",Roads maintained. Some narrow two lane roads with no shoulders.,"Narrow and or single lane, minimally maintained, no shoulders."
+Subdivision,Road Width,"24’+ wide.
+Wide roads with drivable shoulders and good visibility allow two-way traffic.  Streets in the downtown area are the widest streets in town.
+Interior streets are smaller and are easily blocked by
+parked vehicles.","20’-24’ wide.
+Medium width roads with drivable shoulders and good visibility, support evacuation and emergency response time.",Less than 20 feet wide. Narrow roads coupled with poor visibility limit evacuation and emergency response.  Traffic problems will occur.  Entrapment is likely.
+Subdivision,All-season Road Condition,Flat or gently sloping surfaced roads can support high volumes of large fire equipment.,Surfaced road with 5%+ grade or non-surfaced road with <5% grade that can still support fire equipment.  Road and right-of-way maintenances is essential for access and visibility.,"Narrow, steep, or non- surfaced roads are difficult to access. One-way traffic is a hazard. Overhanging brush may damage fire equipment.  Jeep trails and seasonal roads limit 2wd emergency response equipment."
+Subdivision,Fire Service Access,Adequate turnaround space is available for large fire equipment.,"<300’ with no turnaround.
+Short or dead-end streets will become crowded with
+homeowner’s vehicles.",300’+ with no turnaround. Long dead-end streets will become crowded with vehicles. Two-way visibility is an issue.
+Subdivision,Street signs,"Present. Most are at least 4’ in size and are
+reflectorized.","Present and reflectorized with some
+exceptions.",Not present.
+Subdivision,Structure Density,Low structure density and low ignition probability.,"Density and ignition probability are both moderate, or one is high but is balanced by
+the other being low.",Dense structures with high ignition probability.
+Subdivision,Home Setbacks,Majority (50%+) of homes are set back from property lines and slopes by at least 30 feet.,10-50% of homes have defensible setbacks from property lines and sloped areas.,<10% of homes have defensible setbacks from property lines. Buildings located close to dangerous topographic features such as the tops of slopes.
+Subdivision,"Unmanaged, untended, undeveloped lands",Few to no weedy vacant lots. Few to no undeveloped unmaintained vegetated areas or corridors between homes.  Less than 10% of lots remain undeveloped and pose an additional wildfire hazard due to lack of maintenance and/or restricted access.,"Some isolated unmaintained lots or undeveloped vegetated areas within subdivision.  10-50% of lots have not been developed and pose an additional wildfire hazard due to lack of maintenance and/or restricted access.
+Hazard ranking is dependent on ignition risk, size of area, and fuel type.","Abundant unmanaged, vegetated corridors and vacant lots throughout community.  Agricultural lands irregularly maintained leaving dry weedy species causing increased ignition risk.  Numerous ladder fuels and high risk fuels.
+Greater than 75% of lots have not been developed or Separation of adjacent structures that can contribute to fire spread"
+Subdivision,Private landowner actions / Firewise landscaping and defensible space,"70% of homes have improved survivable space around property, reduced ignition risk, hardened homes, and no ladder fuels.",30-70% homes have improved survivable space around property and well-maintained landscapes.,"<30% of homes have defensible space, hardened home features, or Firewise landscaping"
+Subdivision,Proximity of subdivision to wildland areas,"Wildland areas share no borders with the subdivision.  Little to no undeveloped and unmaintained vegetated areas within community. Little to no ladder fuels along community
+boundaries.",Wildland areas adjoin subdivision on 1-2 sides.,Wildland areas surround subdivision on at least 3 sides.
+Vegetation,Proximity of flammable fuels around subdivision,Greater than 100’,40-100’,Less than 40’
+Vegetation,Type of predominant vegetation within 300’ of homes,"Grasses less than 6 inches in height.
+Light leaf litter.",Grasses 6–12 inches in height.  Grasses 6-12” tall. Light brush and small trees.  Patchy fuels.,"Dense grass, brush, timber, and/or hardwoods. Moderate to heavy dead and downed vegetation.
+Fuels greater than 12 feet
+tall.  Heavy vegetation."
+Vegetation,Fuel loading,0-30% cover,31-70% cover,71-100% cover
+Vegetation,Fuel structure and arrangement,"Non-contiguous or patchwork arrangement. Little to
+no ladder fuels.","NA","Uninterrupted vegetation, pervasive ladder fuels."
+Vegetation,Defensible Space/ Fuels reduction around homes & structures,Vegetation is treated 100 feet or more from structures.,31-100 ft of vegetation treatment from structures.,Less than 30 ft of vegetation treatment from structures.
+Building,Roofing Assembly,"Greater than 75% of homes have Class A roofs (metal, asphalt, or fiberglass roofing
+material).",50-75% have Class A roofing.,Less than 50% of homes have Class A roofing.
+Building,Siding/ Soffits,Greater than 75% of homes have fire resistant siding and soffits.,50-75% of homes have fire resistant siding and soffits.,Less than 50% of homes have fire resistant siding and soffits.
+Building,"Under-skirting around decks, lanais, post-and- pier structures.",Greater than 75% of homes have the equivalent of fine non- combustible mesh screening to protect underneath from flying embers and ignition,50-75% of homes have the equivalent of fine non-combustible mesh screening,Less than 50% of homes have the equivalent of fine non- combustible mesh screening
+Building,Utilities Placement- Gas and Electric,All underground or none.,"One underground, one above ground.",Both above ground.
+Building,Structural Ignitability,"Greater than 75% or houses are spaced with cleared boundaries.
+Flammables and combustible materials stored according to fire-
+safe principles.",50-75% of homes store combustibles properly.,Less than 50% of homes store combustibles properly. Houses close to each other.
+Fire Environment,Slope,Flat to slight slope (10%),"Moderate slopes (10-
+30%)",Steep slopes (>30%)
+Fire Environment,"Average rainfall
+*Score 1-6 instead",High precipitation (Score=1 or 2),(Score=3 or 4),Low precipitation (Score=5 or 6)
+Fire Environment,"Prevailing wind speeds and direction
+*Score 1-4 instead",Wind rarely (less than 10% of time) exceeds 15 mph. Protection from predominant winds.,Wind rarely (less than 10% of time) exceeds 15 mph.,Wind frequently (50% or more of time) exceeds 15 mph or frequent exposure to predominant winds or transitional/converging wind directions.
+Fire Environment,Seasonal or periodic high hazard conditions,Area has no major seasonal increase of fire hazard.,"Area is occasionally (e.g., once per decade) exposed to fire prone conditions: drought, lightning storms, desiccated vegetation, and/or strong dry winds","Area is seasonally exposed to unusually severe fire weather, drought conditions, lightning storms, desiccated vegetation, and/or strong dry winds"
+Fire Environment,Ignition risk,Little to no natural (lightning or lava) ignition risk.  No history of arson. Wildland areas absent or distant from public and/or vehicular access.,"Some history of wildfire, but not particularly fire prone area due to prevailing lack of fire prone conditions, weather, and vegetation type.",Most historic wildfire events were anthropogenic with easy access to wildland areas via roads or proximity to development OR natural ignition sources such as lightning or lava are prevalent. Fire prone area.  High rate of ignitions or history of large scale fires and/or severe wildfire events.
+Fire Environment,Topographical features that adversely wildland fire behavior,None.,NA,"Major feature such as box canyon, ravines, chutes, saddles, transition zones."
+Fire Protection,Water source availability,Pressurized water source availability. 500 GPM less than 1000 ft spacing.,"Non-pressurized water source availability (offsite or draft location) or dipsite.
+Homes on catchment water
+have fire-hose hookups.","Water unavailable, or offsite water more than 20 minute roundtrip"
+Fire Protection,Response time,Within 15 minutes,16-30 minutes,Greater than 30 minutes
+Fire Protection,Proximity to fire station,Less than 5 miles,6-10 miles,More than 10 miles
+Fire Protection,Fire department structural training and expertise,"Large fully paid fire department with personnel that meet NFPA or NWCG training requirements and have
+adequate equipment.","Mixed fire department. Some paid and some volunteer personnel.  Limited experience, training, and equipment to fight fire.","Small, all volunteer fire department.  Limited training, experience, and budget with regular turnover of personnel.  Do not meet
+NFPA or NWCG standards."
+Fire Protection,Wildland firefighting capability of initial response agency,"Sufficient personnel, equipment, and wildland firefighting capability and experience. Good supply of structural and wildland fire apparatus and misc
+specialty equipment","Limited personnel, and or equipment but with some wildland firefighting expertise and training. Smaller supply of fire apparatus in fairly good repair with some
+specialty equipment.","Fire department non-existent or untrained/unequipped to fight wildland fire. Minimum amount of fire apparatus, which is old and in need of repair. None or little specialty
+equipment."
+Fire Protection,Interagency Cooperation,Mutual aid agreements and resources available to deploy.,Mutual aid agreements but limited resource availability.,No mutual aid agreements.
+Fire Protection,"Local
+emergency operations group or other similar",Active EOG or CERT. Evacuation plan in place.,Limited participation in EOG or similar. Have some form of evacuation process.,"EOG or CERT team, etc. organized and active, prepared for evacuation processes"
+Fire Protection,Community planning practices and ordinances,"County/local laws, zoning ordinances, and codes require use of fire safe residential and subdivision designs.
+Fire department actively participates in planning process and enforces ordinances.  Residents are compliant.","Have voluntary ordinances for fire safe practices. Local officials have an understanding of appropriate wildfire mitigation strategies. Fire department has limited input to fire safe planning and development efforts and limited enforcement.
+Residents are mostly compliant.","No local codes, laws, or ordinances requiring fire safe building or practices.
+Community standards for fire safe development and protection are marginal or non-existent.  Little to no effort has been made in assessing and applying measures to reduce wildfire impact.  Ordinances are not enforced and/or residents are
+not compliant."
+Fire Protection,Community fire-safe efforts and programs already in place,"Organized and active groups provide educational materials and programs throughout the
+community.","Limited provision of or interest in educational efforts.  Fire Department or local group does some limited prevention and public
+education.",No interest or participation in educational programs. No prevention education by local fire department.
