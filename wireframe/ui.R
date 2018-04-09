@@ -8,18 +8,18 @@ header <- dashboardHeader(
   
 sidebar <- dashboardSidebar(
   sidebarMenu(
-    menuItem("Hawaii Wildfire Website", icon = icon("home"), 
-             href = "https://hawaiiwildfire.org", 
-             newtab = T),
-    menuItem("Source code", icon = icon("file-code-o"), 
-             href = "https://github.com/niklaslollo/hwmo_data_tool", 
-             newtab = T),
     menuItem("Map", tabName = "Map"),
     menuItem("Community Meeting Results", tabName = "community"),
     menuItem("Explore your area", tabName = "explore"),
     menuItem("How am I?", tabName = "area"),
     menuItem("Take Action", tabName = "action"),
-    menuItem("FAQ", tabName = "FAQ")
+    menuItem("FAQ", tabName = "FAQ"),
+    menuItem("Hawaii Wildfire Website", icon = icon("home"), 
+             href = "https://hawaiiwildfire.org", 
+             newtab = T),
+    menuItem("Source code (Github)", icon = icon("file-code-o"), 
+             href = "https://github.com/niklaslollo/hwmo_data_tool", 
+             newtab = T, )
   ))
 
 body <- dashboardBody(
