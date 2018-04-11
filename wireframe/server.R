@@ -506,7 +506,7 @@ function(input, output, session) {
     score <- row$score[1]
     
     # Conditional icon
-    if (score == 1){
+    if (score == 3){
       icon = "thumbs-down"
     } else if (score == 2){
       icon = "cog"
@@ -514,7 +514,7 @@ function(input, output, session) {
       icon = "thumbs-up"
     }
     # Conditional color
-    if (score == 1){
+    if (score == 3){
       color = "red"
     } else if (score == 2){
       color = "yellow"

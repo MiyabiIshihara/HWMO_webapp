@@ -249,9 +249,9 @@ body <- dashboardBody(
               box(width = 3, solidHeader = T,
                 tags$h4("How was this scored?"))),
             fluidRow(
-              infoBoxOutput("lowScoreBox", width = 4),
+              infoBoxOutput("hiScoreBox", width = 4),
               infoBoxOutput("medScoreBox", width = 4),
-              infoBoxOutput("hiScoreBox", width = 4)
+              infoBoxOutput("lowScoreBox", width = 4)
             )
             ),
     #### Fifth Tab #######
