@@ -1,5 +1,6 @@
 library(shinydashboard)
 library(shiny)
+library(sf)
 library(leaflet)
 
 header <- dashboardHeader(
@@ -45,14 +46,8 @@ body <- dashboardBody(
                                        "Median HH Income" = "MedH_Inc",
                                        "Native Hawaiian Count" = "NH_ac",
                                        "Homeownership" = "Homeowner"),
-                                     selected = "overall_score"))),
-              column(width = 4,
-                     box(width= NULL, 
-                         solidHeader = TRUE, # removes header
-                         title = "Scores showing in map",
-                         plotOutput(outputId = "histScores",
-                                    height = 200))
-            )),
+                                     selected = "overall_score")))),
+              
             fluidRow(
               #tags$style(
               #type = "text/css", 
@@ -81,7 +76,16 @@ body <- dashboardBody(
                                                  "Total acres burned" = "total_acres",
                                                  "Avg acres burned per fire" = "avg_acres"),
                                      selected = "count")))       
-              )),
+              ),
+            fluidRow(
+              column(width = 4,
+                     box(width= NULL, 
+                         solidHeader = TRUE, # removes header
+                         title = "Scores showing in map",
+                         plotOutput(outputId = "histScores",
+                                    height = 200))
+              )
+            )),
     ### Second tab ######
      tabItem(tabName = "community",
              fluidRow(
@@ -203,43 +207,40 @@ body <- dashboardBody(
                   status = "warning",
                   selectInput(inputId = "category2", 
                               label = "Hazard Category", 
-                              choices = c("Pick a hazard category..."="",
+                              choices = c("Sort by hazard category..."="",
                                           "Subdivision" = "Subdivision",
                                           "Fire Protection" = "Fire Protection",
                                           "Vegetation" = "Vegetation",
                                           "Building" = "Building",
                                           "Fire Environment" = "Fire Environment"), 
-                              multiple=F)),
+                              multiple=F)
+                  ),
               box(width = 3, 
                   status = "warning",
-                  conditionalPanel("input.category2",
-                                   selectInput(inputId = "hazard2", 
-                                               label = "Hazard", 
-                                               choices = c("Pick a hazard..."=""), 
-                                               multiple=F))),
+                   selectInput(inputId = "hazard2", 
+                               label = "Hazard", 
+                               choices = c("Pick a hazard..."="",
+                                           sort(unique(haz_tidy$hazard_full))
+                                           ), 
+                               multiple=F,
+                               selected = "Road Width")
+                  ),
               box(width = 3, 
                   status = "warning",
                   selectInput(inputId = "island2",
                               label = "Island",
-                              choices = c("Pick an island..."="",
-                                          "Hawaii Island" = "Hawaii Island",
-                                          "Kahoolawe" = "Kahoolawe",
-                                          "Kauai" = "Kauai",
-                                          "Lanai" = "Lanai",
-                                          "Lehua" = "Lehua",
-                                          "Maui" = "Maui",
-                                          "Molokai" = "Molokai",
-                                          "Molokini Atoll" = "Molokini Atoll",
-                                          "Niihau" = "Niihau",
-                                          "Oahu" = "Oahu"),
+                              choices = c("Sort by island..."="",
+                                          sort(unique(haz_tidy$Island))
+                                          ),
                               multiple = F)),
               box(width = 3, 
                   status = "warning",
-                  conditionalPanel("input.island2",
-                                   selectInput(inputId = "areaname2", 
-                                               label = "Area", 
-                                               choices = c("Pick an area..."=""), 
-                                               multiple=F)))
+                  selectInput(inputId = "areaname2", 
+                              label = "Area", 
+                              choices = c("Pick an area..."="",
+                                          sort(unique(haz_tidy$AreaName))), 
+                              multiple=F,
+                              selected = "Hanalei"))
             ),
             fluidRow(
               valueBoxOutput("scoreBox", width = 4)

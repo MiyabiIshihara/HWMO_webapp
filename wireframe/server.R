@@ -52,9 +52,7 @@ haz_dat <- haz_dat %>%
   mutate(
     overall_score = FIREPROTOT + SUBD_TOT + VEG_TOT + BLDG_TOT + FIREHAZTOT
   )
-## Load hazard data for data explorer
-haz_tidy <- read_csv("data/tidy_haz.csv") %>%
-  select(-c(AREA, PERIMETER, Acres, zone, CAR_Hawaii, CAR_adjtot))
+
 ## Load hazard scoring system
 haz_scoring <- read_csv("data/hazard_scoring_system.csv")
 
@@ -106,14 +104,7 @@ function(input, output, session) {
     
     plot <- ggplot(tbl) +
       geom_col(mapping= aes_string(input$histX, input$histY), fill = "brown1") +
-      theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), 
-            panel.background = element_blank(), 
-            panel.grid = element_blank(),
-            axis.line = element_line(color = "white"), 
-            text = element_text(color = "white"), 
-            axis.text = element_text(color = "white"),
-            axis.ticks = element_line(color = "white"),
-            axis.title.x=element_blank())
+      theme_classic()
     
     
     if (input$histX == "month") {
@@ -125,6 +116,7 @@ function(input, output, session) {
       plot + scale_x_discrete(limits=c(2000, 2005, 2010))
     }
   })
+  
   
   #### Which data are in view? #####
   # Need to determine how to capture long/lat from sf object
@@ -312,19 +304,12 @@ function(input, output, session) {
         ) %>%
       hideGroup(c("Fire Heatmap", "Fire Points"))
     
+    ## Histogram of scores
     output$histScores <- renderPlot({
       ggplot(the_data) +
             geom_histogram(aes_string(x = user_choice), fill = "brown1",bins = 5) +
-            theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), 
-                  panel.background = element_blank(), 
-                  panel.grid = element_blank(),
-                  axis.line = element_line(color = "white"), 
-                  text = element_text(color = "white"), 
-                  axis.text = element_text(color = "white"),
-                  axis.ticks = element_line(color = "white"),
-                  axis.title.x=element_blank()) + 
+            theme_classic() + 
             scale_fill_brewer()
-      
     })
 
   })
@@ -475,12 +460,11 @@ function(input, output, session) {
 
   #### How is my area? ####
   
-  
-  
   # hazards
   observe({
-    hazards <- if (is.null(input$category2)) character(0) else {
-      filter(haz_temp(), hazard_category %in% input$category2) %>%
+    hazards <- if (input$category2!="") {
+        haz_temp() %>%
+      filter(hazard_category %in% input$category2) %>%
         `$`('hazard_full') %>%
         unique() %>%
         sort()
@@ -491,7 +475,7 @@ function(input, output, session) {
   })
   # Areas
   observe({
-    areanames <- if (is.null(input$island2)) character(0) else {
+    areanames <- if (input$island2!="") {
       filter(haz_temp(), Island %in% input$island2) %>%
         `$`('AreaName') %>%
         unique() %>%
@@ -507,9 +491,7 @@ function(input, output, session) {
     
     haz_temp() %>%
       filter(
-        is.null(input$category2) | hazard_category %in% input$category2,
         is.null(input$hazard2) | hazard_full %in% input$hazard2,
-        is.null(input$island2) | Island %in% input$island2,
         is.null(input$areaname2) | AreaName %in% input$areaname2) -> row
     score <- row$score[1]
     
@@ -606,5 +588,5 @@ function(input, output, session) {
   })
   
   
-}  
+}
   
