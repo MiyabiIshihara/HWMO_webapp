@@ -19,7 +19,7 @@ sidebar <- dashboardSidebar(
              newtab = T),
     menuItem("Source code (Github)", icon = icon("file-code-o"), 
              href = "https://github.com/niklaslollo/hwmo_data_tool", 
-             newtab = T, )
+             newtab = T)
   ))
 
 body <- dashboardBody(
@@ -36,6 +36,7 @@ body <- dashboardBody(
                          selectInput(inputId = "dataset",
                                      label = "Map Data",
                                      choices = list(
+                                       "Total Score" = "overall_score",
                                        "Fire Protection" = "FIREPROTOT",
                                        "Subdivision" = "SUBD_TOT",
                                        "Vegetation" = "VEG_TOT",
@@ -44,7 +45,7 @@ body <- dashboardBody(
                                        "Median HH Income" = "MedH_Inc",
                                        "Native Hawaiian Count" = "NH_ac",
                                        "Homeownership" = "Homeowner"),
-                                     selected = "FIREPROTOT"))),
+                                     selected = "overall_score"))),
               column(width = 4,
                      box(width= NULL, 
                          solidHeader = TRUE, # removes header

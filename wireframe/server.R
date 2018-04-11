@@ -48,6 +48,10 @@ comm_dat <- read_csv("data/comm_input.csv") %>%
 #haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 haz_dat <- st_read("data/hazard/WHA2015.shp")
 haz_dat <- st_transform(haz_dat, 4326)
+haz_dat <- haz_dat %>%
+  mutate(
+    overall_score = FIREPROTOT + SUBD_TOT + VEG_TOT + BLDG_TOT + FIREHAZTOT
+  )
 ## Load hazard data for data explorer
 haz_tidy <- read_csv("data/tidy_haz.csv") %>%
   select(-c(AREA, PERIMETER, Acres, zone, CAR_Hawaii, CAR_adjtot))
