@@ -104,7 +104,7 @@ function(input, output, session) {
                                                  "Oct", "Nov", "Dec"))
     }
     
-    ggplot(tbl) +
+    plot <- ggplot(tbl) +
       geom_col(mapping= aes_string(input$histX, input$histY), fill = "brown1") +
       theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), 
             panel.background = element_blank(), 
@@ -114,6 +114,16 @@ function(input, output, session) {
             axis.text = element_text(color = "white"),
             axis.ticks = element_line(color = "white"),
             axis.title.x=element_blank())
+    
+    
+    if (input$histX == "month") {
+      plot + scale_x_discrete(limits=c("Jan", "Feb", "Mar",
+                                       "Apr", "May", "Jun",
+                                       "Jul", "Aug", "Sep",
+                                       "Oct", "Nov", "Dec"))
+    } else {
+      plot + scale_x_discrete(limits=c(2000, 2005, 2010))
+    }
   })
   
   #### Which data are in view? #####
@@ -314,6 +324,7 @@ function(input, output, session) {
                   axis.ticks = element_line(color = "white"),
                   axis.title.x=element_blank()) + 
             scale_fill_brewer()
+      
     })
 
   })
