@@ -33,7 +33,8 @@ m <- leaflet() %>%
 # load data
 ```{r}
 # Load Oahu subset of fire point data
-OFires <- geojsonio::geojson_read("../wireframe/data/Oahu_Wildfires.geojson", what = "sp")
+#OFires <- geojsonio::geojson_read("../wireframe/data/Oahu_Wildfires.geojson", what = "sp")
+HFires <- geojsonio::geojson_read("../wireframe/data//HI_Wildfires_m.geojson", what = "sp")
 
 # Load census shp data
 # EM: this should have worked by just calling from look_at_data.rmd, but whatever
@@ -73,6 +74,26 @@ pal2 <- colorQuantile(
 * a leaflet.js example solution to the same question that might be of use: https://gis.stackexchange.com/questions/124847/legend-items-to-appear-disappear-simultaneaously-with-layer-turned-on-off-in-l
 * 
 * 
+
+# points only variant
+```{r}
+#Heatmap
+  addHeatmap(m, lng = ~Long, lat = ~Lat, data = HFires,
+             blur = 25, max = 0.05, radius = 15,
+             minOpacity = 0.02,
+             intensity = 0.5*(HFires$Total_Ac), # based on (half of) reported acreage, about 8% of data is null values
+             group = "Hawaii fires"
+                  
+                  ) 
+
+# #GeoJSONHeatmap
+#   addGeoJSONHeatmap(m, geojson = "../wireframe/data//HI_Wildfires_m.geojson",
+#                     intensityProperty = HFires$Total_Ac,
+#              blur = 20,
+#              group = "Hawaii fires"
+#                   
+#                   ) 
+```
 
 # the map
 ```{r}

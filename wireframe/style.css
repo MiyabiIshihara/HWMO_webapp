@@ -1,0 +1,22 @@
+input[type = "histX"] {
+  max-width: 40%;
+}
+input[type = "histY"] {
+  max-width: 40%;
+}
+
+/* Customize fonts */
+  body, label, input, button, select { 
+    font-family: 'Helvetica Neue', Helvetica;
+    font-weight: 200;
+  }
+h1, h2, h3, h4 { font-weight: 400; }
+
+
+.leaflet .legend i{
+            border: 1px solid #666;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            margin-top: 4px;
+         }
