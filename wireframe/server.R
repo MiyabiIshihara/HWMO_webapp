@@ -461,29 +461,39 @@ function(input, output, session) {
   #### How is my area? ####
   
   # hazards
-  observe({
-    hazards <- if (input$category2!="") {
-        haz_temp() %>%
+  observeEvent(input$category2, {
+    if (input$category2!="") {
+      hazards <- haz_temp() %>%
       filter(hazard_category %in% input$category2) %>%
         `$`('hazard_full') %>%
         unique() %>%
         sort()
+      hazSelected <- isolate(input$hazard2[input$hazard2 %in% hazards])
+      updateSelectInput(session, "hazard2", choices = hazards)
+    } else {
+      updateSelectInput(session, "hazard2", 
+                        choices = c("Pick a hazard..."="",
+                                    sort(unique(haz_tidy$hazard_full))),
+                        selected = "Road Width")
     }
-    hazSelected <- isolate(input$hazard2[input$hazard2 %in% hazards])
-    updateSelectInput(session, "hazard2", choices = hazards,
-                      selected = hazSelected)
+    
   })
   # Areas
-  observe({
-    areanames <- if (input$island2!="") {
-      filter(haz_temp(), Island %in% input$island2) %>%
+  observeEvent(input$island2, {
+     if (input$island2!="") {
+      areanames <-  filter(haz_temp(), Island %in% input$island2) %>%
         `$`('AreaName') %>%
         unique() %>%
         sort()
+      areaSelected <- isolate(input$areaname2[input$areaname2 %in% areanames])
+      updateSelectInput(session, "areaname2", choices = areanames)
+     } else {
+       updateSelectInput(session, "areaname2", 
+                         choices = c("Pick an area..."="",
+                                     sort(unique(haz_tidy$AreaName))),
+                         selected = "Hanalei")
     }
-    areaSelected <- isolate(input$areaname2[input$areaname2 %in% areanames])
-    updateSelectInput(session, "areaname2", choices = areanames,
-                      selected = areaSelected)
+    
   })
   
   
