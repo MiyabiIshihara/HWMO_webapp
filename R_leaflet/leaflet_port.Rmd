@@ -39,6 +39,7 @@ OFires <- geojsonio::geojson_read("../wireframe/data/Oahu_Wildfires.geojson", wh
 # Load census shp data
 # EM: this should have worked by just calling from look_at_data.rmd, but whatever
 census_dat = st_read("../wireframe/data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
+
 # Check coordinate reference system
 st_crs(census_dat)
 
@@ -196,6 +197,7 @@ addMarkers(m, lng = -156.54, lat = 21.09, group = "Test point") %>%
   addLegend(pal = palxyz, values = haz_dat$FIREPROTOT, title = "Fire Protection", position = "bottomright", group = 'Fire Protection Score') %>%
 
   
+
   # MedH_Inc
 addPolygons(data = census_dat, color = '#000000', weight = 1,
               fillColor = ~colorQuantile("PuBuGn", n = 5, MedH_Inc) (MedH_Inc),
@@ -218,7 +220,6 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
                                                   bringToFront = TRUE),
               label = paste("NH_ac: ", census_dat$NH_ac), #for test purposes
               group = "NH_ac"
-              
   ) %>%
     # NOTE: possible we have to add legends for each polygon layer 
     # however, switching functionality seems broken with base layers in library
@@ -235,7 +236,6 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
 # EXAMPLE
 #   addLegend(pal = factpalA, values = dens_pop$dens_pop, opacity = 0.7, title = "Hab./Km2", position = "bottomright", group = 'Densidade Populacional')
   
-
   # homeowners
   addPolygons(data = census_dat, color = '#000000', weight = 1,
               fillColor = ~colorQuantile("YlGnBu", n = 5, Homeowner) (Homeowner),
@@ -247,12 +247,12 @@ addPolygons(data = census_dat, color = '#000000', weight = 1,
               popup = paste("<b>Homeowners: </b>", census_dat$Homeowner,"%"), #for test purposes
               group = "Homeowners"
   ) %>%
-
   
 
 # LAYER CONTROLS
   addLayersControl(
     # base groups = radio buttons
+
     overlayGroups = c("Oahu fires", "Subdivision Hazard Rating", "Vegetation Hazard Rating", "Building Hazard Rating", "Fire Environment Hazard Rating", "Fire Protection Score", "Median HH income",  
                   "NH_ac", "Homeowners"),
     # #  overlay groups = check boxes
