@@ -322,12 +322,12 @@ function(input, output, session) {
       ggplot(the_data) +
             geom_histogram(aes_string(x = user_choice), 
                            fill = c(
-                             "#ffffb2",
-                             "#fed976",
-                              "#feb24c",
-                              "#fd8d3c",
-                              "#f03b20",
-                              "#bd0026"),
+                             "#1a9850",
+                             "#91cf60",
+                              "#d9ef8b",
+                              "#fee08b",
+                              "#fc8d59",
+                              "#d73027"),
                            bins = 6) +
             theme_classic() + 
             scale_fill_brewer()
