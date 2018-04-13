@@ -287,7 +287,8 @@ function(input, output, session) {
       addHeatmap(lng = ~Long, lat = ~Lat, data = hawaiiFiresdf,
                  blur = 25, max = 0.05, radius = 15,
                  minOpacity = 0.02,
-                 intensity = 0.5*(hawaiiFiresdf$Total_Ac), # based on (half of) reported acreage, about 8% of data is null values,
+                 # based on (half of) reported acreage, about 8% of data is null values
+                 intensity = 0.5*(hawaiiFiresdf$Total_Ac), 
                  gradient = "magma",
                  group = "Fire Heatmap"
                  ) %>%
@@ -332,8 +333,6 @@ function(input, output, session) {
   output$dt <- DT::renderDataTable({ 
     comm_temp() %>%
       filter(
-        #total_votes >= input$minVotes,
-        #total_votes <= input$maxVotes,
         is.null(input$focus) | timing_focus %in% input$focus,
         is.null(input$region) | cwpp_region %in% input$region,
         is.null(input$meeting) | meeting_location %in% input$meeting
@@ -393,32 +392,7 @@ function(input, output, session) {
     updateSelectInput(session, "areaname", choices = areanames,
                       selected = areaSelected)
   })
-  # action button
-  #observeEvent(input$risky, {
-  #  output$dt_haz <- DT::renderDataTable({ 
-  #    haz_temp() %>%
-  #      filter(
-  #        score >= 3,
-  #        is.null(input$category) | hazard_category %in% input$category,
-  #        is.null(input$hazard) | hazard %in% input$hazard,
-  #        is.null(input$island) | Island %in% input$island,
-  #        is.null(input$areaname) | AreaName %in% input$areaname
-  #      )}
-  #    )
-  #})
-  #
-  #observeEvent(input$allRisks, {
-  #  output$dt_haz <- DT::renderDataTable({ 
-  #    haz_temp() %>%
-  #      filter(
-  #        score >= 3,
-  #        is.null(input$category) | hazard_category %in% input$category,
-  #        is.null(input$hazard) | hazard %in% input$hazard,
-  #        is.null(input$island) | Island %in% input$island,
-  #        is.null(input$areaname) | AreaName %in% input$areaname
-  #      )}
-  #    )
-  #}) 
+  ## Download all data
     output$dt_haz <- DT::renderDataTable({ 
       haz_temp() %>%
         filter(
@@ -458,9 +432,9 @@ function(input, output, session) {
     }
   )
 
-  #### How is my area? ####
+  #### How is my area? #########
   
-  # hazards
+  ## Hazard
   observeEvent(input$category2, {
     if (input$category2!="") {
       hazards <- haz_temp() %>%
@@ -478,7 +452,7 @@ function(input, output, session) {
     }
     
   })
-  # Areas
+  ## Areaname
   observeEvent(input$island2, {
      if (input$island2!="") {
       areanames <-  filter(haz_temp(), Island %in% input$island2) %>%
@@ -496,7 +470,7 @@ function(input, output, session) {
     
   })
   
-  
+  #### Scorebox #####
   output$scoreBox <- renderValueBox({
     
     haz_temp() %>%
@@ -518,8 +492,10 @@ function(input, output, session) {
       color = "red"
     } else if (score == 2){
       color = "yellow"
-    } else {
+    } else if (score ==1) {
       color = "green"
+    } else {
+      color = "black"
     }
     
     valueBox(value = paste0(score), 

@@ -4,7 +4,16 @@ library(sf)
 library(leaflet)
 
 header <- dashboardHeader(
-  title = "Hawaii Wildfire"
+  title = "Hawaii Wildfire",
+  tags$li(a(href = 'http://hawaiiwildfire.org',
+            img(src = 'hwmo_smaller.jpg',
+                title = "HWMO Home", height = "30px"),
+            style = "padding-top:10px; padding-bottom:10px;"),
+          class = "dropdown"),
+  tags$li(a(href = 'https://github.com/niklaslollo/hwmo_data_tool',
+            icon("file-code-o"),
+            style = "padding-top:10px; padding-bottom:10px;"),
+          class = "dropdown")
   )
   
 sidebar <- dashboardSidebar(
@@ -15,12 +24,13 @@ sidebar <- dashboardSidebar(
     menuItem("How am I?", tabName = "area"),
     menuItem("Take Action", tabName = "action"),
     menuItem("FAQ", tabName = "FAQ"),
-    menuItem("Hawaii Wildfire Website", icon = icon("home"), 
-             href = "https://hawaiiwildfire.org", 
-             newtab = T),
-    menuItem("Source code (Github)", icon = icon("file-code-o"), 
+    menuItem("Links", tabName = "Links", 
+             menuSubItem("Hawaii Wildfire Website", icon = icon("home"), 
+                         href = "https://hawaiiwildfire.org", 
+                         newtab = T),
+             menuSubItem("Source code (Github)", icon = icon("file-code-o"), 
              href = "https://github.com/niklaslollo/hwmo_data_tool", 
-             newtab = T)
+             newtab = T))
   ))
 
 body <- dashboardBody(
