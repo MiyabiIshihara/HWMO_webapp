@@ -26,7 +26,6 @@ hawaiiFiresdf <- as.data.frame(HFires) %>%
   select(-datechar) %>% 
   filter(year > 2001 & year < 2012) # remove some fires from 1988 and 1900
 
-
 ## Load census shp data
 ## EM: this should have worked by just calling from look_at_data.rmd, but whatever
 census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
@@ -50,7 +49,13 @@ haz_dat <- st_read("data/hazard/WHA2015.shp")
 haz_dat <- st_transform(haz_dat, 4326)
 haz_dat <- haz_dat %>%
   mutate(
-    overall_score = FIREPROTOT + SUBD_TOT + VEG_TOT + BLDG_TOT + FIREHAZTOT
+    `Fire Protection` = FIREPROTOT/9, 
+    Subdivision = SUBD_TOT/11,
+    Vegetation = VEG_TOT/5,
+    Buildings = BLDG_TOT/5,
+    `Fire Environment` = FIREHAZTOT/6,
+    `Total Score` = (`Fire Protection` + Subdivision + 
+      Vegetation + Buildings + `Fire Environment`)/5
   )
 
 ## Load hazard scoring system
@@ -212,7 +217,7 @@ function(input, output, session) {
       } else if (user_choice == "Homeowner") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                       tags$em("Homeownership: "), round(census_dat$Homeowner, digits = 2),"%")
-      } else if (user_choice == "FIREPROTOT") {
+      } else if (user_choice == "Fire Protection") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
                       tags$em("Water availability: "), haz_dat$Wat_Avail, tags$br(),
@@ -224,7 +229,7 @@ function(input, output, session) {
                       tags$em("Local emergency operations: "), haz_dat$Loc_Ops,tags$br(),
                       tags$em("Community planning: "), haz_dat$Com_Plan,tags$br(),
                       tags$em("Community fire programs: "), haz_dat$Com_FirPrg)
-      } else if (user_choice == "SUBD_TOT") {
+      } else if (user_choice == "Subdivision") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
                       tags$em("Ingress/Egress: "), haz_dat$Ing_Eg, tags$br(),
@@ -238,7 +243,7 @@ function(input, output, session) {
                       tags$em("Unmanaged lands: "),haz_dat$Un_Lands, tags$br(),
                       tags$em("Private landowner action: "),haz_dat$Priv_Act, tags$br(),
                       tags$em("Wildland proximity: "),haz_dat$Prox_Wild)
-      } else if (user_choice == "VEG_TOT") {
+      } else if (user_choice == "Vegetation") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
                       tags$em("Proximity of flammable fuel: "), haz_dat$Prox_Flam, tags$br(),
@@ -246,7 +251,7 @@ function(input, output, session) {
                       tags$em("Fuel loading: "), haz_dat$Fuel_Load, tags$br(),
                       tags$em("Fuel structure: "), haz_dat$Fuel_Strc, tags$br(),
                       tags$em("Defensible space: "), haz_dat$Def_Space)
-      } else if (user_choice == "BLDG_TOT") {
+      } else if (user_choice == "Buildings") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
                       tags$em("Roofing: "), haz_dat$Roof_Asmb, tags$br(),
@@ -254,7 +259,7 @@ function(input, output, session) {
                       tags$em("Under-skirting: "), haz_dat$Undr_Skrt, tags$br(),
                       tags$em("Utilities placement: "), haz_dat$Utlty_Plmt, tags$br(),
                       tags$em("Structural ignitability: "), haz_dat$Strc_Ign)
-      } else if(user_choice == "FIREHAZTOT"){
+      } else if(user_choice == "Fire Environment"){
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>",tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
                       tags$em("Slope: "), haz_dat$Slope, tags$br(),
@@ -265,11 +270,11 @@ function(input, output, session) {
                       tags$em("Topography: "), haz_dat$Top_Adv)
       } else { # Total Score
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>",tags$br(),
-                       tags$em("Fire Protection: "), haz_dat$FIREPROTOT, tags$br(),
-                       tags$em("Subdivision: "), haz_dat$SUBD_TOT, tags$br(),
-                       tags$em("Vegetation: "), haz_dat$VEG_TOT, tags$br(),
-                       tags$em("Buildings: "), haz_dat$BLDG_TOT, tags$br(),
-                       tags$em("Fire Hazard: "), haz_dat$FIREHAZTOT)
+                       tags$em("Fire Protection: "), haz_dat$`Fire Protection`, tags$br(),
+                       tags$em("Subdivision: "), haz_dat$Subdivision, tags$br(),
+                       tags$em("Vegetation: "), haz_dat$Vegetation, tags$br(),
+                       tags$em("Buildings: "), haz_dat$Buildings, tags$br(),
+                       tags$em("Fire Environment: "), haz_dat$`Fire Environment`)
       }
     
     leafletProxy("leafmap", data = the_data) %>%
@@ -318,20 +323,20 @@ function(input, output, session) {
       hideGroup(c("Fire Heatmap", "Fire Points"))
     
     ## Histogram of scores
-    output$histScores <- renderPlot({
-      ggplot(the_data) +
-            geom_histogram(aes_string(x = user_choice), 
-                           fill = c(
-                             "#1a9850",
-                             "#91cf60",
-                              "#d9ef8b",
-                              "#fee08b",
-                              "#fc8d59",
-                              "#d73027"),
-                           bins = 6) +
-            theme_classic() + 
-            scale_fill_brewer()
-    })
+    #output$histScores <- renderPlot({
+    #  ggplot(the_data) +
+    #        geom_histogram(aes_string(x = user_choice), 
+    #                       fill = c(
+    #                         "#1a9850",
+    #                         "#91cf60",
+    #                          "#d9ef8b",
+    #                          "#fee08b",
+    #                          "#fc8d59",
+    #                          "#d73027"),
+    #                       bins = 6) +
+    #        theme_classic() + 
+    #        scale_fill_brewer()
+    #})
 
   })
   

@@ -50,12 +50,12 @@ body <- dashboardBody(
                          selectInput(inputId = "dataset",
                                      label = "Map Data",
                                      choices = list(
-                                       "Total Score" = "overall_score",
-                                       "Fire Protection" = "FIREPROTOT",
-                                       "Subdivision" = "SUBD_TOT",
-                                       "Vegetation" = "VEG_TOT",
-                                       "Buildings" = "BLDG_TOT",
-                                       "Fire Hazard" = "FIREHAZTOT",
+                                       "Total Score" = "Total Score",
+                                       "Fire Protection" = "Fire Protection",
+                                       "Subdivision" = "Subdivision",
+                                       "Vegetation" = "Vegetation",
+                                       "Buildings" = "Buildings",
+                                       "Fire Environment" = "Fire Environment",
                                        "Median HH Income" = "MedH_Inc",
                                        "Native Hawaiian Count" = "NH_ac",
                                        "Homeownership" = "Homeowner"),
@@ -89,16 +89,16 @@ body <- dashboardBody(
                                                  "Total acres burned" = "total_acres",
                                                  "Avg acres burned per fire" = "avg_acres"),
                                      selected = "count")))       
-              ),
-            fluidRow(
-              column(width = 4,
-                     box(width= NULL, 
-                         solidHeader = TRUE, # removes header
-                         title = "All scores",
-                         plotOutput(outputId = "histScores",
-                                    height = 200))
               )
-            )),
+            #fluidRow(
+            #  column(width = 4,
+            #         box(width= NULL, 
+            #             solidHeader = TRUE, # removes header
+            #             title = "All scores",
+            #             plotOutput(outputId = "histScores",
+            #                        height = 200))
+            #  ))
+            ),
     ### Second tab ######
      tabItem(tabName = "community",
              fluidRow(
