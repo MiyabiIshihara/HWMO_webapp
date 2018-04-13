@@ -91,7 +91,7 @@ body <- dashboardBody(
               column(width = 4,
                      box(width= NULL, 
                          solidHeader = TRUE, # removes header
-                         title = "Scores showing in map",
+                         title = "All scores",
                          plotOutput(outputId = "histScores",
                                     height = 200))
               )
