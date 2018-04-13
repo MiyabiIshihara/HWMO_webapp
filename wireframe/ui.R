@@ -6,7 +6,7 @@ library(leaflet)
 header <- dashboardHeader(
   title = "Hawaii Wildfire",
   tags$li(a(href = 'http://hawaiiwildfire.org',
-            img(src = 'hwmo_smaller.jpg',
+            img(src = 'hwmo_logo_white.svg',
                 title = "HWMO Home", height = "30px"),
             style = "padding-top:10px; padding-bottom:10px;"),
           class = "dropdown"),
@@ -19,11 +19,14 @@ header <- dashboardHeader(
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Map", tabName = "Map"),
-    menuItem("Community Meeting Results", tabName = "community"),
-    menuItem("Explore your area", tabName = "explore"),
-    menuItem("How am I?", tabName = "area"),
+    menuItem("Explore your area", tabName = "area"),
     menuItem("Take Action", tabName = "action"),
-    menuItem("FAQ", tabName = "FAQ"),
+    menuItem("About", tabName = "FAQ"),
+    menuItem("Data Downloads", tabname = "Downloads",
+             menuSubItem("Community Meeting Info", 
+                      tabName = "community"),
+             menuSubItem("Hazards", 
+                      tabName = "explore")),
     menuItem("Links", tabName = "Links", 
              menuSubItem("Hawaii Wildfire Website", icon = icon("home"), 
                          href = "https://hawaiiwildfire.org", 

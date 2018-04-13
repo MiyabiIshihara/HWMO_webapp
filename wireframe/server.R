@@ -24,7 +24,7 @@ hawaiiFiresdf <- as.data.frame(HFires) %>%
     month = as.factor(format(date,'%b')), #this collects the abbreviated month
     month_num = format(date,'%m')) %>%
   select(-datechar) %>% 
-  filter(year >= 2000) # remove some fires from 1988 and 1900
+  filter(year > 2001 & year < 2012) # remove some fires from 1988 and 1900
 
 
 ## Load census shp data
@@ -241,7 +241,7 @@ function(input, output, session) {
       } else if (user_choice == "VEG_TOT") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
-                      tags$em("Proximity of flamable fuel: "), haz_dat$Prox_Flam, tags$br(),
+                      tags$em("Proximity of flammable fuel: "), haz_dat$Prox_Flam, tags$br(),
                       tags$em("Vegetation type: "), haz_dat$Veg_Type, tags$br(),
                       tags$em("Fuel loading: "), haz_dat$Fuel_Load, tags$br(),
                       tags$em("Fuel structure: "), haz_dat$Fuel_Strc, tags$br(),
@@ -356,7 +356,12 @@ function(input, output, session) {
         is.null(input$focus) | timing_focus %in% input$focus,
         is.null(input$region) | cwpp_region %in% input$region,
         is.null(input$meeting) | meeting_location %in% input$meeting
-      )})
+      ) %>%
+      select(Region = cwpp_region, `Meeting Location` = meeting_location, 
+             Concern = concern, Votes = total_votes,
+             Recommendations = recommendations, 
+             `Strategic Focus` = timing_focus)
+    })
   ## Download Selected Data
   output$download_data <- downloadHandler(
     # This function returns a string which tells the client browser what name to use when saving the file.
@@ -420,7 +425,9 @@ function(input, output, session) {
           is.null(input$hazard) | hazard %in% input$hazard,
           is.null(input$island) | Island %in% input$island,
           is.null(input$areaname) | AreaName %in% input$areaname
-        )
+        ) %>%
+        select(Island, Area=AreaName, Category= hazard_category, Hazard = hazard_full,
+               Score = score, Reason = reason, -hazard)
       })
   ## Download Selected Data
   output$download_haz <- downloadHandler(
