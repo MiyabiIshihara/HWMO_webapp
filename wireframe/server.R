@@ -71,8 +71,28 @@ function(input, output, session) {
       setMaxBounds(-162.6,23.6,-153.5,18.0) %>% 
       # the two diagonal pts that limit panning (long1, lat1, long2, lat2)
       addEasyButton(easyButton(
+        id="OV",
         icon="fa-globe", title="Zoom to Level 7",
-        onClick=JS("function(btn, map){ map.setZoom(7); }")))
+        onClick=JS("function(btn, map){ map.setZoom(7); }"))) %>%
+      addEasyButtonBar(
+        position = "bottomright",
+        easyButton(
+          id="BI",
+          icon = 'f14e', 
+          title="Big Island",
+          onClick = JS("function(btn, map){map.setView([-156, 21], zoom = 8); }")),
+        easyButton(
+          id="cHI",
+          icon = 'fa-circle', 
+          title="Central",
+          onClick = JS("function(btn, map){map.setView([-160, 21], 10); }")),
+        easyButton(
+          id="wHI",
+          icon = 'fa-square', 
+          title="West",
+          onClick = JS("function(btn, map){map.setView([-159.5, 22], zoom = 7); }"))
+        )
+      
       })
   
   #### Which Fires are in view? #####
