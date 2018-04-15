@@ -287,49 +287,67 @@ body <- dashboardBody(
             ),
     #### Fifth Tab #######
      tabItem(tabName = "action",
+             column(
+               width = 9,
              fluidRow(
              box(
-              # width = 3,
+               width = 12,
                solidHeader = T,
                title = "Raise Awareness",
                status = "success",
                collapsible = T,
-               collapsed = T
+               collapsed = T,
+               includeMarkdown("docs/TA_awareness.md")
              )),
              fluidRow(
                box(
-                 # width = 3,
+                 width = 12,
                  solidHeader = T,
                  title = "Protect Your Home",
                  status = "primary",
                  collapsible = T,
-                 collapsed = T
+                 collapsed = T,
+                 includeMarkdown("docs/TA_protectHome.md")
                )),
              fluidRow(
                box(
-                 # width = 3,
+                 width = 12,
                  solidHeader = T,
                  title = "Protect Your Community",
                  status = "warning",
                  collapsible = T,
-                 collapsed = T
+                 collapsed = T,
+                 includeMarkdown("docs/TA_protectComm.md")
                )),
              fluidRow(
                box(
-                 # width = 3,
+                 width = 12,
                  solidHeader = T,
-                 title = "Attend An Event",
+                 title = "Attend a Future Event",
                  status = "info",
                  collapsible = T,
-                 collapsed = T
+                 collapsed = T,
+                 includeMarkdown("docs/TA_event.md")
                )),
-             
-             
-             
-             fluidRow(
-             box(width = 12, solidHeader = T,
-                 includeMarkdown("docs/take_action.md")))
+          fluidRow(
+            box(
+              width = 12,
+              solidHeader = F,
+              title = "Donate",
+              includeMarkdown("docs/TA_donate.md")
+            )
+          )
              ),
+          column(
+            width = 3,
+            fluidRow(
+            box(
+              width = 12,
+              solidHeader = F,
+              title = "Connect"
+            )
+          )
+          )),
     #### Last Tab #####
      tabItem(tabName = "FAQ",
              fluidRow(
