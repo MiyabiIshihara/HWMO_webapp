@@ -258,9 +258,9 @@ function(input, output, session) {
       pretty = F,
       #Green Yellow Red
       palette = c(
-        "#1a9641",
+        "#2c7bb6",
         '#ffffbf',
-        "#ca0020"),
+        "#d7191c"),
       alpha = T,
       domain = color_domain
     )
@@ -274,7 +274,8 @@ function(input, output, session) {
       alpha = T,
       domain = color_domain
     )
-    
+
+
     pal <- pal_haz
     
     # Popup content
