@@ -27,7 +27,6 @@ hawaiiFiresdf <- as.data.frame(HFires) %>%
   filter(year > 2001 & year < 2012) # remove some fires from 1988 and 1900
 
 ## Load census shp data
-## EM: this should have worked by just calling from look_at_data.rmd, but whatever
 census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
 ### Check coordinate reference system
 census_dat <- st_transform(census_dat, 4326)
@@ -51,8 +50,9 @@ census_dat <- census_dat %>%
 comm_dat <- read_csv("data/comm_input.csv") %>%
   select(-c(cohesive_strategy, key_codes, sec_desc1, sec_desc2, sec_desc3))
 
-## Load CWPP Data
-#cwpp_dat <- geojsonio::geojson_read("data/ALL_CWPP.geojson", what = "sp")
+## Load CWPP Data 
+ # cwpp_dat <- geojsonio::geojson_read("data/CWPP/CWPP.geojson", what = "sp")
+# cwpp_dat <- st_read("../data/CWPP/ALL_CWPP.shp")
 # cwpp_dat <- st_transform(cwpp_dat, 4326)
 
 ## Load haz data
@@ -161,10 +161,6 @@ function(input, output, session) {
       labs(x = xChoice, y = yChoice) +
       theme_classic()
     
-
-    
-
-
     if (input$histX == "month") {
       plot + scale_x_discrete(limits=c("Jan", "Feb", "Mar",
                                        "Apr", "May", "Jun",
@@ -243,6 +239,8 @@ function(input, output, session) {
     
     if (user_choice %in% c("MedH_Inc", "NH_ac", "Homeowner")) {
       the_data = census_dat
+    } else if (user_choice %in% c("CWPP")){
+      the_data = cwpp_dat
     } else {
       the_data = haz_dat
     }
@@ -251,7 +249,7 @@ function(input, output, session) {
     color_domain <- the_data[[user_choice]]
     color_domain[color_domain==0] <- NA
     
-    # colorNumeric is a continuous palette for integers
+    # palette for hazard data (discrete, 3 bins)
     pal_haz <- colorBin(
       bins =  3,
       na.color = alpha("blue",0.0),
@@ -265,6 +263,7 @@ function(input, output, session) {
       domain = color_domain
     )
     
+    # palette for social data
     pal_soc <- colorBin(
       bins =  5,
       na.color = alpha("blue",0.0),
@@ -274,7 +273,12 @@ function(input, output, session) {
       alpha = T,
       domain = color_domain
     )
-
+    
+    # palette for CWPP data (qualitative data) #currently crashes
+    # pal_cwpp <- colorFactor(
+    #   palette = "set1",
+    #   na.color = alpha("blue",0.0)
+    # )
 
     pal <- pal_haz
     
@@ -292,6 +296,10 @@ function(input, output, session) {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                       tags$em("Homeownership: "), round(census_dat$Homeowner, digits = 2),"%")
         pal = pal_soc
+      # } else if (user_choice == "Status") {
+      #   popup = paste0("<h4>",cwpp_dat$CWPPregion, "</h4>", tags$br(),
+      #                  tags$em("Region Status: "), cwpp_dat$Status)
+      #   pal = pal_cwpp
       } else if (user_choice == "Fire Protection") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
