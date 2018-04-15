@@ -32,6 +32,14 @@ census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
 ### Check coordinate reference system
 census_dat <- st_transform(census_dat, 4326)
 
+# unsuccessful attempt to get the proper titles in the legend
+census_dat <- census_dat %>%
+  mutate(
+    `Median HH Income` = MedH_Inc,
+    `Native Hawaiian Count` = NH_ac,
+    Homeownership = Homeowner
+  )
+
 #### data format placeholder for either here or within popups; 
 #### broken so far
 # DT::formatCurrency(table = census_dat, columns = 'MedH_Inc', currency = "$", interval = 3, mark = ",", 
@@ -342,13 +350,13 @@ function(input, output, session) {
     leafletProxy("leafmap", data = the_data) %>%
       clearShapes() %>%
       clearControls() %>%
-      addPolygons(weight = 1,
+      addPolygons(weight = 0.2,
                   color = '#aaaaaa',
                   fillColor = pal(color_domain),
                   opacity = 1.0,
-                  highlightOptions = highlightOptions(stroke = "#ff0505",
-                                                      weight = 4.0,
-                                                      opacity = 1.0,
+                  highlightOptions = highlightOptions(color = "#d53b2e",
+                                                      weight = 2.5,
+                                                      opacity = 0.8,
                                                       bringToFront = TRUE),
                   popup = popup,
                   popupOptions = popupOptions(
