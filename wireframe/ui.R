@@ -344,7 +344,8 @@ body <- dashboardBody(
             box(
               width = 12,
               solidHeader = F,
-              title = "Connect"
+              title = "Connect",
+              includeMarkdown("docs/TA_social.md")
             )
           )
           )),
