@@ -288,6 +288,45 @@ body <- dashboardBody(
     #### Fifth Tab #######
      tabItem(tabName = "action",
              fluidRow(
+             box(
+              # width = 3,
+               solidHeader = T,
+               title = "Raise Awareness",
+               status = "success",
+               collapsible = T,
+               collapsed = T
+             )),
+             fluidRow(
+               box(
+                 # width = 3,
+                 solidHeader = T,
+                 title = "Protect Your Home",
+                 status = "primary",
+                 collapsible = T,
+                 collapsed = T
+               )),
+             fluidRow(
+               box(
+                 # width = 3,
+                 solidHeader = T,
+                 title = "Protect Your Community",
+                 status = "warning",
+                 collapsible = T,
+                 collapsed = T
+               )),
+             fluidRow(
+               box(
+                 # width = 3,
+                 solidHeader = T,
+                 title = "Attend An Event",
+                 status = "info",
+                 collapsible = T,
+                 collapsed = T
+               )),
+             
+             
+             
+             fluidRow(
              box(width = 12, solidHeader = T,
                  includeMarkdown("docs/take_action.md")))
              ),
