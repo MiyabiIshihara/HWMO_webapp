@@ -128,7 +128,7 @@ function(input, output, session) {
     }
     
     plot <- ggplot(tbl) +
-      geom_col(mapping= aes_string(input$histX, input$histY), fill = "brown1") +
+      geom_col(mapping= aes_string(input$histX, input$histY), fill = "#bb3e3c") +
       theme_classic()
     
     

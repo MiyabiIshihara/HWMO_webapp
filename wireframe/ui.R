@@ -282,6 +282,7 @@ body <- dashboardBody(
                     
 dashboardPage(
   skin = "red",
+#  skin = "#bb3e3c!important",
   header,
   sidebar,
   body)
