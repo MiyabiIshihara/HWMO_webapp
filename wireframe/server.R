@@ -114,7 +114,8 @@ function(input, output, session) {
     if (nrow(firesInBounds()) == 0)
       return(NULL)
     
-    yChoice <- "test thing"
+    # dummy variables to be updated for axis labels
+    yChoice <- "Total"
     xChoice <- "Time"
     
     tbl <- firesInBounds() %>%
@@ -233,12 +234,13 @@ function(input, output, session) {
     } else {
       the_data = haz_dat
     }
+    
     # For use in the palette
     color_domain <- the_data[[user_choice]]
     color_domain[color_domain==0] <- NA
     
     # colorNumeric is a continuous palette for integers
-    pal <- colorBin(
+    pal_haz <- colorBin(
       bins =  3,
       na.color = alpha("blue",0.0),
       pretty = F,
@@ -251,17 +253,32 @@ function(input, output, session) {
       domain = color_domain
     )
     
+    pal_soc <- colorBin(
+      bins =  5,
+      na.color = alpha("blue",0.0),
+      pretty = T,
+      #Green Yellow Red
+      palette = "YlGn",
+      alpha = T,
+      domain = color_domain
+    )
+    
+    pal <- pal_haz
+    
     # Popup content
     if (user_choice == "MedH_Inc") {
       popup = paste0("<h4>", haz_dat$AreaName, "</h4>", tags$br(),
                     tags$em("Median Household Income: "),"$", census_dat$MedH_Inc
                     )
+      pal = pal_soc
       } else if (user_choice == "NH_ac") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                       tags$em("Native Hawaiian count: "), census_dat$NH_ac)
+        pal = pal_soc
       } else if (user_choice == "Homeowner") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                       tags$em("Homeownership: "), round(census_dat$Homeowner, digits = 2),"%")
+        pal = pal_soc
       } else if (user_choice == "Fire Protection") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
