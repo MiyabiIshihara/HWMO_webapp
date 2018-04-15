@@ -78,7 +78,7 @@ function(input, output, session) {
         position = "bottomright",
         easyButton(
           id="BI",
-          icon = 'f14e', 
+          icon = '<strong>E</strong>', 
           title="Big Island",
           onClick = JS("function(btn, map){map.setView([-156, 21], zoom = 8); }")),
         easyButton(
@@ -88,7 +88,7 @@ function(input, output, session) {
           onClick = JS("function(btn, map){map.setView([-160, 21], 10); }")),
         easyButton(
           id="wHI",
-          icon = 'fa-square', 
+          icon = '<strong>W</strong>', 
           title="West",
           onClick = JS("function(btn, map){map.setView([-159.5, 22], zoom = 7); }"))
         )
@@ -128,7 +128,7 @@ function(input, output, session) {
     }
     
     plot <- ggplot(tbl) +
-      geom_col(mapping= aes_string(input$histX, input$histY), fill = "#bb3e3c") +
+      geom_col(mapping= aes_string(input$histX, input$histY), fill = "#db4c3f") +
       theme_classic()
     
     

@@ -11,6 +11,9 @@ input[type = "histY"] {
   background-color: #ffffff;
 }
 
+.bg-primary {color: #944fe8!important;
+}
+
 /* Customize fonts */
 body, label, input, button, select { 
     font-family: 'Gustan', Helvetica, Arial, sans-serif;
@@ -26,6 +29,8 @@ h1, h2, h3, h4 {
   font-family: 'Helvetica Neue', Helvetica;
   font-weight: 300;
   font-size: 24px;
+  color: #944fe8;
+  max-height: 200px;
 }
 
 
