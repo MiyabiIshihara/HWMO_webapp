@@ -154,12 +154,16 @@ body <- dashboardBody(
                DT::dataTableOutput("dt"))
                ),
              fluidRow(
-               box(width = 5, status = "primary",
+               box(width = 4, status = "primary",
                downloadButton("download_data",
                               "Download Selected Data")),
-               box(width = 5, status = "primary",
+               box(width = 4, status = "primary",
                downloadButton("download_all_data",
-                              "Download All Data")))
+                              "Download All Data")),
+               box(width = 4, status = "primary",
+               includeMarkdown("docs/license.md")
+               )
+               )
              ),
     ################### Third tab ##########
      tabItem(tabName = "explore",
@@ -221,13 +225,15 @@ body <- dashboardBody(
                 DT::dataTableOutput("dt_haz"))
                 ),
              fluidRow(
-               box(width = 5, status = "primary",
+               box(width = 4, status = "primary",
                downloadButton("download_haz",
                               "Download Selected Data")),
-               box(width = 5, status = "primary",
+               box(width = 4, status = "primary",
                downloadButton("download_all_haz",
-                              "Download All Data"))
-                          )),
+                              "Download All Data")),
+               box(width = 4, status = "primary",
+                   includeMarkdown("docs/license.md")
+                          ))),
     #### Fourth Tab ######
     tabItem(tabName = "area",
             fluidRow(
