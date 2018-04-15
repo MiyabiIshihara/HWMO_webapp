@@ -7,8 +7,8 @@ header <- dashboardHeader(
   title = "Hawaii Wildfire",
   tags$li(a(href = 'http://hawaiiwildfire.org',
             img(src = 'hwmo_logo_white.svg',
-                title = "HWMO Home", height = "30px"),
-            style = "padding-top:10px; padding-bottom:10px;"),
+                title = "HWMO Home", height = "45px"),
+            style = "padding-top:5px; padding-bottom:0px;"),
           class = "dropdown"),
   tags$li(a(href = 'https://github.com/niklaslollo/hwmo_data_tool',
             icon("file-code-o"),
@@ -43,10 +43,39 @@ body <- dashboardBody(
   tabItems(
     ### First Tab ####
     tabItem(tabName = "Map",
+            # fluidRow(
+            #   column(width = 3,
+            #          box(width=NULL, 
+            #              status = "warning", # Makes header yellow
+            #              selectInput(inputId = "dataset",
+            #                          label = "Map Data",
+            #                          choices = list(
+            #                            "Total Score" = "Total Score",
+            #                            "Fire Protection" = "Fire Protection",
+            #                            "Subdivision" = "Subdivision",
+            #                            "Vegetation" = "Vegetation",
+            #                            "Buildings" = "Buildings",
+            #                            "Fire Environment" = "Fire Environment",
+            #                            "Median HH Income" = "MedH_Inc",
+            #                            "Native Hawaiian Count" = "NH_ac",
+            #                            "Homeownership" = "Homeowner"),
+            #                          selected = "overall_score")))),
+              
             fluidRow(
+              #tags$style(
+              #type = "text/css", 
+              #"#leafmap {height: calc(100vh - 150px) !important;}"),
+              column(width = 9,  
+              box(width = NULL, 
+                    solidHeader = T,
+                    leafletOutput("leafmap", height = 500))),
               column(width = 3,
+                     # box(width=NULL, 
+                     #     solidHeader = T, title = "Fires showing in map",
+                     #     plotOutput(outputId = "timeFire",
+                     #                height = 175)),
                      box(width=NULL, 
-                         status = "warning", # Makes header yellow
+                         status = "danger", # Makes header yellow
                          selectInput(inputId = "dataset",
                                      label = "Map Data",
                                      choices = list(
@@ -59,36 +88,25 @@ body <- dashboardBody(
                                        "Median HH Income" = "MedH_Inc",
                                        "Native Hawaiian Count" = "NH_ac",
                                        "Homeownership" = "Homeowner"),
-                                     selected = "overall_score")))),
-              
-            fluidRow(
-              #tags$style(
-              #type = "text/css", 
-              #"#leafmap {height: calc(100vh - 150px) !important;}"),
-              column(width = 9,  
-              box(width = NULL, 
-                    solidHeader = T,
-                    leafletOutput("leafmap", height = 500))),
-              column(width = 3,
-                     box(width=NULL, 
+                                     selected = "overall_score")),
+                     box(width = NULL, 
+                         status = "danger",
                          solidHeader = T, title = "Fires showing in map",
                          plotOutput(outputId = "timeFire",
-                                    height = 200)),
-                     box(width = NULL, 
-                         status = "warning",
-                         selectInput(inputId = "histX",
-                                     label = "Unit of time",
-                                     choices = c("Month" = "month",
-                                                 "Year" = "year"),
-                                     selected = "year")),
-                     box(width=NULL,
-                         status = "warning",
+                                    height = 175),
                          selectInput(inputId = "histY",
-                                     label = "Statistic",
+                                     label = "Y: ",
                                      choices = c("Number of fires" = "count",
                                                  "Total acres burned" = "total_acres",
                                                  "Avg acres burned per fire" = "avg_acres"),
-                                     selected = "count")))       
+                                     selected = "count"),
+                         selectInput(inputId = "histX",
+                                     label = "X: ",
+                                     choices = c("Month" = "month",
+                                                 "Year" = "year"),
+                                     selected = "year")
+                         )
+                     )       
               )
             #fluidRow(
             #  column(width = 4,

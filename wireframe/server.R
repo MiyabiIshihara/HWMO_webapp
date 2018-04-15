@@ -21,7 +21,7 @@ hawaiiFiresdf <- as.data.frame(HFires) %>%
     datechar = as.character(Start_Date),
     date = as.POSIXct(strptime(datechar, tz = "HST", format = "%Y/%m/%d")),
     year = as.integer(format(date,'%Y')),
-    month = as.factor(format(date,'%b')), #this collects the abbreviated month
+    month = as.factor(format(date,'%b')) , #this collects the abbreviated month
     month_num = format(date,'%m')) %>%
   select(-datechar) %>% 
   filter(year > 2001 & year < 2012) # remove some fires from 1988 and 1900
@@ -114,6 +114,9 @@ function(input, output, session) {
     if (nrow(firesInBounds()) == 0)
       return(NULL)
     
+    yChoice <- "test thing"
+    xChoice <- "Time"
+    
     tbl <- firesInBounds() %>%
       group_by_(input$histX) %>% 
       summarize(count = n(),
@@ -126,17 +129,39 @@ function(input, output, session) {
                                                  "Jul", "Aug", "Sep",
                                                  "Oct", "Nov", "Dec"))
     }
+  
+    if(input$histY == "avg_acres"){
+      yChoice = "Average Acreage"
+    } 
+    else if (input$histY == "total_acres") {
+      yChoice = "Total Acres"
+    } else { yChoice = "Total Fires"  }
+    
+    if(input$histX == "month"){
+      xChoice = "Month"
+    } else if(input$histX == "year") {
+      xChoice = "Year"
+    }
     
     plot <- ggplot(tbl) +
-      geom_col(mapping= aes_string(input$histX, input$histY), fill = "#db4c3f") +
+      geom_col(mapping= aes_string(input$histX, input$histY), fill = "#d53b2e") +
+      labs(x = xChoice, y = yChoice) +
       theme_classic()
     
+
     
+
+
     if (input$histX == "month") {
       plot + scale_x_discrete(limits=c("Jan", "Feb", "Mar",
                                        "Apr", "May", "Jun",
                                        "Jul", "Aug", "Sep",
-                                       "Oct", "Nov", "Dec"))
+                                       "Oct", "Nov", "Dec"),
+                              labels=c("J", "F", "M",
+                                      "A", "M", "J",
+                                      "J", "A", "S",
+                                      "O", "N", "D"))
+                              
     } else {
       plot + scale_x_discrete(limits=c(2000, 2005, 2010))
     }
