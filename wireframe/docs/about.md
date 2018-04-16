@@ -1,21 +1,29 @@
+<h1>About Us</h1>
 Hawaii Wildfire Management Organization (HWMO) is a 501(c)3 non-profit organization dedicated to outreach, education and technical assistance, project implementation, and research focused on proactive and collaborative wildfire prevention, mitigation and post-fire recovery in Hawaii and the Pacific.
 
 Our goals are to:
+<ol>
+<li> Prevent Wildfires </li>
+<li> Mitigate Wildfire Impacts </li>
+<li> Aid Post-Fire Recovery </li>
+<li> Provide a collaborative environment among residents, communities, firefighters, decision makers, and natural resource managers to address wildfire management goals collaboratively and proactively.</li>
+</ol>
 
-1) Prevent Wildfires
-2) Mitigate Wildfire Impacts
-3) Aid Post-Fire Recovery
-4) Provide a collaborative environment among residents, communities, firefighters, decision makers, and natural resource managers to address wildfire management goals collaboratively and proactively.
+<h1>FAQ</h1>
+<a href="#one"> "What does the Hawaii Wildfire webapp do?"</a> </br>
+<a href="#two"> What produce the Hawaii Wildfire webapp?</a></br>
+<a href="#three"> What data is included?</a></br>
+<a href="#four"> How can I use this data?</a></br>
+<a href="#five"> Where can I find more information?</a> </br>
 
-**What does the Hawaii Wildfire webapp do?**
+<h3 id="one">What does the Hawaii Wildfire webapp do?</h3>
 The HWMO webapp visualizes wildfire data across Hawai'i.
 It has three types of data: fire history, community hazard assessments, and community input information.
 
-**What produce the Hawaii Wildfire webapp?** 
+<h3 id="two">What produced the Hawaii Wildfire webapp?</h3>
 As an organization that serves all who live, work, or visit the Hawaiian Islands and parts of the Western Pacific, we want to make wildfire-related information readily available at your fingertips. We hope this app will be useful for you to learn more about the wildfire hazards in your own area so that you will be better equipped to take action in your community. 
 
-**What data is included?** 
-
+<h3 id="three">What data is included?</h3>
 *Statewide Wildfire History* (2002-2011 data)  
 HWMO led a multi-year, multi-partner effort with fire response agencies and resource managers (see below) to create compatible reporting among agencies, and to compile the first ever statewide wildfire history data set.  In Hawaii, fire suppression agencies use reporting formats that differ in the type of information and level of detail recorded per fire event. These differences have prevented mapping and identifying fire trends and emerging problems at community, county, and state levels. The HWMO Hawaii State Wildfire History data set is intended to: (1) aid communities in developing federally compliant Community Wildfire Protection Plans (CWPP); (2) support research on the ecological and social drivers of wildfire; (3) communicate the extent of fire occurrence and threat in Hawaii with national and local funding agencies/grantors; (4) secure external resources to address fire issues; and (5) engage communities in wildfire preparedness activities.  It is essential to understand that this data comes with limitations and caveats
 
@@ -58,15 +66,12 @@ The community input available in this app are from 2016 CWPPs: Kauai Update, Mol
 http://www.hawaiiwildfire.org/cwpps
 
 
-
-
-**Data Use and Distribution:**
+<h3 id="four">Data Use and Distribution:</h3>
 We actively encourage use of this data set for scientific purposes and planning by communities, natural resource managers, and emergency response agencies. This is not, however, the case for commercial purposes.  Users are prohibited from any commercial, non-free resale, or redistribution without explicit written permission from Hawai'i Wildfire Management Organization (HWMO). We kindly ask any users to cite the HWMO as the source used in the creation of any reports, publications, new data sets, derived products, or services resulting from the use of this data set.  If possible, please link web pages to the HWMO website (hawaiiwildfire.org).
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 
-
-**Where can I find more information?**
+<h3 id="five">Where can I find more information?</h3>
 [www.hawaiiwildfire.org](www.hawaiiwildfire.org)
 E-mail: <admin@hawaiiwildfire.org> or call (808) 885-0900
 

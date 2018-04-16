@@ -51,7 +51,7 @@ comm_dat <- read_csv("data/comm_input.csv") %>%
   select(-c(cohesive_strategy, key_codes, sec_desc1, sec_desc2, sec_desc3))
 
 ## Load CWPP Data 
- # cwpp_dat <- geojsonio::geojson_read("data/CWPP/CWPP.geojson", what = "sp")
+#  cwpp_dat <- geojsonio::geojson_read("data/CWPP/CWPP.geojson", what = "sp")
 # cwpp_dat <- st_read("../data/CWPP/ALL_CWPP.shp")
 # cwpp_dat <- st_transform(cwpp_dat, 4326)
 

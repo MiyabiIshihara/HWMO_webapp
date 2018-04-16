@@ -21,9 +21,18 @@ body, label, input, button, select {
     font-weight: 200;
     color: #666666;
   }
-h1, h2, h3, h4 { 
+h1 {
+  font-weight: bold;
+ /* color: #d53b2d;*/
+} 
+h3 {
+  font-size: 25px;
+  font-weight: medium;
+}
+h4 { 
   font-weight: 400; 
 }
+
 
 .main-header .logo {
   font-family: 'Helvetica Neue', Helvetica;
@@ -33,6 +42,22 @@ h1, h2, h3, h4 {
   max-height: 200px;
 }
 
+/*Links*/
+a:link {
+    color: #d53b2d;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:visited {
+    color: #a82317;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:hover {
+    color: #db4c3f;
+    background-color: transparent;
+    text-decoration: underline;
+}
 
 .leaflet .legend i{
             border: 1px solid #666;
