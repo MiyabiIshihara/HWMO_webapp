@@ -7,3 +7,4 @@ Become a nationally-recognized Firewise Community. Starting in July 2015, HWMO b
 We have done just that. HWMO has assisted 10 communities on Hawaii Island and Maui to help them achieve national Firewise Communities recognition. There are 4 more on the way and we welcome more communities to join a growing movement.
 
 As a nonprofit organization, our mission is to support your wildfire protection efforts, so we work hard to secure grant and donated funds to provide these services at no cost to you or your community. Becoming a nationally-recognized Firewise Community is an excellent step toward safeguarding your family, home, and neighborhood. Additionally, the certified Firewise Communities across Hawaiʻi have opportunities to get together, support each other, and learn from one another. [Learn more about Firewise Communities.](http://www.hawaiiwildfire.org/firewise-communities)
+

@@ -4,14 +4,17 @@ library(sf)
 library(leaflet)
 
 header <- dashboardHeader(
-  title = "Hawaii Wildfire",
-  tags$li(a(href = 'http://hawaiiwildfire.org',
-            img(src = 'hwmo_logo_white.svg',
-                title = "HWMO Home", height = "45px"),
-            style = "padding-top:5px; padding-bottom:0px;"),
-          class = "dropdown"),
+  title = tags$a(href='https://hawaiiwildfire.org',
+                 tags$img(src='hwmo_logo_white.svg',
+                          title = "HWMO Home", height = "45px")),
+  #tags$li(a(href = 'http://hawaiiwildfire.org',
+  #          img(src = 'hwmo_logo_white.svg',
+  #              title = "HWMO Home", height = "45px"),
+  #          style = "padding-top:5px; padding-bottom:0px;"),
+  #        class = "dropdown"),
   tags$li(a(href = 'https://github.com/niklaslollo/hwmo_data_tool',
             icon("file-code-o"),
+            title = "Github",
             style = "padding-top:10px; padding-bottom:10px;"),
           class = "dropdown")
   )
@@ -169,8 +172,7 @@ body <- dashboardBody(
             fluidRow(
               infoBoxOutput("hiScoreBox", width = 4),
               infoBoxOutput("medScoreBox", width = 4),
-              infoBoxOutput("lowScoreBox", width = 4)
-            )
+              infoBoxOutput("lowScoreBox", width = 4))
             ),
 ############## Informational (Markdown) Tabs ############################    
     #### Take Action Tab #######
@@ -223,9 +225,7 @@ body <- dashboardBody(
               solidHeader = F,
               title = "Donate",
               includeMarkdown("docs/TA_donate.md")
-            )
-          )
-             ),
+            ))),
           column(
             width = 3,
             fluidRow(
@@ -234,9 +234,8 @@ body <- dashboardBody(
               solidHeader = F,
               title = "Connect",
               includeMarkdown("docs/TA_social.md")
-            )
-          )
-          )),
+            )))
+          ),
     #### About Tab #####
      tabItem(tabName = "FAQ",
              fluidRow(

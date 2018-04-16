@@ -1,5 +1,5 @@
 <h1>About Us</h1>
-Hawaii Wildfire Management Organization (HWMO) is a 501(c)3 non-profit organization dedicated to outreach, education and technical assistance, project implementation, and research focused on proactive and collaborative wildfire prevention, mitigation and post-fire recovery in Hawaii and the Pacific.
+Hawaii Wildfire Management Organization (HWMO) is a `501(c)(3)` non-profit organization dedicated to outreach, education and technical assistance, project implementation, and research focused on proactive and collaborative wildfire prevention, mitigation and post-fire recovery in Hawaii and the Pacific.
 
 Our goals are to:
 <ol>
