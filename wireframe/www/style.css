@@ -21,13 +21,14 @@ body, label, input, button, select {
     font-weight: 200;
     color: #666666;
   }
+  
 h1 {
   font-weight: bold;
  /* color: #d53b2d;*/
 } 
 h3 {
   font-size: 25px;
-  font-weight: medium;
+  /* font-weight: bold; */
 }
 h4 { 
   font-weight: 400; 
@@ -43,7 +44,7 @@ h4 {
 }
 
 /*Links*/
-a:link {
+p a:link {
     color: #d53b2d;
     background-color: transparent;
     text-decoration: none;

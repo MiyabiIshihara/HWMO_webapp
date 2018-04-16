@@ -232,7 +232,7 @@ body <- dashboardBody(
                               "Download Selected Data")),
                box(width = 4, status = "primary",
                downloadButton("download_all_haz",
-                              "Download All Data")),
+                              "Download All Data", class = "butt")),
                box(width = 4, status = "primary",
                    includeMarkdown("docs/license.md")
                           ))),
