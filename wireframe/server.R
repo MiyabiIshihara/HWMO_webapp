@@ -51,10 +51,14 @@ comm_dat <- read_csv("data/comm_input.csv") %>%
   select(-c(cohesive_strategy, key_codes, sec_desc1, sec_desc2, sec_desc3))
 
 ## Load CWPP Data 
-#  cwpp_dat <- geojsonio::geojson_read("data/CWPP/CWPP.geojson", what = "sp")
-# cwpp_dat <- st_read("../data/CWPP/ALL_CWPP.shp")
-# cwpp_dat <- st_transform(cwpp_dat, 4326)
-
+# cwpp_dat <- geojsonio::geojson_read("data/CWPP/CWPP.geojson", what = "sp")
+ cwpp_dat <- st_read("data/CWPP/ALL_CWPP.shp")
+ cwpp_dat <- st_transform(cwpp_dat, 4326)
+ cwpp_dat <- cwpp_dat %>%
+   mutate(
+     Status = as_factor(Status)
+   )
+ 
 ## Load haz data
 #haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 haz_dat <- st_read("data/hazard/WHA2015.shp")
@@ -129,9 +133,6 @@ function(input, output, session) {
         icon = '<strong>W</strong>',
         title="West",
         onClick = JS("function(btn, map){map.panTo([-159.5, 22], 7); }")))
-
-
-    
       })
   
   #### Which Fires are in view? #####
@@ -193,71 +194,15 @@ function(input, output, session) {
                                        "Apr", "May", "Jun",
                                        "Jul", "Aug", "Sep",
                                        "Oct", "Nov", "Dec"),
-                              labels=c("J", "F", "M",
-                                      "A", "M", "J",
-                                      "J", "A", "S",
-                                      "O", "N", "D"))
+                              labels=c("Jan", "2", "3",
+                                      "Apr", "5", "6",
+                                      "Jul", "8", "9",
+                                      "Oct", "11", "12"))
                               
     } else {
       plot + scale_x_discrete(limits=c(2000, 2005, 2010))
     }
   })
-  
-  
-  #### Which data are in view? #####
-  # Need to determine how to capture long/lat from sf object
-  #dataInBounds <- eventReactive(input$leafmap_bounds,{
-  #  if (is.null(input$leafmap_bounds))
-  #    return(hawaiiFiresdf[FALSE,])
-  #  
-  #  bounds <- input$leafmap_bounds
-  #  latRng <- range(bounds$north, bounds$south)
-  #  lngRng <- range(bounds$east, bounds$west)
-  #  
-  #  user_choice <- input$dataset
-  #  
-  #  if (user_choice %in% c("MedH_Inc", "NH_ac", "Homeowner")) {
-  #    the_data = census_dat
-  #  } else {
-  #    the_data = haz_dat
-  #  }
-  #  subset(the_data,
-  #         Lat >= latRng[[1]] & Lat <= latRng[[2]] &
-  #         Long >= lngRng[[1]] & Long <= lngRng[[2]])  
-  #}, ignoreNULL = T)
-  
-  # Plot of scores in view ########
-  #output$histScores <- renderPlot({
-  #  if (nrow(firesInBounds()) == 0)
-  #    return(NULL)
-  #  
-  #  tbl <- firesInBounds() 
-#
-  #  # Histogram
-  #    ggplot(the_data) +
-  #      geom_histogram(aes_string(x = user_choice), fill = "brown1",bins = 5) +
-  #      theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), 
-  #            panel.background = element_blank(), 
-  #            panel.grid = element_blank(),
-  #            axis.line = element_line(color = "white"), 
-  #            text = element_text(color = "white"), 
-  #            axis.text = element_text(color = "white"),
-  #            axis.ticks = element_line(color = "white"),
-  #            axis.title.x=element_blank()) + 
-  #      scale_fill_brewer()
-  #  
-  #  ggplot(tbl) +
-  #    geom_col(mapping= aes_string(input$histX, input$histY), fill = "brown1") +
-  #    theme(plot.background = element_rect(fill = "#222d32", color = "#222d32"), 
-  #          panel.background = element_blank(), 
-  #          panel.grid = element_blank(),
-  #          axis.line = element_line(color = "white"), 
-  #          text = element_text(color = "white"), 
-  #          axis.text = element_text(color = "white"),
-  #          axis.ticks = element_line(color = "white"),
-  #          axis.title.x=element_blank())
-  #})
-  
   
   # This observer is responsible for maintaining the polygons and legend,
   # according to the variables the user has chosen
@@ -266,7 +211,7 @@ function(input, output, session) {
     
     if (user_choice %in% c("MedH_Inc", "NH_ac", "Homeowner")) {
       the_data = census_dat
-    } else if (user_choice %in% c("CWPP")){
+    } else if (user_choice %in% c("Status")){
       the_data = cwpp_dat
     } else {
       the_data = haz_dat
@@ -302,13 +247,19 @@ function(input, output, session) {
     )
     
     # palette for CWPP data (qualitative data) #currently crashes
-    # pal_cwpp <- colorFactor(
-    #   palette = "set1",
-    #   na.color = alpha("blue",0.0)
-    # )
+     pal_cwpp <- colorFactor(
+       #domain = color_domain, ### I would guess this is the problem area
+       levels = c("Current: Completed 2015", "Current: Completed 2016",       
+                  "Current: Update Completed 2016","Update Planned for 2018-2019"),
+       palette = c(
+         "#2c7bb6",
+         '#ffffbf',
+         "#d7191c",
+         "#d53b2e"
+       ),
+       na.color = alpha("blue",0.0)
+     )
 
-    pal <- pal_haz
-    
     # Popup content
     if (user_choice == "MedH_Inc") {
       popup = paste0("<h4>", haz_dat$AreaName, "</h4>", tags$br(),
@@ -323,10 +274,10 @@ function(input, output, session) {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                       tags$em("Homeownership: "), round(census_dat$Homeowner, digits = 2),"%")
         pal = pal_soc
-      # } else if (user_choice == "Status") {
-      #   popup = paste0("<h4>",cwpp_dat$CWPPregion, "</h4>", tags$br(),
-      #                  tags$em("Region Status: "), cwpp_dat$Status)
-      #   pal = pal_cwpp
+      } else if (user_choice == "Status") {
+        popup = paste0("<h4>",cwpp_dat$CWPPregion, "</h4>", tags$br(),
+                      tags$em("Region Status: "), cwpp_dat$Status)
+        pal = pal_cwpp
       } else if (user_choice == "Fire Protection") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
@@ -339,6 +290,7 @@ function(input, output, session) {
                       tags$em("Local emergency operations: "), haz_dat$Loc_Ops,tags$br(),
                       tags$em("Community planning: "), haz_dat$Com_Plan,tags$br(),
                       tags$em("Community fire programs: "), haz_dat$Com_FirPrg)
+        pal = pal_haz
       } else if (user_choice == "Subdivision") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
@@ -353,6 +305,7 @@ function(input, output, session) {
                       tags$em("Unmanaged lands: "),haz_dat$Un_Lands, tags$br(),
                       tags$em("Private landowner action: "),haz_dat$Priv_Act, tags$br(),
                       tags$em("Wildland proximity: "),haz_dat$Prox_Wild)
+        pal = pal_haz
       } else if (user_choice == "Vegetation") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
@@ -361,6 +314,7 @@ function(input, output, session) {
                       tags$em("Fuel loading: "), haz_dat$Fuel_Load, tags$br(),
                       tags$em("Fuel structure: "), haz_dat$Fuel_Strc, tags$br(),
                       tags$em("Defensible space: "), haz_dat$Def_Space)
+        pal = pal_haz
       } else if (user_choice == "Buildings") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
@@ -369,6 +323,7 @@ function(input, output, session) {
                       tags$em("Under-skirting: "), haz_dat$Undr_Skrt, tags$br(),
                       tags$em("Utilities placement: "), haz_dat$Utlty_Plmt, tags$br(),
                       tags$em("Structural ignitability: "), haz_dat$Strc_Ign)
+        pal = pal_haz
       } else if(user_choice == "Fire Environment"){
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>",tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
@@ -378,6 +333,7 @@ function(input, output, session) {
                       tags$em("Seasonal hazard condition: "), haz_dat$Seas_Haz, tags$br(),
                       tags$em("Ignition risk: "), haz_dat$Ign_Risk, tags$br(),
                       tags$em("Topography: "), haz_dat$Top_Adv)
+        pal = pal_haz
       } else { # Total Score
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>",tags$br(),
                        tags$em("Fire Protection: "), haz_dat$`Fire Protection`, tags$br(),
@@ -385,6 +341,7 @@ function(input, output, session) {
                        tags$em("Vegetation: "), haz_dat$Vegetation, tags$br(),
                        tags$em("Buildings: "), haz_dat$Buildings, tags$br(),
                        tags$em("Fire Environment: "), haz_dat$`Fire Environment`)
+        pal = pal_haz
       }
     
     leafletProxy("leafmap", data = the_data) %>%
@@ -392,7 +349,7 @@ function(input, output, session) {
       clearControls() %>%
       addPolygons(weight = 0.2,
                   color = '#aaaaaa',
-                  fillColor = pal(color_domain),
+                  fillColor = pal(color_domain), # This seems to be the problem area
                   opacity = 1.0,
                   highlightOptions = highlightOptions(color = "#d53b2e",
                                                       weight = 2.5,
