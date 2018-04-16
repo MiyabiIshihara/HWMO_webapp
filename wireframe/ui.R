@@ -41,7 +41,7 @@ body <- dashboardBody(
     tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
   ),
   tabItems(
-    ### First Tab ####
+    ### Map Tab - First Tab ####
     tabItem(tabName = "Map",
             # fluidRow(
             #   column(width = 3,
@@ -75,7 +75,7 @@ body <- dashboardBody(
                      #     plotOutput(outputId = "timeFire",
                      #                height = 175)),
                      box(width=NULL, 
-                         status = "danger", # Makes header yellow
+                         status = "danger", # Makes header red
                          selectInput(inputId = "dataset",
                                      label = "Map Data",
                                      choices = list(
@@ -119,126 +119,7 @@ body <- dashboardBody(
             #                        height = 200))
             #  ))
             ),
-    ### Second tab ######
-     tabItem(tabName = "community",
-             fluidRow(
-               box(width = 3, 
-                   status = "warning",
-               selectInput(inputId = "focus", 
-                           label = "Strategic Focus", 
-                           choices = c("Pick a focus..."="",
-                                       "Prevention" = "P",
-                                       "Pre-suppression" = "PS",
-                                       "Suppression" = "S",
-                                       "Post-fire" = "PF"), 
-                           multiple=TRUE)),
-               box(width = 3, 
-                   status = "warning",
-               selectInput(inputId = "region",
-                           label = "Region(s)", 
-                           choices = c("Pick a region..."="", 
-                                       "Kauai" = "Kauai",
-                                       "Molokai" = "Molokai",
-                                       "South Maui" = "South Maui",
-                                       "Upcountry Maui" = "Upcountry Maui",
-                                       "Western Oahu" = "W. Oahu"), 
-                           multiple=TRUE)),
-               box(width = 3, 
-                   status = "warning",
-               conditionalPanel("input.region",
-                                selectInput(inputId = "meeting", 
-                                            label = "Meeting Location(s)", 
-                                            choices = c("Pick a meeting location"=""), 
-                                            multiple=TRUE)))
-             ),
-             fluidRow(
-               box(width = 12, solidHeader = T,
-               DT::dataTableOutput("dt"))
-               ),
-             fluidRow(
-               box(width = 4, status = "primary",
-               downloadButton("download_data",
-                              "Download Selected Data")),
-               box(width = 4, status = "primary",
-               downloadButton("download_all_data",
-                              "Download All Data")),
-               box(width = 4, status = "primary",
-               includeMarkdown("docs/license.md")
-               )
-               )
-             ),
-    ################### Third tab ##########
-     tabItem(tabName = "explore",
-             fluidRow(
-               box(width = 3, 
-                   status = "warning",
-                   selectInput(inputId = "island",
-                               label = "Island",
-                               choices = c("Pick an island..."="",
-                                           "Hawaii Island" = "Hawaii Island",
-                                           "Kahoolawe" = "Kahoolawe",
-                                           "Kauai" = "Kauai",
-                                           "Lanai" = "Lanai",
-                                           "Lehua" = "Lehua",
-                                           "Maui" = "Maui",
-                                           "Molokai" = "Molokai",
-                                           "Molokini Atoll" = "Molokini Atoll",
-                                           "Niihau" = "Niihau",
-                                           "Oahu" = "Oahu"),
-                               multiple = TRUE)),
-               box(width = 3, 
-                   status = "warning",
-                   conditionalPanel("input.island",
-                                    selectInput(inputId = "areaname", 
-                                                label = "Area", 
-                                                choices = c("Pick an area..."=""), 
-                                                multiple=TRUE))),
-               box(width = 3, 
-                   status = "warning",
-               selectInput(inputId = "category", 
-                           label = "Hazard Category", 
-                           choices = c("Pick a hazard category..."="",
-                                       "Subdivision" = "Subdivision",
-                                       "Fire Protection" = "Fire Protection",
-                                       "Vegetation" = "Vegetation",
-                                       "Building" = "Building",
-                                       "Fire Environment" = "Fire Environment"), 
-                           multiple=TRUE)),
-               box(width = 3, 
-                   status = "warning",
-               conditionalPanel("input.category",
-                                selectInput(inputId = "hazard", 
-                                            label = "Hazard(s)", 
-                                            choices = c("Pick a hazard..."=""), 
-                                            multiple=TRUE)))
-              
-               ),
-             #fluidRow(
-             #  box(width = 5, 
-             #      status = "warning",
-             #  actionButton(inputId = "risky",
-             #               label = "Show me high risk hazards")),
-             #  box(width = 5, 
-             #      status = "warning",
-             #  actionButton(inputId = "allRisks",
-             #               label = "Show me everything"))
-             #  ),
-              fluidRow(
-                box(width = 12, solidHeader = T,
-                DT::dataTableOutput("dt_haz"))
-                ),
-             fluidRow(
-               box(width = 4, status = "primary",
-               downloadButton("download_haz",
-                              "Download Selected Data")),
-               box(width = 4, status = "primary",
-               downloadButton("download_all_haz",
-                              "Download All Data")
-               ),
-               box(width = 4, status = "primary",
-                   includeMarkdown("docs/license.md")
-                          ))),
-    #### Fourth Tab ######
+    #### Explore Your Area Tab ######
     tabItem(tabName = "area",
             fluidRow(
               box(width = 12, solidHeader = T,
@@ -291,7 +172,8 @@ body <- dashboardBody(
               infoBoxOutput("lowScoreBox", width = 4)
             )
             ),
-    #### Fifth Tab #######
+############## Informational (Markdown) Tabs ############################    
+    #### Take Action Tab #######
      tabItem(tabName = "action",
              column(
                width = 9,
@@ -355,11 +237,132 @@ body <- dashboardBody(
             )
           )
           )),
-    #### Last Tab #####
+    #### About Tab #####
      tabItem(tabName = "FAQ",
              fluidRow(
              box(width = 12, solidHeader = T,
-                 includeMarkdown("docs/about.md")))))
+                 includeMarkdown("docs/about.md")))),
+    
+################## Data Tabs ###################################
+    ### Community data tab ######
+    tabItem(tabName = "community",
+            fluidRow(
+              box(width = 3, 
+                  status = "warning",
+                  selectInput(inputId = "focus", 
+                              label = "Strategic Focus", 
+                              choices = c("Pick a focus..."="",
+                                          "Prevention" = "P",
+                                          "Pre-suppression" = "PS",
+                                          "Suppression" = "S",
+                                          "Post-fire" = "PF"), 
+                              multiple=TRUE)),
+              box(width = 3, 
+                  status = "warning",
+                  selectInput(inputId = "region",
+                              label = "Region(s)", 
+                              choices = c("Pick a region..."="", 
+                                          "Kauai" = "Kauai",
+                                          "Molokai" = "Molokai",
+                                          "South Maui" = "South Maui",
+                                          "Upcountry Maui" = "Upcountry Maui",
+                                          "Western Oahu" = "W. Oahu"), 
+                              multiple=TRUE)),
+              box(width = 3, 
+                  status = "warning",
+                  conditionalPanel("input.region",
+                                   selectInput(inputId = "meeting", 
+                                               label = "Meeting Location(s)", 
+                                               choices = c("Pick a meeting location"=""), 
+                                               multiple=TRUE)))
+            ),
+            fluidRow(
+              box(width = 12, solidHeader = T,
+                  DT::dataTableOutput("dt"))
+            ),
+            fluidRow(
+              box(width = 4, status = "primary",
+                  downloadButton("download_data",
+                                 "Download Selected Data")),
+              box(width = 4, status = "primary",
+                  downloadButton("download_all_data",
+                                 "Download All Data")),
+              box(width = 4, status = "primary",
+                  includeMarkdown("docs/license.md")
+              )
+            )
+    ),
+    ################### Hazard data tab ##########
+    tabItem(tabName = "explore",
+            fluidRow(
+              box(width = 3, 
+                  status = "warning",
+                  selectInput(inputId = "island",
+                              label = "Island",
+                              choices = c("Pick an island..."="",
+                                          "Hawaii Island" = "Hawaii Island",
+                                          "Kahoolawe" = "Kahoolawe",
+                                          "Kauai" = "Kauai",
+                                          "Lanai" = "Lanai",
+                                          "Lehua" = "Lehua",
+                                          "Maui" = "Maui",
+                                          "Molokai" = "Molokai",
+                                          "Molokini Atoll" = "Molokini Atoll",
+                                          "Niihau" = "Niihau",
+                                          "Oahu" = "Oahu"),
+                              multiple = TRUE)),
+              box(width = 3, 
+                  status = "warning",
+                  conditionalPanel("input.island",
+                                   selectInput(inputId = "areaname", 
+                                               label = "Area", 
+                                               choices = c("Pick an area..."=""), 
+                                               multiple=TRUE))),
+              box(width = 3, 
+                  status = "warning",
+                  selectInput(inputId = "category", 
+                              label = "Hazard Category", 
+                              choices = c("Pick a hazard category..."="",
+                                          "Subdivision" = "Subdivision",
+                                          "Fire Protection" = "Fire Protection",
+                                          "Vegetation" = "Vegetation",
+                                          "Building" = "Building",
+                                          "Fire Environment" = "Fire Environment"), 
+                              multiple=TRUE)),
+              box(width = 3, 
+                  status = "warning",
+                  conditionalPanel("input.category",
+                                   selectInput(inputId = "hazard", 
+                                               label = "Hazard(s)", 
+                                               choices = c("Pick a hazard..."=""), 
+                                               multiple=TRUE)))
+              
+            ),
+            #fluidRow(
+            #  box(width = 5, 
+            #      status = "warning",
+            #  actionButton(inputId = "risky",
+            #               label = "Show me high risk hazards")),
+            #  box(width = 5, 
+            #      status = "warning",
+            #  actionButton(inputId = "allRisks",
+            #               label = "Show me everything"))
+            #  ),
+            fluidRow(
+              box(width = 12, solidHeader = T,
+                  DT::dataTableOutput("dt_haz"))
+            ),
+            fluidRow(
+              box(width = 4, status = "primary",
+                  downloadButton("download_haz",
+                                 "Download Selected Data")),
+              box(width = 4, status = "primary",
+                  downloadButton("download_all_haz",
+                                 "Download All Data")
+              ),
+              box(width = 4, status = "primary",
+                  includeMarkdown("docs/license.md")
+              ))))
   )
                     
 dashboardPage(
