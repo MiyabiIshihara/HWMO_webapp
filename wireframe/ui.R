@@ -46,7 +46,7 @@ body <- dashboardBody(
             # fluidRow(
             #   column(width = 3,
             #          box(width=NULL, 
-            #              status = "warning", # Makes header yellow
+            #              status = "danger", # Makes header yellow
             #              selectInput(inputId = "dataset",
             #                          label = "Map Data",
             #                          choices = list(
@@ -126,7 +126,7 @@ body <- dashboardBody(
                   tags$h4("Pick an area and hazard to see the hazard score."))),
             fluidRow(
               box(width = 4, 
-                  status = "warning",
+                  status = "danger",
                   selectInput(inputId = "island2",
                               label = "Island",
                               choices = c("Sort by island..."="",
@@ -141,7 +141,7 @@ body <- dashboardBody(
                               selected = "Hanalei")
                   ),
               box(width = 4, 
-                  status = "warning",
+                  status = "danger",
                   selectInput(inputId = "category2", 
                               label = "Hazard Category", 
                               choices = c("Sort by hazard category..."="",
@@ -248,7 +248,7 @@ body <- dashboardBody(
     tabItem(tabName = "community",
             fluidRow(
               box(width = 3, 
-                  status = "warning",
+                  status = "danger",
                   selectInput(inputId = "focus", 
                               label = "Strategic Focus", 
                               choices = c("Pick a focus..."="",
@@ -258,7 +258,7 @@ body <- dashboardBody(
                                           "Post-fire" = "PF"), 
                               multiple=TRUE)),
               box(width = 3, 
-                  status = "warning",
+                  status = "danger",
                   selectInput(inputId = "region",
                               label = "Region(s)", 
                               choices = c("Pick a region..."="", 
@@ -269,7 +269,7 @@ body <- dashboardBody(
                                           "Western Oahu" = "W. Oahu"), 
                               multiple=TRUE)),
               box(width = 3, 
-                  status = "warning",
+                  status = "danger",
                   conditionalPanel("input.region",
                                    selectInput(inputId = "meeting", 
                                                label = "Meeting Location(s)", 
@@ -296,7 +296,7 @@ body <- dashboardBody(
     tabItem(tabName = "explore",
             fluidRow(
               box(width = 3, 
-                  status = "warning",
+                  status = "danger",
                   selectInput(inputId = "island",
                               label = "Island",
                               choices = c("Pick an island..."="",
@@ -312,14 +312,14 @@ body <- dashboardBody(
                                           "Oahu" = "Oahu"),
                               multiple = TRUE)),
               box(width = 3, 
-                  status = "warning",
+                  status = "danger",
                   conditionalPanel("input.island",
                                    selectInput(inputId = "areaname", 
                                                label = "Area", 
                                                choices = c("Pick an area..."=""), 
                                                multiple=TRUE))),
               box(width = 3, 
-                  status = "warning",
+                  status = "danger",
                   selectInput(inputId = "category", 
                               label = "Hazard Category", 
                               choices = c("Pick a hazard category..."="",
@@ -330,7 +330,7 @@ body <- dashboardBody(
                                           "Fire Environment" = "Fire Environment"), 
                               multiple=TRUE)),
               box(width = 3, 
-                  status = "warning",
+                  status = "danger",
                   conditionalPanel("input.category",
                                    selectInput(inputId = "hazard", 
                                                label = "Hazard(s)", 
@@ -340,11 +340,11 @@ body <- dashboardBody(
             ),
             #fluidRow(
             #  box(width = 5, 
-            #      status = "warning",
+            #      status = "danger",
             #  actionButton(inputId = "risky",
             #               label = "Show me high risk hazards")),
             #  box(width = 5, 
-            #      status = "warning",
+            #      status = "danger",
             #  actionButton(inputId = "allRisks",
             #               label = "Show me everything"))
             #  ),
