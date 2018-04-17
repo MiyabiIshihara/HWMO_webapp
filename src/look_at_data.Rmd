@@ -15,6 +15,48 @@ library(leaflet)
 <https://ryanpeek.github.io/mapping_in_R/index.html>
 <https://edzer.github.io/rstudio_conf/#1>
 
+```{r cwpp}
+cwpp_dat <- st_read("../wireframe/data/CWPP/ALL_CWPP.shp")
+cwpp_dat <- st_transform(cwpp_dat, 4326)
+cwpp_dat <- cwpp_dat %>%
+   mutate(
+     Status = as_factor(Status)
+   )
+
+map <- leaflet(cwpp_dat) %>%
+      addProviderTiles(providers$OpenMapSurfer.Grayscale) %>%
+  setView(lng = -156, lat = 20.35, zoom = 7) %>%
+      setMaxBounds(-162.6,23.6,-153.5,18.0)
+
+pal_cwpp <- colorFactor(
+       domain = cwpp_dat$Status, ### I would guess this is the problem area
+       #levels = c("Current: Completed 2015", "Current: Completed 2016",       
+       #           "Current: Update Completed 2016","Update Planned for 2018-2019"),
+       palette = "YlGn",
+       #na.color = alpha("blue",0.0)
+     )
+pal = pal_cwpp
+color_domain = cwpp_dat$Status
+color_domain[color_domain==0] <- NA
+ 
+map %>%
+  addPolygons(weight = 0.2,
+              color = '#aaaaaa',
+              fillColor = pal(color_domain), # This seems to be the problem area
+              opacity = 1.0,
+              highlightOptions = highlightOptions(color = "#d53b2e",
+                                                  weight = 2.5,
+                                                  opacity = 0.8,
+                                                  bringToFront = TRUE),
+              popup = ~Status,
+              popupOptions = popupOptions(
+                    style = list("color" = "black"),
+                    maxHeight = 150
+                    ))
+
+
+```
+
 ```{r load hazard assessment data}
 # Load data
 haz_dat = st_read("../wireframe/data/hazard/WHA2015.shp")

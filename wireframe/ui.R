@@ -90,8 +90,8 @@ body <- dashboardBody(
                                        "Fire Environment" = "Fire Environment",
                                        "Median HH Income" = "MedH_Inc",
                                        "Native Hawaiian Count" = "NH_ac",
-                                       "Homeownership" = "Homeowner",
-                                       "CWPP" = "Status"
+                                       "Homeownership" = "Homeowner"
+                                       #"CWPP" = "Status"
                                       ),
                                      selected = "overall_score")),
                      box(width = NULL, 

@@ -211,8 +211,8 @@ function(input, output, session) {
     
     if (user_choice %in% c("MedH_Inc", "NH_ac", "Homeowner")) {
       the_data = census_dat
-    } else if (user_choice %in% c("Status")){
-      the_data = cwpp_dat
+    #} else if (user_choice %in% c("Status")){
+    #  the_data = cwpp_dat
     } else {
       the_data = haz_dat
     }
@@ -247,18 +247,13 @@ function(input, output, session) {
     )
     
     # palette for CWPP data (qualitative data) #currently crashes
-     pal_cwpp <- colorFactor(
-       #domain = color_domain, ### I would guess this is the problem area
-       levels = c("Current: Completed 2015", "Current: Completed 2016",       
-                  "Current: Update Completed 2016","Update Planned for 2018-2019"),
-       palette = c(
-         "#2c7bb6",
-         '#ffffbf',
-         "#d7191c",
-         "#d53b2e"
-       ),
-       na.color = alpha("blue",0.0)
-     )
+     #pal_cwpp <- colorFactor(
+     #  domain = color_domain, ### I would guess this is the problem area
+     #  #levels = c("Current: Completed 2015", "Current: Completed 2016",       
+     #  #           "Current: Update Completed 2016","Update Planned for 2018-2019"),
+     #  palette = "YlGn"
+     #  #,na.color = alpha("blue",0.0)
+     #)
 
     # Popup content
     if (user_choice == "MedH_Inc") {
@@ -274,10 +269,10 @@ function(input, output, session) {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                       tags$em("Homeownership: "), round(census_dat$Homeowner, digits = 2),"%")
         pal = pal_soc
-      } else if (user_choice == "Status") {
-        popup = paste0("<h4>",cwpp_dat$CWPPregion, "</h4>", tags$br(),
-                      tags$em("Region Status: "), cwpp_dat$Status)
-        pal = pal_cwpp
+      #} else if (user_choice == "Status") {
+      #  popup = paste0("<h4>",cwpp_dat$CWPPregion, "</h4>", tags$br(),
+      #                tags$em("Region Status: "), cwpp_dat$Status)
+      #  pal = pal_cwpp
       } else if (user_choice == "Fire Protection") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
@@ -344,12 +339,13 @@ function(input, output, session) {
         pal = pal_haz
       }
     
-    leafletProxy("leafmap", data = the_data) %>%
+    leafletProxy("leafmap", 
+                 data = the_data) %>%
       clearShapes() %>%
       clearControls() %>%
       addPolygons(weight = 0.2,
                   color = '#aaaaaa',
-                  fillColor = pal(color_domain), # This seems to be the problem area
+                  fillColor = ~pal(color_domain), # This seems to be the problem area
                   opacity = 1.0,
                   highlightOptions = highlightOptions(color = "#d53b2e",
                                                       weight = 2.5,
