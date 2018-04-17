@@ -1,8 +1,7 @@
-# HWMO Data Tool
+# HWMO Webapp
 
-by Niklas Lollo & Evangeline McGlynn, UC Berkeley  
-In fulfillment of the DS421 NSF training program capstone project  
+Data vizualization for the Hawai'i Wildfire Management Organization.  
 
-For the Hawai'i Wildfire Management Organization  
-
-Many thanks to [Rich Pauloo](https://richpauloo.github.io) for the code support!
+Created and programmed by Niklas Lollo & Evangeline McGlynn
+UC Berkeley  
+NSF Data Sciences for the 21st Century  
