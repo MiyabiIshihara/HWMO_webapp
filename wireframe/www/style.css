@@ -1,0 +1,70 @@
+input[type = "histX"] {
+  max-width: 40%;
+}
+input[type = "histY"] {
+  max-width: 40%;
+}
+
+/*background color*/
+.content-wrapper,
+.right-side {
+  background-color: #ffffff;
+}
+
+.bg-primary {color: #944fe8!important;
+}
+
+/* Customize fonts */
+body, label, input, button, select { 
+    font-family: 'Gustan', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 200;
+    color: #666666;
+  }
+  
+h1 {
+  font-weight: bold;
+ /* color: #d53b2d;*/
+} 
+h3 {
+  font-size: 25px;
+  /* font-weight: bold; */
+}
+h4 { 
+  font-weight: 400; 
+}
+
+
+.main-header .logo {
+  font-family: 'Helvetica Neue', Helvetica;
+  font-weight: 300;
+  font-size: 24px;
+  color: #944fe8;
+  max-height: 200px;
+}
+
+/*Links*/
+p a:link {
+    color: #d53b2d;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:visited {
+    color: #a82317;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:hover {
+    color: #db4c3f;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.leaflet .legend i{
+            border: 1px solid #666;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            margin-top: 4px;
+         }
+         

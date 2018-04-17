@@ -1,5 +1,5 @@
 ---
-title: "Exploring the HWMO data"
+title: "Data Processing"
 output: html_document
 ---
 
@@ -11,87 +11,26 @@ library(spdep)
 library(leaflet)
 ```
 
-`sf` Resources:
-<https://ryanpeek.github.io/mapping_in_R/index.html>
-<https://edzer.github.io/rstudio_conf/#1>
-
-```{r cwpp}
-cwpp_dat <- st_read("../wireframe/data/CWPP/ALL_CWPP.shp")
-cwpp_dat <- st_transform(cwpp_dat, 4326)
-cwpp_dat <- cwpp_dat %>%
-   mutate(
-     Status = as_factor(Status)
-   )
-
-map <- leaflet(cwpp_dat) %>%
-      addProviderTiles(providers$OpenMapSurfer.Grayscale) %>%
-  setView(lng = -156, lat = 20.35, zoom = 7) %>%
-      setMaxBounds(-162.6,23.6,-153.5,18.0)
-
-pal_cwpp <- colorFactor(
-       domain = cwpp_dat$Status, ### I would guess this is the problem area
-       #levels = c("Current: Completed 2015", "Current: Completed 2016",       
-       #           "Current: Update Completed 2016","Update Planned for 2018-2019"),
-       palette = "YlGn",
-       #na.color = alpha("blue",0.0)
-     )
-pal = pal_cwpp
-color_domain = cwpp_dat$Status
-color_domain[color_domain==0] <- NA
- 
-map %>%
-  addPolygons(weight = 0.2,
-              color = '#aaaaaa',
-              fillColor = pal(color_domain), # This seems to be the problem area
-              opacity = 1.0,
-              highlightOptions = highlightOptions(color = "#d53b2e",
-                                                  weight = 2.5,
-                                                  opacity = 0.8,
-                                                  bringToFront = TRUE),
-              popup = ~Status,
-              popupOptions = popupOptions(
-                    style = list("color" = "black"),
-                    maxHeight = 150
-                    ))
-
-
-```
-
-```{r load hazard assessment data}
-# Load data
+```{r tidy hazard assessment data, warning =F, message =F, error=F}
+## Read in file
 haz_dat = st_read("../wireframe/data/hazard/WHA2015.shp")
-# Check coordinate reference system
-st_crs(haz_dat)
-
+## Transform coordinates to 4326
 haz_dat <- st_transform(haz_dat, 4326)
-
-# Plot
-#plot(st_geometry(haz_dat), col="white")
-#haz_dat %>%
-#ggplot() +
-#  geom_sf() +
-#  aes(fill = SUBD_TOT) + 
-#  theme(panel.grid.major = element_line(color = "white")) +
-#  scale_fill_gradientn(colors = sf.colors(20))
-# View data
-#View(haz_dat)
-```
-
-```{r make hazard assessment tidy}
-#haz_dat <- haz_dat %>%
-#  select(SUBD_TOT, VEG_TOT, BLDG_TOT, FIREHAZTOT,FIREPROTOT,
-#         # Acres, AREA, PERIMETER, CAR_Rating, 
-#         AreaName, Island, -geometry)
-
+## Make a tidy dataset
 tidy_haz <- haz_dat %>% 
+  ## converts to mutatable dataframe
   as.data.frame %>%
+  ## Removes geometry (too large)
   select(-c(geometry)) %>%
+  ## Brings data from wide to long format using key-value pair
   gather(key = hazard, 
-         value = score, 
+         value = score,
+         ## Removes all these variables within -c()
          -c(AreaName, Island, AREA, PERIMETER,
             Acres, CAR_Rating, zone, 
             CAR_Hawaii, CAR_adjtot)) %>%
   mutate(
+    ## Create new variable for hazard category
     hazard_category = 
     case_when(
     hazard %in% c("Wat_Avail", "Rspn_Time", "Prox_Stn",
@@ -109,6 +48,7 @@ tidy_haz <- haz_dat %>%
                   "Seas_Haz", "Ign_Risk", "Top_Adv") ~ "Fire Environment"
   ))%>%
   mutate(
+    ### Create new variable for Assessment reason
     reason =
       case_when(
         ## Subdivision scores
@@ -227,6 +167,7 @@ tidy_haz <- haz_dat %>%
       )
   ) %>%
   mutate(
+    ### Create new variable that specifies full hazard name
     hazard_full =
       case_when(
         ## Subdivision scores
@@ -273,61 +214,22 @@ tidy_haz <- haz_dat %>%
       )
   )
 
+## Output file ##
 write_csv(tidy_haz, "../wireframe/data/tidy_haz.csv")
-
-
-census_dat = st_read("../data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
-# Check coordinate reference system
-st_crs(census_dat)
-#convert to factor as test
-census_dat$Homeowner <- as.integer(census_dat$Homeowner)
-census_dat$MedH_Inc <- as.integer(census_dat$MedH_Inc)
-
-# Plot
-plot(st_geometry(census_dat), col="white")
-# View data
-View(census_dat)
-
-
-
 ```
 
-HWMO-given census variables:
-- Bachelors Degree or Higher: BD_Higher
-- Homeownership Rate: Homeowner
-- Median Household Income: MedH_Inc
-- Native Hawaiian alone or in combination with another race: NH_ac
-- Native Hawaiian and Other Pacific Islanders alone or in combination with another race: NH_PI_ac
-- Other Pacific Islanders alone or in combination with another race: PI_a 
-Other variables to consider: <https://www.epa.gov/ejscreen/overview-demographic-indicators-ejscreen>
-
-```{r load fire history data}
-# Load data
-fire_dat = st_read("../data/Fire History/HI_Wildfires1.shp")
-# Check coordinate reference system
-st_crs(fire_dat)
-# Plot
-fire_dat %>%
-  filter(Long < -50) %>%
-  ggplot() + 
-  geom_point(aes(x= Long, y = Lat))
-# View data
-View(fire_dat)
-```
-
-```{r load community input data}
+```{r community input data, warning = F, message = F, error = F}
 # Load data
 comm_input_dat <-
-    # this generates the list of files
+    # this generates the list of files in that folder
     list.files(path = "../data/community_input/",
                pattern="*.csv", 
                full.names = T) %>% 
     # map over read_csv, col_types specifies that each have same column headers
     map_dfr(~read_csv(., col_types = cols(.default = "c"))) 
-```
 
-```{r clean community input data}
-## split secondary desc (should be 15 total)
+## Clean data
+# Split secondary desc (should be 15 total)
 comm_input_dat <- comm_input_dat %>%
     mutate(
       # combines firewise and Firewise
@@ -335,6 +237,7 @@ comm_input_dat <- comm_input_dat %>%
       # combines collab and Collab
       key_codes = tolower(key_codes)
            ) %>%
+  # Makes three new columns
     separate(secondary_desc, c("sec_desc1", "sec_desc2", "sec_desc3"), ",")
 
 # Remove potentially complicating $ and '
@@ -345,23 +248,21 @@ comm_input_dat$sec_desc1<-gsub("\\-.*", "", comm_input_dat$sec_desc1)
 
 # Manipulate data
 comm_input_dat <- comm_input_dat %>% 
+  # Make votes numeric instead of character
   mutate(total_votes = as.numeric(total_votes)) %>%
+  # Changes all remaining character variables to factors
   mutate_if(is.character,funs(factor(.))) %>%
+  # Changes concerns and recommendations back to characters
   mutate(concern = as.character(concern),
          recommendations = as.character(recommendations))
 
+## Output data
 write_csv(comm_input_dat,"../data/comm_input.csv")
 ```
 
-```{r read clean community input data}
-
-comm_input_dat <- read_csv("../wireframe/data/comm_input.csv")
+```{r community hazard scoring, message=F, warning=F, error=F}
+## Read in data as xlsx
+dat <- readxl::read_xlsx(path = "../data/2014_3_31_Community Hazard Assessment_Key Final_HWMO.xlsx")
+## Output data as csv
+write_csv(dat, path = "../wireframe/data/hazard_scoring_system.csv")
 ```
-
-
-
-
-
-
-
-
