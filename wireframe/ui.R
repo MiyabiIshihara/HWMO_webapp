@@ -246,7 +246,7 @@ body <- dashboardBody(
     ### Community data tab ######
     tabItem(tabName = "community",
             fluidRow(
-              box(width = 3, 
+              box(width = 4, 
                   status = "danger",
                   selectInput(inputId = "focus", 
                               label = "Strategic Focus", 
@@ -256,7 +256,7 @@ body <- dashboardBody(
                                           "Suppression" = "S",
                                           "Post-fire" = "PF"), 
                               multiple=TRUE)),
-              box(width = 3, 
+              box(width = 4, 
                   status = "danger",
                   selectInput(inputId = "region",
                               label = "Region(s)", 
@@ -266,35 +266,33 @@ body <- dashboardBody(
                                           "South Maui" = "South Maui",
                                           "Upcountry Maui" = "Upcountry Maui",
                                           "Western Oahu" = "W. Oahu"), 
-                              multiple=TRUE)),
-              box(width = 3, 
-                  status = "danger",
+                              multiple=TRUE),
                   conditionalPanel("input.region",
                                    selectInput(inputId = "meeting", 
                                                label = "Meeting Location(s)", 
                                                choices = c("Pick a meeting location"=""), 
-                                               multiple=TRUE)))
+                                               multiple=TRUE))),
+              box(width = 3, status = "primary",
+                  title = "Downloads",
+                  downloadButton("download_data",
+                                 "Download Selected Data"),
+                  tags$br(),
+                  downloadButton("download_all_data",
+                                 "Download All Data"),
+                  tags$br(),
+                  includeMarkdown("docs/license.md")
+              )
             ),
             fluidRow(
               box(width = 12, solidHeader = T,
                   DT::dataTableOutput("dt"))
-            ),
-            fluidRow(
-              box(width = 4, status = "primary",
-                  downloadButton("download_data",
-                                 "Download Selected Data")),
-              box(width = 4, status = "primary",
-                  downloadButton("download_all_data",
-                                 "Download All Data")),
-              box(width = 4, status = "primary",
-                  includeMarkdown("docs/license.md")
-              )
             )
+            
     ),
     ################### Hazard data tab ##########
     tabItem(tabName = "explore",
             fluidRow(
-              box(width = 3, 
+              box(width = 4, 
                   status = "danger",
                   selectInput(inputId = "island",
                               label = "Island",
@@ -309,15 +307,13 @@ body <- dashboardBody(
                                           "Molokini Atoll" = "Molokini Atoll",
                                           "Niihau" = "Niihau",
                                           "Oahu" = "Oahu"),
-                              multiple = TRUE)),
-              box(width = 3, 
-                  status = "danger",
+                              multiple = TRUE),
                   conditionalPanel("input.island",
                                    selectInput(inputId = "areaname", 
                                                label = "Area", 
                                                choices = c("Pick an area..."=""), 
                                                multiple=TRUE))),
-              box(width = 3, 
+              box(width = 4, 
                   status = "danger",
                   selectInput(inputId = "category", 
                               label = "Hazard Category", 
@@ -327,16 +323,13 @@ body <- dashboardBody(
                                           "Vegetation" = "Vegetation",
                                           "Building" = "Building",
                                           "Fire Environment" = "Fire Environment"), 
-                              multiple=TRUE)),
-              box(width = 3, 
-                  status = "danger",
+                              multiple=TRUE), 
                   conditionalPanel("input.category",
                                    selectInput(inputId = "hazard", 
                                                label = "Hazard(s)", 
                                                choices = c("Pick a hazard..."=""), 
-                                               multiple=TRUE)))
-              
-            ),
+                                               multiple=TRUE))
+                  ),
             #fluidRow(
             #  box(width = 5, 
             #      status = "danger",
@@ -347,21 +340,20 @@ body <- dashboardBody(
             #  actionButton(inputId = "allRisks",
             #               label = "Show me everything"))
             #  ),
+            box(width = 3, status = "primary",
+                title = "Downloads",
+                  downloadButton("download_haz",
+                                 "Download Selected Data"),
+                tags$br(),
+                  downloadButton("download_all_haz",
+                                 "Download All Data"), 
+                tags$br(),
+                includeMarkdown("docs/license.md")
+              )),
             fluidRow(
               box(width = 12, solidHeader = T,
                   DT::dataTableOutput("dt_haz"))
-            ),
-            fluidRow(
-              box(width = 4, status = "primary",
-                  downloadButton("download_haz",
-                                 "Download Selected Data")),
-              box(width = 4, status = "primary",
-                  downloadButton("download_all_haz",
-                                 "Download All Data")
-              ),
-              box(width = 4, status = "primary",
-                  includeMarkdown("docs/license.md")
-              ))))
+            )))
   )
                     
 dashboardPage(
