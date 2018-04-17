@@ -26,6 +26,9 @@ hawaiiFiresdf <- as.data.frame(HFires) %>%
   select(-datechar) %>% 
   filter(year > 2001 & year < 2012) # remove some fires from 1988 and 1900
 
+# Load Firewise Communities data
+FComms <- geojsonio::geojson_read("data/firewise/firewise5.geojson", what = "sp")
+
 ## Load census shp data
 census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
 ### Check coordinate reference system
@@ -54,11 +57,11 @@ comm_dat <- read_csv("data/comm_input.csv") %>%
 # cwpp_dat <- geojsonio::geojson_read("data/CWPP/CWPP.geojson", what = "sp")
  cwpp_dat <- st_read("data/CWPP/ALL_CWPP.shp")
  cwpp_dat <- st_transform(cwpp_dat, 4326)
- cwpp_dat <- cwpp_dat %>%
-   mutate(
-     Status = as_factor(Status)
-   )
- 
+ cwpp_dat <- cwpp_dat #%>%
+   # mutate(
+   #   Status = as_factor(Status)
+   # )
+   # 
 ## Load haz data
 #haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 haz_dat <- st_read("data/hazard/WHA2015.shp")
@@ -379,11 +382,21 @@ function(input, output, session) {
                                tags$em("Acres burned"), hawaiiFiresdf$Total_Ac),
                  group = "Fire Points"
                  ) %>%
+      addCircleMarkers(lng = ~lng, lat = ~lat, data = FComms,
+                 radius = 10,
+                 fillColor = "#blue",
+                 stroke = T,
+                 weight = 0.5,
+                 color = 'black',
+                 opacity = 100,
+                 label = FComms$AreaName,
+                 group = "Firewise Communities"
+      ) %>%
       addLayersControl(
-        overlayGroups = c("Fire Heatmap", "Fire Points"),
+        overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities"),
         options = layersControlOptions(collapsed = FALSE)
         ) %>%
-      hideGroup(c("Fire Heatmap", "Fire Points"))
+      hideGroup(c("Fire Heatmap", "Fire Points", "Firewise Communities"))
     
     ## Histogram of scores
     #output$histScores <- renderPlot({
