@@ -42,13 +42,6 @@ census_dat <- census_dat %>%
     Homeownership = Homeowner
   )
 
-#### data format placeholder for either here or within popups; 
-#### broken so far
-# DT::formatCurrency(table = census_dat, columns = 'MedH_Inc', currency = "$", interval = 3, mark = ",", 
-#                    digits = 2, dec.mark = getOption("OutDec"), before = TRUE)
-#census_dat$MedH_Inc <--  formatCurrency(census_dat$MedH_Inc, '$')
-
-
 ## Load Community Input data
 comm_dat <- read_csv("data/comm_input.csv") %>%
   select(-c(cohesive_strategy, key_codes, sec_desc1, sec_desc2, sec_desc3))
@@ -57,13 +50,12 @@ comm_dat <- read_csv("data/comm_input.csv") %>%
 # cwpp_dat <- geojsonio::geojson_read("data/CWPP/CWPP.geojson", what = "sp")
  cwpp_dat <- st_read("data/CWPP/ALL_CWPP.shp")
  cwpp_dat <- st_transform(cwpp_dat, 4326)
- cwpp_dat <- cwpp_dat #%>%
+ #cwpp_dat <- cwpp_dat %>%
    # mutate(
    #   Status = as_factor(Status)
    # )
    # 
 ## Load haz data
-#haz_dat <- geojsonio::geojson_read("data/WHA_zones_choro.geojson", what = "sp")
 haz_dat <- st_read("data/hazard/WHA2015.shp")
 haz_dat <- st_transform(haz_dat, 4326)
 haz_dat <- haz_dat %>%
@@ -397,22 +389,6 @@ function(input, output, session) {
         options = layersControlOptions(collapsed = FALSE)
         ) %>%
       hideGroup(c("Fire Heatmap", "Fire Points", "Firewise Communities"))
-    
-    ## Histogram of scores
-    #output$histScores <- renderPlot({
-    #  ggplot(the_data) +
-    #        geom_histogram(aes_string(x = user_choice), 
-    #                       fill = c(
-    #                         "#1a9850",
-    #                         "#91cf60",
-    #                          "#d9ef8b",
-    #                          "#fee08b",
-    #                          "#fc8d59",
-    #                          "#d73027"),
-    #                       bins = 6) +
-    #        theme_classic() + 
-    #        scale_fill_brewer()
-    #})
 
   })
   
@@ -472,7 +448,7 @@ function(input, output, session) {
     }
   )
   
-  # Explore your Area tab ##############################################
+  # Explore your Area Data tab ##############################################
   haz_temp <- reactive({ haz_tidy })
   # hazards
   observe({
@@ -540,7 +516,7 @@ function(input, output, session) {
     }
   )
 
-  #### How is my area? #########
+  #### Explore your area #########
   
   ## Hazard
   observeEvent(input$category2, {

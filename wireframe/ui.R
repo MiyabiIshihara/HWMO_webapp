@@ -6,12 +6,9 @@ library(leaflet)
 header <- dashboardHeader(
   title = tags$a(href='https://hawaiiwildfire.org',
                  tags$img(src='hwmo_logo_white.svg',
-                          title = "HWMO Home", height = "45px")),
-  #tags$li(a(href = 'http://hawaiiwildfire.org',
-  #          img(src = 'hwmo_logo_white.svg',
-  #              title = "HWMO Home", height = "45px"),
-  #          style = "padding-top:5px; padding-bottom:0px;"),
-  #        class = "dropdown"),
+                          title = "HWMO Home", 
+                          height = "45px")),
+  ### Top right corner ###
   tags$li(a(href = 'https://github.com/niklaslollo/hwmo_data_tool',
             icon("file-code-o"),
             title = "Github",
@@ -46,37 +43,12 @@ body <- dashboardBody(
   tabItems(
     ### Map Tab - First Tab ####
     tabItem(tabName = "Map",
-            # fluidRow(
-            #   column(width = 3,
-            #          box(width=NULL, 
-            #              status = "danger", # Makes header yellow
-            #              selectInput(inputId = "dataset",
-            #                          label = "Map Data",
-            #                          choices = list(
-            #                            "Total Score" = "Total Score",
-            #                            "Fire Protection" = "Fire Protection",
-            #                            "Subdivision" = "Subdivision",
-            #                            "Vegetation" = "Vegetation",
-            #                            "Buildings" = "Buildings",
-            #                            "Fire Environment" = "Fire Environment",
-            #                            "Median HH Income" = "MedH_Inc",
-            #                            "Native Hawaiian Count" = "NH_ac",
-            #                            "Homeownership" = "Homeowner"),
-            #                          selected = "overall_score")))),
-              
             fluidRow(
-              #tags$style(
-              #type = "text/css", 
-              #"#leafmap {height: calc(100vh - 150px) !important;}"),
               column(width = 9,  
               box(width = NULL, 
                     solidHeader = T,
                     leafletOutput("leafmap", height = 500))),
               column(width = 3,
-                     # box(width=NULL, 
-                     #     solidHeader = T, title = "Fires showing in map",
-                     #     plotOutput(outputId = "timeFire",
-                     #                height = 175)),
                      box(width=NULL, 
                          status = "danger", # Makes header red
                          selectInput(inputId = "dataset",
@@ -109,18 +81,7 @@ body <- dashboardBody(
                                      label = "X: ",
                                      choices = c("Month" = "month",
                                                  "Year" = "year"),
-                                     selected = "year")
-                         )
-                     )       
-              )
-            #fluidRow(
-            #  column(width = 4,
-            #         box(width= NULL, 
-            #             solidHeader = TRUE, # removes header
-            #             title = "All scores",
-            #             plotOutput(outputId = "histScores",
-            #                        height = 200))
-            #  ))
+                                     selected = "year"))))
             ),
     #### Explore Your Area Tab ######
     tabItem(tabName = "area",
@@ -330,16 +291,6 @@ body <- dashboardBody(
                                                choices = c("Pick a hazard..."=""), 
                                                multiple=TRUE))
                   ),
-            #fluidRow(
-            #  box(width = 5, 
-            #      status = "danger",
-            #  actionButton(inputId = "risky",
-            #               label = "Show me high risk hazards")),
-            #  box(width = 5, 
-            #      status = "danger",
-            #  actionButton(inputId = "allRisks",
-            #               label = "Show me everything"))
-            #  ),
             box(width = 3, status = "primary",
                 title = "Downloads",
                   downloadButton("download_haz",
