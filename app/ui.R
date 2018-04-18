@@ -3,19 +3,22 @@ library(shiny)
 library(sf)
 library(leaflet)
 
+#### Header ####
 header <- dashboardHeader(
+  # Top Left Corner
   title = tags$a(href='https://hawaiiwildfire.org',
                  tags$img(src='hwmo_logo_white.svg',
                           title = "HWMO Home", 
                           height = "45px")),
-  ### Top right corner ###
+  # Top Right Corner
   tags$li(a(href = 'https://github.com/niklaslollo/hwmo_data_tool',
             icon("file-code-o"),
             title = "Github",
             style = "padding-top:10px; padding-bottom:10px;"),
           class = "dropdown")
   )
-  
+
+#### Sidebar ####
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Map", tabName = "Map"),
@@ -36,7 +39,9 @@ sidebar <- dashboardSidebar(
              newtab = T))
   ))
 
+#### Body ####
 body <- dashboardBody(
+  # Load CSS
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
   ),
@@ -44,13 +49,16 @@ body <- dashboardBody(
     ### Map Tab - First Tab ####
     tabItem(tabName = "Map",
             fluidRow(
+              # Map output
               column(width = 9,  
               box(width = NULL, 
                     solidHeader = T,
                     leafletOutput("leafmap", height = 500))),
+              # Right content bar
               column(width = 3,
                      box(width=NULL, 
                          status = "danger", # Makes header red
+                         # Select map data
                          selectInput(inputId = "dataset",
                                      label = "Map Data",
                                      choices = list(
@@ -66,6 +74,7 @@ body <- dashboardBody(
                                        #"CWPP" = "Status"
                                       ),
                                      selected = "overall_score")),
+                     # Fires showing in map plot
                      box(width = NULL, 
                          status = "danger",
                          solidHeader = T, title = "Fires showing in map",
@@ -89,6 +98,7 @@ body <- dashboardBody(
               box(width = 12, solidHeader = T,
                   tags$h4("Pick an area and hazard to see the hazard score."))),
             fluidRow(
+              # Select area
               box(width = 4, 
                   status = "danger",
                   selectInput(inputId = "island2",
@@ -104,6 +114,7 @@ body <- dashboardBody(
                               multiple=F,
                               selected = "Hanalei")
                   ),
+              # Select hazard
               box(width = 4, 
                   status = "danger",
                   selectInput(inputId = "category2", 
@@ -124,12 +135,14 @@ body <- dashboardBody(
                               selected = "Road Width")
                   )
             ),
+            # Hazard score for area
             fluidRow(
               valueBoxOutput("scoreBox", width = 4)
             ),
             fluidRow(
               box(width = 3, solidHeader = T,
                 tags$h4("How was this scored?"))),
+            # Reasons for scoring
             fluidRow(
               infoBoxOutput("hiScoreBox", width = 4),
               infoBoxOutput("medScoreBox", width = 4),
@@ -187,6 +200,7 @@ body <- dashboardBody(
               title = "Donate",
               includeMarkdown("docs/TA_donate.md")
             ))),
+          # Social Icons
           column(
             width = 3,
             fluidRow(
@@ -233,7 +247,9 @@ body <- dashboardBody(
                                                label = "Meeting Location(s)", 
                                                choices = c("Pick a meeting location"=""), 
                                                multiple=TRUE))),
-              box(width = 3, status = "primary",
+              # Download buttons
+              box(
+                width = 3, status = "primary",
                   title = "Downloads",
                   downloadButton("download_data",
                                  "Download Selected Data"),
@@ -241,14 +257,15 @@ body <- dashboardBody(
                   downloadButton("download_all_data",
                                  "Download All Data"),
                   tags$br(),
-                  includeMarkdown("docs/license.md")
+                  # License
+                  includeMarkdown("docs/license_short.md")
               )
             ),
+            # Show data
             fluidRow(
               box(width = 12, solidHeader = T,
                   DT::dataTableOutput("dt"))
             )
-            
     ),
     ################### Hazard data tab ##########
     tabItem(tabName = "explore",
@@ -291,6 +308,7 @@ body <- dashboardBody(
                                                choices = c("Pick a hazard..."=""), 
                                                multiple=TRUE))
                   ),
+              # Download buttons
             box(width = 3, status = "primary",
                 title = "Downloads",
                   downloadButton("download_haz",
@@ -299,17 +317,19 @@ body <- dashboardBody(
                   downloadButton("download_all_haz",
                                  "Download All Data"), 
                 tags$br(),
-                includeMarkdown("docs/license.md")
+                # License
+                includeMarkdown("docs/license_short.md")
               )),
+            # Show data
             fluidRow(
               box(width = 12, solidHeader = T,
                   DT::dataTableOutput("dt_haz"))
             )))
   )
-                    
+
+# Call the dashboard elements            
 dashboardPage(
   skin = "red",
-#  skin = "#bb3e3c!important",
   header,
   sidebar,
   body)
