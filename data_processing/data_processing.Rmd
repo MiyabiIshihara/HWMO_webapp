@@ -13,7 +13,7 @@ library(leaflet)
 
 ```{r tidy hazard assessment data, warning =F, message =F, error=F}
 ## Read in file
-haz_dat = st_read("../wireframe/data/hazard/WHA2015.shp")
+haz_dat = st_read("../app/data/hazard/WHA2015.shp")
 ## Transform coordinates to 4326
 haz_dat <- st_transform(haz_dat, 4326)
 ## Make a tidy dataset
@@ -215,14 +215,14 @@ tidy_haz <- haz_dat %>%
   )
 
 ## Output file ##
-write_csv(tidy_haz, "../wireframe/data/tidy_haz.csv")
+write_csv(tidy_haz, "../app/data/tidy_haz.csv")
 ```
 
 ```{r community input data, warning = F, message = F, error = F}
 # Load data
 comm_input_dat <-
     # this generates the list of files in that folder
-    list.files(path = "../data/community_input/",
+    list.files(path = "community_input/",
                pattern="*.csv", 
                full.names = T) %>% 
     # map over read_csv, col_types specifies that each have same column headers
@@ -257,12 +257,12 @@ comm_input_dat <- comm_input_dat %>%
          recommendations = as.character(recommendations))
 
 ## Output data
-write_csv(comm_input_dat,"../data/comm_input.csv")
+write_csv(comm_input_dat,"../app/data/comm_input.csv")
 ```
 
 ```{r community hazard scoring, message=F, warning=F, error=F}
 ## Read in data as xlsx
-dat <- readxl::read_xlsx(path = "../data/2014_3_31_Community Hazard Assessment_Key Final_HWMO.xlsx")
+dat <- readxl::read_xlsx(path = "2014_3_31_Community Hazard Assessment_Key Final_HWMO.xlsx")
 ## Output data as csv
-write_csv(dat, path = "../wireframe/data/hazard_scoring_system.csv")
+write_csv(dat, path = "../app/data/hazard_scoring_system.csv")
 ```
