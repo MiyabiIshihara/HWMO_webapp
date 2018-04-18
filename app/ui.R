@@ -60,9 +60,9 @@ body <- dashboardBody(
                                        "Vegetation" = "Vegetation",
                                        "Buildings" = "Buildings",
                                        "Fire Environment" = "Fire Environment",
-                                       "Median HH Income" = "MedH_Inc",
-                                       "Native Hawaiian Count" = "NH_ac",
-                                       "Homeownership" = "Homeowner"
+                                       "Median HH Income" = "Median HH Income",
+                                       "Native Hawaiian Count" = "Native Hawaiian Count",
+                                       "Homeownership" = "Homeownership"
                                        #"CWPP" = "Status"
                                       ),
                                      selected = "overall_score")),

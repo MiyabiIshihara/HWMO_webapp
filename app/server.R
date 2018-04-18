@@ -4,18 +4,16 @@ library(sf)
 library(leaflet)
 library(leaflet.extras)
 library(geojsonio)
-library(rgdal)
 library(htmltools)
-library(spdep)
-library(sp)
-library(Matrix)
-library(spData)
 library(tidyverse)
 library(DT)
 library(viridis)
 
-# Load fire point data for use in heatmap
+####---- Load Data ----####
+# 1. Fire point data for heatmap
 HFires <- geojsonio::geojson_read("data/HI_Wildfires.geojson", what = "sp")
+
+# 2. Fire point dataframe for histogram
 hawaiiFiresdf <- as.data.frame(HFires) %>%
   mutate(
     datechar = as.character(Start_Date),
@@ -26,15 +24,14 @@ hawaiiFiresdf <- as.data.frame(HFires) %>%
   select(-datechar) %>% 
   filter(year > 2001 & year < 2012) # remove some fires from 1988 and 1900
 
-# Load Firewise Communities data
+# 3. Firewise Communities data
 FComms <- geojsonio::geojson_read("data/firewise/firewise5.geojson", what = "sp")
 
-## Load census shp data
+# 4. Census data
 census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
-### Check coordinate reference system
+# Change coordinate reference system
 census_dat <- st_transform(census_dat, 4326)
-
-# unsuccessful attempt to get the proper titles in the legend
+# Change variable names
 census_dat <- census_dat %>%
   mutate(
     `Median HH Income` = MedH_Inc,
@@ -42,22 +39,25 @@ census_dat <- census_dat %>%
     Homeownership = Homeowner
   )
 
-## Load Community Input data
+# 5. Community Input data
 comm_dat <- read_csv("data/comm_input.csv") %>%
-  select(-c(cohesive_strategy, key_codes, sec_desc1, sec_desc2, sec_desc3))
+  select(-c(cohesive_strategy, key_codes, 
+            sec_desc1, sec_desc2, sec_desc3))
 
-## Load CWPP Data 
+# 6. CWPP Data - Currently non-functional
 # cwpp_dat <- geojsonio::geojson_read("data/CWPP/CWPP.geojson", what = "sp")
- cwpp_dat <- st_read("data/CWPP/ALL_CWPP.shp")
- cwpp_dat <- st_transform(cwpp_dat, 4326)
- #cwpp_dat <- cwpp_dat %>%
-   # mutate(
-   #   Status = as_factor(Status)
-   # )
-   # 
-## Load haz data
+# cwpp_dat <- st_read("data/CWPP/ALL_CWPP.shp")
+# cwpp_dat <- st_transform(cwpp_dat, 4326)
+# cwpp_dat <- cwpp_dat %>%
+#    mutate(
+#      Status = as_factor(Status)
+#    )
+ 
+# 7. Hazard Assessment data
 haz_dat <- st_read("data/hazard/WHA2015.shp")
+# Change coordinate reference system
 haz_dat <- st_transform(haz_dat, 4326)
+# Make new variables
 haz_dat <- haz_dat %>%
   mutate(
     `Fire Protection` = FIREPROTOT/9, 
@@ -69,18 +69,20 @@ haz_dat <- haz_dat %>%
       Vegetation + Buildings + `Fire Environment`)/5
   )
 
-## Load hazard scoring system
+# 8. Hazard scoring system
 haz_scoring <- read_csv("data/hazard_scoring_system.csv")
+
+####---- Shiny server function ----####
 
 function(input, output, session) {
   
-  # Leaflet Map #####################################
+  ### Leaflet Map Base ####
   output$leafmap <- renderLeaflet({
     leaflet() %>%
       addProviderTiles(providers$OpenMapSurfer.Grayscale) %>%
       setView(lng = -156, lat = 20.35, zoom = 7) %>%
+      # Two diagonal pts that limit panning (long1, lat1, long2, lat2)
       setMaxBounds(-162.6,23.6,-153.5,18.0) %>% 
-      # the two diagonal pts that limit panning (long1, lat1, long2, lat2)
       addEasyButton(easyButton(
         id="OV",
         icon="fa-globe", title="Zoom to Level 7",
@@ -106,7 +108,7 @@ function(input, output, session) {
       #     onClick = JS("function(btn, map){map.panTo([-159.5, 22], zoom = 7); }"))
       #   )
     
-    # separately articulated buttons for testing
+    # Separately articulated buttons -- testing
     addEasyButton(
       easyButton(
         id="BI",
@@ -130,7 +132,7 @@ function(input, output, session) {
         onClick = JS("function(btn, map){map.panTo([-159.5, 22], 7); }")))
       })
   
-  #### Which Fires are in view? #####
+  #### Observer to keep track of fires in map view #####
   firesInBounds <- eventReactive(input$leafmap_bounds,{
     if (is.null(input$leafmap_bounds))
       return(hawaiiFiresdf[FALSE,])
@@ -165,25 +167,26 @@ function(input, output, session) {
                                                  "Jul", "Aug", "Sep",
                                                  "Oct", "Nov", "Dec"))
     }
-  
-    if(input$histY == "avg_acres"){
+  ## Y variable
+    if (input$histY == "avg_acres") {
       yChoice = "Average Acreage"
-    } 
-    else if (input$histY == "total_acres") {
+    } else if (input$histY == "total_acres") {
       yChoice = "Total Acres"
-    } else { yChoice = "Total Fires"  }
-    
+    } else { 
+      yChoice = "Total Fires"  
+      }
+  ## X variable  
     if(input$histX == "month"){
       xChoice = "Month"
     } else if(input$histX == "year") {
       xChoice = "Year"
     }
-    
+  ## Plot  
     plot <- ggplot(tbl) +
       geom_col(mapping= aes_string(input$histX, input$histY), fill = "#d53b2e") +
       labs(x = xChoice, y = yChoice) +
       theme_classic()
-    
+    ## Change X axes based on input
     if (input$histX == "month") {
       plot + scale_x_discrete(limits=c("Jan", "Feb", "Mar",
                                        "Apr", "May", "Jun",
@@ -199,12 +202,15 @@ function(input, output, session) {
     }
   })
   
-  # This observer is responsible for maintaining the polygons and legend,
-  # according to the variables the user has chosen
-  observe({
+  #### Observer to change leaflet map #####
+    observe({
+      # User choice from ui input
     user_choice <- input$dataset
     
-    if (user_choice %in% c("MedH_Inc", "NH_ac", "Homeowner")) {
+    # Change dataset based on "map data" selection
+    if (user_choice %in% c("Median HH Income", 
+                           "Native Hawaiian Count", 
+                           "Homeownership")) {
       the_data = census_dat
     #} else if (user_choice %in% c("Status")){
     #  the_data = cwpp_dat
@@ -212,11 +218,12 @@ function(input, output, session) {
       the_data = haz_dat
     }
     
-    # For use in the palette
+    ## Color Palettes ##
+    # To change the color palette according to user_choice
     color_domain <- the_data[[user_choice]]
     color_domain[color_domain==0] <- NA
     
-    # palette for hazard data (discrete, 3 bins)
+    # Hazard Assessment palette (discrete, 3 bins)
     pal_haz <- colorBin(
       bins =  3,
       na.color = alpha("blue",0.0),
@@ -230,12 +237,11 @@ function(input, output, session) {
       domain = color_domain
     )
     
-    # palette for social data
+    # Census palette 
     pal_soc <- colorBin(
       bins =  5,
       na.color = alpha("blue",0.0),
       pretty = T,
-      #Green Yellow Red
       palette = "YlGn",
       alpha = T,
       domain = color_domain
@@ -250,19 +256,19 @@ function(input, output, session) {
      #  #,na.color = alpha("blue",0.0)
      #)
 
-    # Popup content
-    if (user_choice == "MedH_Inc") {
+    ## Popup content ##
+    if (user_choice == "Median HH Income") {
       popup = paste0("<h4>", haz_dat$AreaName, "</h4>", tags$br(),
-                    tags$em("Median Household Income: "),"$", census_dat$MedH_Inc
+                    tags$em("Median Household Income: "),"$", census_dat$`Median HH Income`
                     )
       pal = pal_soc
-      } else if (user_choice == "NH_ac") {
+      } else if (user_choice == "Native Hawaiian Count") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
-                      tags$em("Native Hawaiian count: "), census_dat$NH_ac)
+                      tags$em("Native Hawaiian count: "), census_dat$`Native Hawaiian Count`)
         pal = pal_soc
-      } else if (user_choice == "Homeowner") {
+      } else if (user_choice == "Homeownership") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
-                      tags$em("Homeownership: "), round(census_dat$Homeowner, digits = 2),"%")
+                      tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
         pal = pal_soc
       #} else if (user_choice == "Status") {
       #  popup = paste0("<h4>",cwpp_dat$CWPPregion, "</h4>", tags$br(),
@@ -326,11 +332,11 @@ function(input, output, session) {
         pal = pal_haz
       } else { # Total Score
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>",tags$br(),
-                       tags$em("Fire Protection: "), haz_dat$`Fire Protection`, tags$br(),
-                       tags$em("Subdivision: "), haz_dat$Subdivision, tags$br(),
-                       tags$em("Vegetation: "), haz_dat$Vegetation, tags$br(),
-                       tags$em("Buildings: "), haz_dat$Buildings, tags$br(),
-                       tags$em("Fire Environment: "), haz_dat$`Fire Environment`)
+                       tags$em("Fire Protection: "), round(haz_dat$`Fire Protection`, digits = 2), tags$br(),
+                       tags$em("Subdivision: "), round(haz_dat$Subdivision, digits = 2), tags$br(),
+                       tags$em("Vegetation: "), round(haz_dat$Vegetation, digits = 2), tags$br(),
+                       tags$em("Buildings: "), round(haz_dat$Buildings, digits = 2), tags$br(),
+                       tags$em("Fire Environment: "), round(haz_dat$`Fire Environment`, digits = 2))
         pal = pal_haz
       }
     
@@ -656,7 +662,6 @@ function(input, output, session) {
       color = "red", fill = FALSE
     )
   })
-  
   
 }
   
