@@ -116,20 +116,20 @@ function(input, output, session) {
         icon = '<strong>E</strong>', 
         title="Big Island",
         onClick = JS("function(btn, map){map.setView([-156, 21],8); }"))) %>%
-    addEasyButton(
-      easyButton(
-        id="cHI",
-        position = "bottomright",
-        icon = 'fa-circle',
-        title="Central",
-        onClick = JS("function(btn, map){map.setView([-157.01, 21.15],10); }"))) %>%
-    addEasyButton(
-      easyButton(
-        id="wHI",
-        position = "bottomright",
-        icon = '<strong>W</strong>',
-        title="West",
-        onClick = JS("function(btn, map){map.panTo([-159.5, 22], 7); }")))
+    #addEasyButton(
+    #  easyButton(
+    #    id="cHI",
+    #    position = "bottomright",
+    #    icon = 'fa-circle',
+    #    title="Central",
+    #    onClick = JS("function(btn, map){map.setView([-157.01, 21.15],10); }"))) %>%
+    #addEasyButton(
+    #  easyButton(
+    #    id="wHI",
+    #    position = "bottomright",
+    #    icon = '<strong>W</strong>',
+    #    title="West",
+    #    onClick = JS("function(btn, map){map.panTo([-159.5, 22], 7); }")))
       })
   
   #### Observer to keep track of fires in map view #####
@@ -198,7 +198,7 @@ function(input, output, session) {
                                       "Oct", "11", "12"))
                               
     } else {
-      plot + scale_x_discrete(limits=c(2000, 2005, 2010))
+      plot + scale_x_discrete(limits=c(2002, 2006, 2011))
     }
   })
   
