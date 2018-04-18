@@ -256,11 +256,13 @@ function(input, output, session) {
      #  #,na.color = alpha("blue",0.0)
      #)
 
-    ## Popup content ##
+    ## Popup and palette content ##
     if (user_choice == "Median HH Income") {
+      ## Popup text
       popup = paste0("<h4>", haz_dat$AreaName, "</h4>", tags$br(),
                     tags$em("Median Household Income: "),"$", census_dat$`Median HH Income`
                     )
+      ## Palette for legend
       pal = pal_soc
       } else if (user_choice == "Native Hawaiian Count") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
@@ -340,13 +342,14 @@ function(input, output, session) {
         pal = pal_haz
       }
     
+    ## Update Leaflet map according to user_choice
     leafletProxy("leafmap", 
                  data = the_data) %>%
       clearShapes() %>%
       clearControls() %>%
       addPolygons(weight = 0.2,
                   color = '#aaaaaa',
-                  fillColor = ~pal(color_domain), # This seems to be the problem area
+                  fillColor = ~pal(color_domain),
                   opacity = 1.0,
                   highlightOptions = highlightOptions(color = "#d53b2e",
                                                       weight = 2.5,
@@ -364,32 +367,41 @@ function(input, output, session) {
                 labels = list("Low", "Medium", "High"),
                 layerId="colorLegend"
                 ) %>%
+      ## Overlay selectors
       # Heatmap
-      addHeatmap(lng = ~Long, lat = ~Lat, data = hawaiiFiresdf,
-                 blur = 25, max = 0.05, radius = 15,
+      addHeatmap(lng = ~Long, 
+                 lat = ~Lat, 
+                 data = hawaiiFiresdf,
+                 blur = 25, 
+                 max = 0.05, 
+                 radius = 15,
                  minOpacity = 0.02,
-                 # based on (half of) reported acreage, about 8% of data is null values
-                 intensity = 0.5*(hawaiiFiresdf$Total_Ac), 
+                 intensity = 0.5*(hawaiiFiresdf$Total_Ac), # about 8% of data is null values
                  gradient = "magma",
                  group = "Fire Heatmap"
                  ) %>%
-      # Fire Points
-      addMarkers(lng = ~Long, lat = ~Lat, data = hawaiiFiresdf,
-                 clusterOptions = markerClusterOptions(),
+      # Fire Points 
+      addMarkers(lng = ~Long, 
+                 lat = ~Lat, 
+                 data = hawaiiFiresdf,
+                 clusterOptions = markerClusterOptions(), # algorithmic clustering
                  popup = paste(tags$em("Date of fire: "), hawaiiFiresdf$Start_Date, tags$br(),
                                tags$em("Acres burned"), hawaiiFiresdf$Total_Ac),
                  group = "Fire Points"
                  ) %>%
-      addCircleMarkers(lng = ~lng, lat = ~lat, data = FComms,
-                 radius = 10,
-                 fillColor = "#blue",
-                 stroke = T,
-                 weight = 0.5,
-                 color = 'black',
-                 opacity = 100,
-                 label = FComms$AreaName,
-                 group = "Firewise Communities"
-      ) %>%
+      # Firewise Communities
+      addCircleMarkers(lng = ~lng, 
+                       lat = ~lat, 
+                       data = FComms,
+                       radius = 10,
+                       fillColor = "#blue",
+                       stroke = T,
+                       weight = 0.5,
+                       color = 'black',
+                       opacity = 100,
+                       label = FComms$AreaName,
+                       group = "Firewise Communities"
+                       ) %>%
       addLayersControl(
         overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities"),
         options = layersControlOptions(collapsed = FALSE)
@@ -398,9 +410,151 @@ function(input, output, session) {
 
   })
   
-  # Community Meetings Data Explorer tab ##############################################
-  comm_temp <- reactive({ comm_dat })
+  #### Explore your area tab #########
+  # Select Hazard
+  observeEvent(input$category2, {
+    if (input$category2!="") {
+      hazards <- haz_temp() %>%
+        filter(hazard_category %in% input$category2) %>%
+        `$`('hazard_full') %>%
+        unique() %>%
+        sort()
+      hazSelected <- isolate(input$hazard2[input$hazard2 %in% hazards])
+      updateSelectInput(session, "hazard2", choices = hazards)
+    } else {
+      updateSelectInput(session, "hazard2", 
+                        choices = c("Pick a hazard..."="",
+                                    sort(unique(haz_tidy$hazard_full))),
+                        selected = "Road Width")
+    }
+    
+  })
+  # Select Area
+  observeEvent(input$island2, {
+    if (input$island2!="") {
+      areanames <-  filter(haz_temp(), Island %in% input$island2) %>%
+        `$`('AreaName') %>%
+        unique() %>%
+        sort()
+      areaSelected <- isolate(input$areaname2[input$areaname2 %in% areanames])
+      updateSelectInput(session, "areaname2", choices = areanames)
+    } else {
+      updateSelectInput(session, "areaname2", 
+                        choices = c("Pick an area..."="",
+                                    sort(unique(haz_tidy$AreaName))),
+                        selected = "Hanalei")
+    }
+    
+  })
   
+  # Scoreboxes
+  output$scoreBox <- renderValueBox({
+    
+    haz_temp() %>%
+      filter(
+        is.null(input$hazard2) | hazard_full %in% input$hazard2,
+        is.null(input$areaname2) | AreaName %in% input$areaname2) -> row
+    score <- row$score[1]
+    
+    # Conditional icon
+    if (score == 3){
+      icon = "thumbs-down"
+    } else if (score == 2){
+      icon = "cog"
+    } else {
+      icon = "thumbs-up"
+    }
+    # Conditional color
+    if (score == 3){
+      color = "red"
+    } else if (score == 2){
+      color = "yellow"
+    } else if (score ==1) {
+      color = "green"
+    } else {
+      color = "black"
+    }
+    
+    # ValueBox output
+    valueBox(value = paste0(score), 
+             subtitle = paste0(input$areaname2, ": ", input$hazard2), 
+             icon = icon(icon, lib= "glyphicon"),
+             color = color)
+  })
+  
+  ## Second Row of Boxes
+  # Low Score
+  output$lowScoreBox <- renderInfoBox({
+    
+    haz_temp() %>%
+      filter(
+        is.null(input$hazard2) | hazard_full %in% input$hazard2) %>%
+      filter(!is.na(reason)) %>%
+      arrange(score) -> temp1
+    
+    temp2 <- t(unique(temp1$reason))
+    
+    end_data <- data_frame(low = temp2[1], 
+                           medium = temp2[2], 
+                           high = temp2[3])
+    
+    infoBox(
+      "Low Hazard", 
+      paste0(end_data[[1]]), 
+      icon = icon("thumbs-up", lib = "glyphicon"),
+      color = "green", fill = FALSE
+    )
+  })
+  
+  # Medium score
+  output$medScoreBox <- renderInfoBox({
+    
+    haz_temp() %>%
+      filter(
+        is.null(input$hazard2) | hazard_full %in% input$hazard2) %>%
+      filter(!is.na(reason)) %>%
+      arrange(score) -> temp1
+    
+    temp2 <- t(unique(temp1$reason))
+    
+    end_data <- data_frame(low = temp2[1], 
+                           medium = temp2[2], 
+                           high = temp2[3])
+    
+    infoBox(
+      "Medium Hazard", 
+      paste0(end_data$medium[1]), 
+      icon = icon("cog", lib = "glyphicon"),
+      color = "yellow", fill = FALSE
+    )
+  })
+  
+  # High Score
+  output$hiScoreBox <- renderInfoBox({
+    
+    haz_temp() %>%
+      filter(
+        is.null(input$hazard2) | hazard_full %in% input$hazard2) %>%
+      filter(!is.na(reason)) %>%
+      arrange(score) -> temp1
+    
+    temp2 <- t(unique(temp1$reason))
+    
+    end_data <- data_frame(low = temp2[1], 
+                           medium = temp2[2], 
+                           high = temp2[3])
+    
+    infoBox(
+      "High Hazard", 
+      paste0(end_data$high[1]), 
+      icon = icon("thumbs-down", lib = "glyphicon"),
+      color = "red", fill = FALSE
+    )
+  })
+  
+  #### Community Meetings Data tab ####
+  comm_temp <- reactive({ comm_dat })
+  ## Observe user input
   observe({
     meetings <- if (is.null(input$region)) character(0) else {
       filter(comm_temp(), cwpp_region %in% input$region) %>%
@@ -412,7 +566,7 @@ function(input, output, session) {
     updateSelectInput(session, "meeting", choices = meetings,
                       selected = stillSelected)
   })
-  
+  ## Output datatable
   output$dt <- DT::renderDataTable({ 
     comm_temp() %>%
       filter(
@@ -454,9 +608,9 @@ function(input, output, session) {
     }
   )
   
-  # Explore your Area Data tab ##############################################
+  #### Hazard Assessment Data tab ####
   haz_temp <- reactive({ haz_tidy })
-  # hazards
+  # Observe user input for hazards
   observe({
     hazards <- if (is.null(input$category)) character(0) else {
       filter(haz_temp(), hazard_category %in% input$category) %>%
@@ -468,7 +622,7 @@ function(input, output, session) {
     updateSelectInput(session, "hazard", choices = hazards,
                       selected = hazSelected)
   })
-  # Areas
+  # Observe user input for area
   observe({
     areanames <- if (is.null(input$island)) character(0) else {
       filter(haz_temp(), Island %in% input$island) %>%
@@ -480,7 +634,7 @@ function(input, output, session) {
     updateSelectInput(session, "areaname", choices = areanames,
                       selected = areaSelected)
   })
-  ## Download all data
+  # Output datatable
     output$dt_haz <- DT::renderDataTable({ 
       haz_temp() %>%
         filter(
@@ -492,7 +646,7 @@ function(input, output, session) {
         select(Island, Area=AreaName, Category= hazard_category, Hazard = hazard_full,
                Score = score, Reason = reason, -hazard)
       })
-  ## Download Selected Data
+  # Download Selected Data
   output$download_haz <- downloadHandler(
     # This function returns a string which tells the client browser what name to use when saving the file.
     filename = function() {
@@ -521,147 +675,5 @@ function(input, output, session) {
       write.table(haz_tidy, file, sep = ",", row.names = FALSE)
     }
   )
-
-  #### Explore your area #########
-  
-  ## Hazard
-  observeEvent(input$category2, {
-    if (input$category2!="") {
-      hazards <- haz_temp() %>%
-      filter(hazard_category %in% input$category2) %>%
-        `$`('hazard_full') %>%
-        unique() %>%
-        sort()
-      hazSelected <- isolate(input$hazard2[input$hazard2 %in% hazards])
-      updateSelectInput(session, "hazard2", choices = hazards)
-    } else {
-      updateSelectInput(session, "hazard2", 
-                        choices = c("Pick a hazard..."="",
-                                    sort(unique(haz_tidy$hazard_full))),
-                        selected = "Road Width")
-    }
-    
-  })
-  ## Areaname
-  observeEvent(input$island2, {
-     if (input$island2!="") {
-      areanames <-  filter(haz_temp(), Island %in% input$island2) %>%
-        `$`('AreaName') %>%
-        unique() %>%
-        sort()
-      areaSelected <- isolate(input$areaname2[input$areaname2 %in% areanames])
-      updateSelectInput(session, "areaname2", choices = areanames)
-     } else {
-       updateSelectInput(session, "areaname2", 
-                         choices = c("Pick an area..."="",
-                                     sort(unique(haz_tidy$AreaName))),
-                         selected = "Hanalei")
-    }
-    
-  })
-  
-  #### Scorebox #####
-  output$scoreBox <- renderValueBox({
-    
-    haz_temp() %>%
-      filter(
-        is.null(input$hazard2) | hazard_full %in% input$hazard2,
-        is.null(input$areaname2) | AreaName %in% input$areaname2) -> row
-    score <- row$score[1]
-    
-    # Conditional icon
-    if (score == 3){
-      icon = "thumbs-down"
-    } else if (score == 2){
-      icon = "cog"
-    } else {
-      icon = "thumbs-up"
-    }
-    # Conditional color
-    if (score == 3){
-      color = "red"
-    } else if (score == 2){
-      color = "yellow"
-    } else if (score ==1) {
-      color = "green"
-    } else {
-      color = "black"
-    }
-    
-    valueBox(value = paste0(score), 
-             subtitle = paste0(input$areaname2, ": ", input$hazard2), 
-             icon = icon(icon, lib= "glyphicon"),
-             color = color)
-  })
-  
-  ## Scores 1
-  output$lowScoreBox <- renderInfoBox({
-    
-    haz_temp() %>%
-      filter(
-        is.null(input$hazard2) | hazard_full %in% input$hazard2) %>%
-      filter(!is.na(reason)) %>%
-      arrange(score) -> temp1
-    
-    temp2 <- t(unique(temp1$reason))
-    
-    end_data <- data_frame(low = temp2[1], 
-                           medium = temp2[2], 
-                           high = temp2[3])
-    
-    infoBox(
-      "Low Hazard", 
-      paste0(end_data[[1]]), 
-      icon = icon("thumbs-up", lib = "glyphicon"),
-      color = "green", fill = FALSE
-    )
-  })
-  
-  ## Scores 2
-  output$medScoreBox <- renderInfoBox({
-    
-    haz_temp() %>%
-      filter(
-        is.null(input$hazard2) | hazard_full %in% input$hazard2) %>%
-      filter(!is.na(reason)) %>%
-      arrange(score) -> temp1
-    
-    temp2 <- t(unique(temp1$reason))
-    
-    end_data <- data_frame(low = temp2[1], 
-                           medium = temp2[2], 
-                           high = temp2[3])
-    
-    infoBox(
-      "Medium Hazard", 
-      paste0(end_data$medium[1]), 
-      icon = icon("cog", lib = "glyphicon"),
-      color = "yellow", fill = FALSE
-    )
-  })
-  
-  ## Scores 3
-  output$hiScoreBox <- renderInfoBox({
-    
-    haz_temp() %>%
-      filter(
-        is.null(input$hazard2) | hazard_full %in% input$hazard2) %>%
-      filter(!is.na(reason)) %>%
-      arrange(score) -> temp1
-    
-    temp2 <- t(unique(temp1$reason))
-    
-    end_data <- data_frame(low = temp2[1], 
-                           medium = temp2[2], 
-                           high = temp2[3])
-    
-    infoBox(
-      "High Hazard", 
-      paste0(end_data$high[1]), 
-      icon = icon("thumbs-down", lib = "glyphicon"),
-      color = "red", fill = FALSE
-    )
-  })
-  
 }
   
