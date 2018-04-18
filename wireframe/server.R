@@ -189,10 +189,10 @@ function(input, output, session) {
                                        "Apr", "May", "Jun",
                                        "Jul", "Aug", "Sep",
                                        "Oct", "Nov", "Dec"),
-                              labels=c("Jan", "2", "3",
-                                      "Apr", "5", "6",
-                                      "Jul", "8", "9",
-                                      "Oct", "11", "12"))
+                              labels=c("Jan", "", "",
+                                      "Apr", "", "",
+                                      "Jul", "", "",
+                                      "", "", "Dec"))
                               
     } else {
       plot + scale_x_discrete(limits=c(2000, 2005, 2010))
