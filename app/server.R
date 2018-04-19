@@ -370,7 +370,6 @@ function(input, output, session) {
                                tags$em("Acres burned"), hawaiiFiresdf$Total_Ac),
                  group = "Fire Points"
                  ) %>%
-
       # Firewise Communities
       addCircleMarkers(lng = ~lng, 
                        lat = ~lat, 
@@ -384,7 +383,6 @@ function(input, output, session) {
                        label = FComms$AreaName,
                        group = "Firewise Communities"
                        ) %>%
-
       addLayersControl(
         overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities"),
         options = layersControlOptions(collapsed = FALSE)
@@ -439,27 +437,27 @@ function(input, output, session) {
         is.null(input$areaname2) | AreaName %in% input$areaname2) -> row
     score <- row$score[1]
     
-    # Conditional icon
+    # Conditional icon, color and text
     if (score == 3){
       icon = "thumbs-down"
+      color = "red"
+      text = "High"
     } else if (score == 2){
       icon = "cog"
-    } else {
-      icon = "thumbs-up"
-    }
-    # Conditional color
-    if (score == 3){
-      color = "red"
-    } else if (score == 2){
       color = "yellow"
+      text = "Medium"
     } else if (score ==1) {
+      icon = "thumbs-up"
       color = "green"
+      text = "Low"
     } else {
       color = "black"
+      icon = NULL
+      text = "Not Rated"
     }
     
     # ValueBox output
-    valueBox(value = paste0(score), 
+    valueBox(value = text, 
              subtitle = paste0(input$areaname2, ": ", input$hazard2), 
              icon = icon(icon, lib= "glyphicon"),
              color = color)

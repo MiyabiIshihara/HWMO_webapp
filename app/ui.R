@@ -15,7 +15,8 @@ header <- dashboardHeader(
   tags$li(a(href = 'appHelp.html',
     icon("question-circle-o"),
     title = "Help",
-    style = "padding-top:10px; padding-bottom:10px;"),
+    style = "padding-top:10px; padding-bottom:10px;",
+    target= "_blank"),
     class = "dropdown"
   ),
   tags$li(a(href = 'https://github.com/niklaslollo/HWMO_webapp',
