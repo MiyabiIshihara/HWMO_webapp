@@ -24,15 +24,25 @@ The HWMO webapp visualizes wildfire data across Hawai'i.
 It has three types of data: fire history, community hazard assessments, and community input information.
 
 <h3 id="three">What data is included?</h3>
-<div class="container">
+<div class="w3-container">
   <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#fhist">Statewide Wildfire History  (2002-2011 data)</button>
   
   <div id="fhist" class="collapse">
-HWMO led a multi-year, multi-partner effort with fire response agencies and resource managers (see below) to create compatible reporting among agencies, and to compile the first ever statewide wildfire history data set.  In Hawaii, fire suppression agencies use reporting formats that differ in the type of information and level of detail recorded per fire event. These differences have prevented mapping and identifying fire trends and emerging problems at community, county, and state levels. The HWMO Hawaii State Wildfire History data set is intended to: (1) aid communities in developing federally compliant Community Wildfire Protection Plans (CWPP); (2) support research on the ecological and social drivers of wildfire; (3) communicate the extent of fire occurrence and threat in Hawaii with national and local funding agencies/grantors; (4) secure external resources to address fire issues; and (5) engage communities in wildfire preparedness activities.  It is essential to understand that this data comes with limitations and caveats
+<p> HWMO led a multi-year, multi-partner effort with fire response agencies and resource managers (see below) to create compatible reporting among agencies, and to compile the first ever statewide wildfire history data set.  In Hawaii, fire suppression agencies use reporting formats that differ in the type of information and level of detail recorded per fire event. These differences have prevented mapping and identifying fire trends and emerging problems at community, county, and state levels. The HWMO Hawaii State Wildfire History data set is intended to:
+<ol>
+<li> aid communities in developing federally compliant Community Wildfire Protection Plans (CWPP); </li>
+<li>support research on the ecological and social drivers of wildfire;</li>
+<li>communicate the extent of fire occurrence and threat in Hawaii with national and local funding agencies/grantors;</li>
+<li>secure external resources to address fire issues; and </li>
+<li>engage communities in wildfire preparedness activities.  </li>
+<ol>
+It is essential to understand that this data comes with limitations and caveats
 
-Collection, compilation, and quality control of the data was carried out by HWMO. The project was funded by grants from the USDA Forest Service and Hawaii State Fire Assistance Wildland/Urban Interface Grant Program (2009-2011; 2011-2013).  HWMO is an equal opportunity employer.  A portion of the of the data was quality controlled through a collaboration between HWMO and the Pacific Fire Exchange (PFX), which facilitated additional logistical support from US Forest Service Pacific Southwest Region Institute for Pacific Islands Forestry.
+<p> Collection, compilation, and quality control of the data was carried out by HWMO. The project was funded by grants from the USDA Forest Service and Hawaii State Fire Assistance Wildland/Urban Interface Grant Program (2009-2011; 2011-2013).  HWMO is an equal opportunity employer.  A portion of the of the data was quality controlled through a collaboration between HWMO and the Pacific Fire Exchange (PFX), which facilitated additional logistical support from US Forest Service Pacific Southwest Region Institute for Pacific Islands Forestry.
 
-Fire record data came from all four county fire departments (Hawaii County, Maui County, Kauai County, and Honolulu City and County [Oahu Island]), the Division of Forestry and Wildlife (DOFAW) within the Hawaii Department of Land and Natural Resources (DLNR), and Hawaii Volcanoes National Park (HVNP). This includes all fire response agencies except for Department of Defense, whose records are classified.
+<p>Fire record data came from all four county fire departments (Hawaii County, Maui County, Kauai County, and Honolulu City and County [Oahu Island]), the Division of Forestry and Wildlife (DOFAW) within the Hawaii Department of Land and Natural Resources (DLNR), and Hawaii Volcanoes National Park (HVNP). This includes all fire response agencies except for Department of Defense, whose records are classified.
+
+<a href = "http://gis.ctahr.hawaii.edu/WildfireHistory">For more information</a>
 
 [For more information](http://gis.ctahr.hawaii.edu/WildfireHistory)
 
