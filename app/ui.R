@@ -9,7 +9,8 @@ header <- dashboardHeader(
   title = tags$a(href='https://hawaiiwildfire.org',
                  tags$img(src='hwmo_logo_white.svg',
                           title = "HWMO Home", 
-                          height = "45px")),
+                          height = "45px"),
+                 alt = "HWMO"),
 
   ### Top right corner ###
   tags$li(a(href = 'appHelp.html',
@@ -108,7 +109,8 @@ body <- dashboardBody(
                   tags$h4("Pick an area and hazard to see the hazard score."))),
             fluidRow(
               # Select area
-              box(width = 4, 
+              box(id = "inlineLab",
+                width = 6, 
                   status = "danger",
                   selectInput(inputId = "island2",
                               label = "Island",
@@ -124,7 +126,8 @@ body <- dashboardBody(
                               selected = "Hanalei")
                   ),
               # Select hazard
-              box(width = 4, 
+              box(id = "inlineLab",
+                  width = 6, 
                   status = "danger",
                   selectInput(inputId = "category2", 
                               label = "Hazard Category", 
@@ -146,7 +149,7 @@ body <- dashboardBody(
             ),
             # Hazard score for area
             fluidRow(
-              valueBoxOutput("scoreBox", width = 4)
+              valueBoxOutput("scoreBox", width = 12)
             ),
             fluidRow(
               box(width = 3, solidHeader = T,
@@ -261,13 +264,14 @@ body <- dashboardBody(
                 width = 3, status = "danger",
                   title = "Downloads",
                   downloadButton("download_data",
-                                 "Download Selected Data"),
+                                 "Selected Data"),
                   tags$br(),
+                tags$br(),
                   downloadButton("download_all_data",
-                                 "Download All Data"),
+                                 "All Data"),
                   tags$br(),
                   # License
-                  includeMarkdown("docs/license_short.md")
+                  includeMarkdown("docs/license_small_short.md")
               )
             ),
             # Show data
@@ -321,13 +325,14 @@ body <- dashboardBody(
             box(width = 3, status = "danger",
                 title = "Downloads",
                   downloadButton("download_haz",
-                                 "Download Selected Data"),
+                                 "Selected Data"),
+                tags$br(),
                 tags$br(),
                   downloadButton("download_all_haz",
-                                 "Download All Data"), 
+                                 "All Data"), 
                 tags$br(),
                 # License
-                includeMarkdown("docs/license_short.md")
+                includeMarkdown("docs/license_small_short.md")
               )),
             # Show data
             fluidRow(

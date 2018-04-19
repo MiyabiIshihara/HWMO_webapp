@@ -100,7 +100,7 @@ function(input, output, session) {
         easyButton(
           id="cHI",
           position = "bottomright",
-          icon = 'fa-circle',
+          icon = icon("circle-o"),
           title="Central",
           onClick = JS("function(btn, map){map.setView([21.123, -157.017],8); }")),
         easyButton(

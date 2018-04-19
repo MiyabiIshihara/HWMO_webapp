@@ -67,6 +67,7 @@ a:hover {
     text-decoration: underline;
 }
 
+/* special map parts */
 .leaflet .legend i{
             border: 1px solid #666;
             border-radius: 50%;
@@ -78,3 +79,15 @@ a:hover {
 .leaflet-control-layers-overlays label{
     font-size: 12px;
 }
+
+/* shiny labels override for explore your area */
+#inlineLab .control-label{ 
+  display: table-cell; 
+  text-align: right; 
+  vertical-align: middle; 
+  padding-right: 4px;
+} 
+.form-group { 
+  display: table-row;
+}
+
