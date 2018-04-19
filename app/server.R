@@ -89,48 +89,29 @@ function(input, output, session) {
         onClick=JS("function(btn, map){ map.setZoom(7); }"))) %>%
       
       # puts all buttons in a vertical bar under the zoom buttons
-      # addEasyButtonBar(
-      #   position = "bottomright",
-      #   easyButton(
-      #     id="BI",
-      #     icon = '<strong>E</strong>',
-      #     title="Big Island",
-      #     onClick = JS("function(btn, map){map.setView([-156, 21],8); }")),
-      #   easyButton(
-      #     id="cHI",
-      #     icon = 'fa-circle',
-      #     title="Central",
-      #     onClick = JS("function(btn, map){map.panTo([-160, 21]); }")),
-      #   easyButton(
-      #     id="wHI",
-      #     icon = '<strong>W</strong>',
-      #     title="West",
-      #     onClick = JS("function(btn, map){map.panTo([-159.5, 22], zoom = 7); }"))
-      #   ) %>%
-    
-    # Separately articulated buttons -- testing
-    addEasyButton(
-      easyButton(
-        id="BI",
+      addEasyButtonBar(
         position = "bottomright",
-        icon = '<strong>E</strong>', 
-        title="Big Island",
-        onClick = JS("function(btn, map){map.setView([-156, 21],8); }"))) %>%
-    addEasyButton(
-     easyButton(
-       id="cHI",
-       position = "bottomright",
-       icon = 'fa-circle',
-       title="Central",
-       onClick = JS("function(btn, map){map.setView([-157.01, 21.15],10); }"))) %>%
-    addEasyButton(
-     easyButton(
-       id="wHI",
-       position = "bottomright",
-       icon = '<strong>W</strong>',
-       title="West",
-       onClick = JS("function(btn, map){map.panTo([-159.5, 22], 7); }")))
-      })
+        easyButton(
+          id="BI",
+          position = "bottomright",
+          icon = '<strong>E</strong>', 
+          title="Big Island",
+          onClick = JS("function(btn, map){map.setView([19.678, -155.450],9); }")),
+        easyButton(
+          id="cHI",
+          position = "bottomright",
+          icon = 'fa-circle',
+          title="Central",
+          onClick = JS("function(btn, map){map.setView([21.123, -157.017],8); }")),
+        easyButton(
+          id="wHI",
+          position = "bottomright",
+          icon = '<strong>W</strong>',
+          title="West",
+          onClick = JS("function(btn, map){map.panTo([22.037, -159.774], 7); }"))
+        )
+    
+      }) #end of leaflet function
   
   #### Observer to keep track of fires in map view #####
   firesInBounds <- eventReactive(input$leafmap_bounds,{
