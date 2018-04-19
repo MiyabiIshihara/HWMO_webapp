@@ -390,7 +390,6 @@ function(input, output, session) {
                                tags$em("Acres burned"), hawaiiFiresdf$Total_Ac),
                  group = "Fire Points"
                  ) %>%
-
       # Firewise Communities
       addCircleMarkers(lng = ~lng, 
                        lat = ~lat, 
@@ -404,7 +403,6 @@ function(input, output, session) {
                        label = FComms$AreaName,
                        group = "Firewise Communities"
                        ) %>%
-
       addLayersControl(
         overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities"),
         options = layersControlOptions(collapsed = FALSE)
