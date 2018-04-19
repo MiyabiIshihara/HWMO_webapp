@@ -72,7 +72,7 @@ The community input available in this app are from 2016 CWPPs: Kauai Update, Mol
 <h3 id="four">Data Use and Distribution:</h3>
 We actively encourage use of this data set for scientific purposes and planning by communities, natural resource managers, and emergency response agencies. This is not, however, the case for commercial purposes.  Users are prohibited from any commercial, non-free resale, or redistribution without explicit written permission from Hawai'i Wildfire Management Organization (HWMO). We kindly ask any users to cite the HWMO as the source used in the creation of any reports, publications, new data sets, derived products, or services resulting from the use of this data set.  If possible, please link web pages to the HWMO website [hawaiiwildfire.org](hawaiiwildfire.org).  
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a>
 
 <h3 id="five">Where can I find more information?</h3>
 [www.hawaiiwildfire.org](www.hawaiiwildfire.org)  

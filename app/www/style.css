@@ -34,9 +34,12 @@ h4 {
   font-weight: 400; 
 }
 
-header {
+.header {
   background-color: #d53b2d;
   height: 45px;
+  font-weight: 200;
+  color: #666666;
+  text-align: "center";
 }
 
 .main-header .logo {

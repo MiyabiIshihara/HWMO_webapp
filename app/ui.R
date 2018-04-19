@@ -12,7 +12,7 @@ header <- dashboardHeader(
                           height = "45px")),
 
   ### Top right corner ###
-  tags$li(a(href = 'https://github.com/niklaslollo/HWMO_webapp/appHelp.html',
+  tags$li(a(href = 'appHelp.html',
     icon("question-circle-o"),
     title = "Help",
     style = "padding-top:10px; padding-bottom:10px;"),
@@ -257,7 +257,7 @@ body <- dashboardBody(
                                                multiple=TRUE))),
               # Download buttons
               box(
-                width = 3, status = "primary",
+                width = 3, status = "danger",
                   title = "Downloads",
                   downloadButton("download_data",
                                  "Download Selected Data"),
@@ -317,7 +317,7 @@ body <- dashboardBody(
                                                multiple=TRUE))
                   ),
               # Download buttons
-            box(width = 3, status = "primary",
+            box(width = 3, status = "danger",
                 title = "Downloads",
                   downloadButton("download_haz",
                                  "Download Selected Data"),
