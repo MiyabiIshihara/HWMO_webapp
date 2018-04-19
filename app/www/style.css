@@ -85,7 +85,7 @@ a:hover {
   display: table-cell; 
   text-align: right; 
   vertical-align: middle; 
-  padding-right: 4px;
+  padding-right: 15px;
 } 
 .form-group { 
   display: table-row;
