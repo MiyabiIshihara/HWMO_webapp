@@ -10,8 +10,15 @@ header <- dashboardHeader(
                  tags$img(src='hwmo_logo_white.svg',
                           title = "HWMO Home", 
                           height = "45px")),
-  # Top Right Corner
-  tags$li(a(href = 'https://github.com/niklaslollo/hwmo_data_tool',
+
+  ### Top right corner ###
+  tags$li(a(href = 'appHelp.html',
+    icon("question-circle-o"),
+    title = "Help",
+    style = "padding-top:10px; padding-bottom:10px;"),
+    class = "dropdown"
+  ),
+  tags$li(a(href = 'https://github.com/niklaslollo/HWMO_webapp',
             icon("file-code-o"),
             title = "Github",
             style = "padding-top:10px; padding-bottom:10px;"),
@@ -59,16 +66,17 @@ body <- dashboardBody(
                      box(width=NULL, 
                          status = "danger", # Makes header red
                          # Select map data
+                         #title = "Map Data",
                          selectInput(inputId = "dataset",
                                      label = "Map Data",
                                      choices = list(
-                                       "Total Score" = "Total Score",
+                                       "Overall Wildfire Hazard" = "Overall Wildfire Hazard",
                                        "Fire Protection" = "Fire Protection",
                                        "Subdivision" = "Subdivision",
                                        "Vegetation" = "Vegetation",
                                        "Buildings" = "Buildings",
                                        "Fire Environment" = "Fire Environment",
-                                       "Median HH Income" = "Median HH Income",
+                                       "Median Household Income" = "Median Household Income",
                                        "Native Hawaiian Count" = "Native Hawaiian Count",
                                        "Homeownership" = "Homeownership"
                                        #"CWPP" = "Status"
@@ -249,7 +257,7 @@ body <- dashboardBody(
                                                multiple=TRUE))),
               # Download buttons
               box(
-                width = 3, status = "primary",
+                width = 3, status = "danger",
                   title = "Downloads",
                   downloadButton("download_data",
                                  "Download Selected Data"),
@@ -309,7 +317,7 @@ body <- dashboardBody(
                                                multiple=TRUE))
                   ),
               # Download buttons
-            box(width = 3, status = "primary",
+            box(width = 3, status = "danger",
                 title = "Downloads",
                   downloadButton("download_haz",
                                  "Download Selected Data"),

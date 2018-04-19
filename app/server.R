@@ -34,7 +34,7 @@ census_dat <- st_transform(census_dat, 4326)
 # Change variable names
 census_dat <- census_dat %>%
   mutate(
-    `Median HH Income` = MedH_Inc,
+    `Median Household Income` = MedH_Inc,
     `Native Hawaiian Count` = NH_ac,
     Homeownership = Homeowner
   )
@@ -65,7 +65,7 @@ haz_dat <- haz_dat %>%
     Vegetation = VEG_TOT/5,
     Buildings = BLDG_TOT/5,
     `Fire Environment` = FIREHAZTOT/6,
-    `Total Score` = (`Fire Protection` + Subdivision + 
+    `Overall Wildfire Hazard` = (`Fire Protection` + Subdivision + 
       Vegetation + Buildings + `Fire Environment`)/5
   )
 
@@ -93,20 +93,20 @@ function(input, output, session) {
       #   position = "bottomright",
       #   easyButton(
       #     id="BI",
-      #     icon = '<strong>E</strong>', 
+      #     icon = '<strong>E</strong>',
       #     title="Big Island",
       #     onClick = JS("function(btn, map){map.setView([-156, 21],8); }")),
       #   easyButton(
       #     id="cHI",
-      #     icon = 'fa-circle', 
+      #     icon = 'fa-circle',
       #     title="Central",
       #     onClick = JS("function(btn, map){map.panTo([-160, 21]); }")),
       #   easyButton(
       #     id="wHI",
-      #     icon = '<strong>W</strong>', 
+      #     icon = '<strong>W</strong>',
       #     title="West",
       #     onClick = JS("function(btn, map){map.panTo([-159.5, 22], zoom = 7); }"))
-      #   )
+      #   ) %>%
     
     # Separately articulated buttons -- testing
     addEasyButton(
@@ -130,6 +130,7 @@ function(input, output, session) {
     #    icon = '<strong>W</strong>',
     #    title="West",
     #    onClick = JS("function(btn, map){map.panTo([-159.5, 22], 7); }")))
+
       })
   
   #### Observer to keep track of fires in map view #####
@@ -192,10 +193,10 @@ function(input, output, session) {
                                        "Apr", "May", "Jun",
                                        "Jul", "Aug", "Sep",
                                        "Oct", "Nov", "Dec"),
-                              labels=c("Jan", "2", "3",
-                                      "Apr", "5", "6",
-                                      "Jul", "8", "9",
-                                      "Oct", "11", "12"))
+                              labels=c("Jan", "", "",
+                                      "Apr", "", "",
+                                      "Jul", "", "",
+                                      "", "", "Dec"))
                               
     } else {
       plot + scale_x_discrete(limits=c(2002, 2006, 2011))
@@ -208,7 +209,7 @@ function(input, output, session) {
     user_choice <- input$dataset
     
     # Change dataset based on "map data" selection
-    if (user_choice %in% c("Median HH Income", 
+    if (user_choice %in% c("Median Household Income", 
                            "Native Hawaiian Count", 
                            "Homeownership")) {
       the_data = census_dat
@@ -257,10 +258,10 @@ function(input, output, session) {
      #)
 
     ## Popup and palette content ##
-    if (user_choice == "Median HH Income") {
+    if (user_choice == "Median Household Income") {
       ## Popup text
       popup = paste0("<h4>", haz_dat$AreaName, "</h4>", tags$br(),
-                    tags$em("Median Household Income: "),"$", census_dat$`Median HH Income`
+                    tags$em("Median Household Income: "),"$", census_dat$`Median Household Income`
                     )
       ## Palette for legend
       pal = pal_soc
@@ -332,7 +333,7 @@ function(input, output, session) {
                       tags$em("Ignition risk: "), haz_dat$Ign_Risk, tags$br(),
                       tags$em("Topography: "), haz_dat$Top_Adv)
         pal = pal_haz
-      } else { # Total Score
+      } else { # Overall Wildfire Hazard
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>",tags$br(),
                        tags$em("Fire Protection: "), round(haz_dat$`Fire Protection`, digits = 2), tags$br(),
                        tags$em("Subdivision: "), round(haz_dat$Subdivision, digits = 2), tags$br(),
@@ -389,19 +390,21 @@ function(input, output, session) {
                                tags$em("Acres burned"), hawaiiFiresdf$Total_Ac),
                  group = "Fire Points"
                  ) %>%
+
       # Firewise Communities
       addCircleMarkers(lng = ~lng, 
                        lat = ~lat, 
                        data = FComms,
                        radius = 10,
-                       fillColor = "#blue",
+                       fillColor = "rgba(0, 0, 0, 0.1)",
                        stroke = T,
-                       weight = 0.5,
-                       color = 'black',
+                       weight = 0.8,
+                       color = '#d53b2e',
                        opacity = 100,
                        label = FComms$AreaName,
                        group = "Firewise Communities"
                        ) %>%
+
       addLayersControl(
         overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities"),
         options = layersControlOptions(collapsed = FALSE)
