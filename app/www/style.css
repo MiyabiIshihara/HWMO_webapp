@@ -67,6 +67,24 @@ a:hover {
     text-decoration: underline;
 }
 
+.container button{
+    background-color: #d53b2d;
+    border: #d53b2d;
+}
+
+.container button:hover {
+    color: #db4c3f;
+    background-color: transparent;
+    border: #d53b2d;
+    border-width: 4px;
+}
+/*
+.container button:focus {
+    background-color: #4caf50;
+    border: #d53b2d;
+}
+
+
 /* special map parts */
 .leaflet .legend i{
             border: 1px solid #666;

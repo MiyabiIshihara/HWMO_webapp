@@ -24,7 +24,10 @@ The HWMO webapp visualizes wildfire data across Hawai'i.
 It has three types of data: fire history, community hazard assessments, and community input information.
 
 <h3 id="three">What data is included?</h3>
-**Statewide Wildfire History** (2002-2011 data)  
+<div class="container">
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#fhist">Statewide Wildfire History  (2002-2011 data)</button>
+  
+  <div id="fhist" class="collapse">
 HWMO led a multi-year, multi-partner effort with fire response agencies and resource managers (see below) to create compatible reporting among agencies, and to compile the first ever statewide wildfire history data set.  In Hawaii, fire suppression agencies use reporting formats that differ in the type of information and level of detail recorded per fire event. These differences have prevented mapping and identifying fire trends and emerging problems at community, county, and state levels. The HWMO Hawaii State Wildfire History data set is intended to: (1) aid communities in developing federally compliant Community Wildfire Protection Plans (CWPP); (2) support research on the ecological and social drivers of wildfire; (3) communicate the extent of fire occurrence and threat in Hawaii with national and local funding agencies/grantors; (4) secure external resources to address fire issues; and (5) engage communities in wildfire preparedness activities.  It is essential to understand that this data comes with limitations and caveats
 
 Collection, compilation, and quality control of the data was carried out by HWMO. The project was funded by grants from the USDA Forest Service and Hawaii State Fire Assistance Wildland/Urban Interface Grant Program (2009-2011; 2011-2013).  HWMO is an equal opportunity employer.  A portion of the of the data was quality controlled through a collaboration between HWMO and the Pacific Fire Exchange (PFX), which facilitated additional logistical support from US Forest Service Pacific Southwest Region Institute for Pacific Islands Forestry.
@@ -33,7 +36,13 @@ Fire record data came from all four county fire departments (Hawaii County, Maui
 
 [For more information](http://gis.ctahr.hawaii.edu/WildfireHistory)
 
-**Statewide Wildfire Hazard Assessment**  
+</div>
+</div>
+
+<div class="container">
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#fassess">Statewide Wildfire Hazard Assessment</button>
+
+  <div id="fassess" class="collapse">
 Communities in Hawaii were assessed for 36 wildfire-related hazard components and rated by personnel from County Fire Departments (Hawaii Fire Department, Maui Fire Department, Kauai Fire Department, Honolulu Fire Department), DLNR Division of Forestry and Wildlife Fire, and Hawaii Wildfire Management Organization. The Subdivision, Vegetation, and Building hazard categories were rated by site inspections in each community. The Fire Environment and Protection categories were rated by fire responders with expert understanding of their agencies and local environments.
 
 An important note to remember when viewing the maps is that only developed community, residential, and commercial areas were assessed for wildfire hazards.  Uninhabited wildland or protected areas were not assessed for hazard using this format.
@@ -49,8 +58,13 @@ The HWMO Hawaii Wildfire Hazard Assessment has been prepared to increase awarene
 It is important to recognize that the HWMO hazard assessment process is a qualitative ranking system that ranks different factors perceived to contribute to the threat of wildfires at the wildland-urban interface (WUI). The assessment does not include the full range of realistic fire and ember exposures at the WUI and offers no actual quantification of the potential exposure of homes to the ignition, spread, and intensity of wildfires or embers produced by wildfires. Furthermore, the HWMO Wildfire Hazard Assessment is a community-level assessment that produces a rating based on a select number of houses in a given area or subdivision. While such an approach gives an indication of the general wildfire risk for a given area, the actual risk of individual homes can deviate from this assessment based on the characteristics of the site around an individual home.
 http://www.hawaiiwildfire.org/hwmo-products/
 
-**Community Wildfire Protection Plan (CWPP) Input Information**  
+</div>
+</div>
 
+<div class="container">
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#cwpp">Community Wildfire Protection Plan (CWPP) Input Information</button>
+
+  <div id="cwpp" class="collapse">
 A Community Wildfire Protection Plan (CWPP) is a plan developed by local communities, resource managers, large landowners, city planners, County/State/Federal agencies including emergency responders, state foresters, and other interested parties to clarify and refine priorities for the protection of life, property, and critical infrastructure in wildland-urban interface areas. It is intended to create a foundation of collaboration and communication among diverse parties toward achieving wildfire risk reduction goals. Through the CWPP process, communities have a tremendous opportunity to learn more about wildfire issues and impacts, influence where and how vegetation reduction projects and federal hazard reduction funds are applied and to initiate or get involved at the local level.
 
 HWMO has completed CWPPs for the following areas (refer to the map for details):
@@ -67,6 +81,8 @@ To collect input for the Western Oʻahu CWPP, a foundational component of the CW
 The community input available in this app are from 2016 CWPPs: Kauai Update, Molokai, South Maui, Upcountry Maui, and Western Oahu.  
 
 [For more CWPP information](http://www.hawaiiwildfire.org/cwpps)  
+</div>
+</div>
 
 
 <h3 id="four">Data Use and Distribution:</h3>
