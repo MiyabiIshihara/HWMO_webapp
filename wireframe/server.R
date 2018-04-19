@@ -91,20 +91,20 @@ function(input, output, session) {
       #   position = "bottomright",
       #   easyButton(
       #     id="BI",
-      #     icon = '<strong>E</strong>', 
+      #     icon = '<strong>E</strong>',
       #     title="Big Island",
       #     onClick = JS("function(btn, map){map.setView([-156, 21],8); }")),
       #   easyButton(
       #     id="cHI",
-      #     icon = 'fa-circle', 
+      #     icon = 'fa-circle',
       #     title="Central",
       #     onClick = JS("function(btn, map){map.panTo([-160, 21]); }")),
       #   easyButton(
       #     id="wHI",
-      #     icon = '<strong>W</strong>', 
+      #     icon = '<strong>W</strong>',
       #     title="West",
       #     onClick = JS("function(btn, map){map.panTo([-159.5, 22], zoom = 7); }"))
-      #   )
+      #   ) %>%
     
     # separately articulated buttons for testing
     addEasyButton(
@@ -229,6 +229,10 @@ function(input, output, session) {
       alpha = T,
       domain = color_domain
     )
+    
+    # "rgba(44, 123, 182, 0.8)",
+    # 'rgba(255, 255, 191, 0.8)',
+    # "rgba(215, 25, 28, 0.8)"
     
     # palette for social data
     pal_soc <- colorBin(
@@ -376,14 +380,15 @@ function(input, output, session) {
                  ) %>%
       addCircleMarkers(lng = ~lng, lat = ~lat, data = FComms,
                  radius = 10,
-                 fillColor = "#blue",
+                 fillColor = "rgba(0, 0, 0, 0.1)",
                  stroke = T,
-                 weight = 0.5,
-                 color = 'black',
+                 weight = 0.8,
+                 color = '#d53b2e',
                  opacity = 100,
                  label = FComms$AreaName,
                  group = "Firewise Communities"
       ) %>%
+      
       addLayersControl(
         overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities"),
         options = layersControlOptions(collapsed = FALSE)

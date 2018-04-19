@@ -9,7 +9,13 @@ header <- dashboardHeader(
                           title = "HWMO Home", 
                           height = "45px")),
   ### Top right corner ###
-  tags$li(a(href = 'https://github.com/niklaslollo/hwmo_data_tool',
+  tags$li(a(href = 'https://github.com/niklaslollo/HWMO_webapp/appHelp.html',
+    icon("question-circle-o"),
+    title = "Help",
+    style = "padding-top:10px; padding-bottom:10px;"),
+    class = "dropdown"
+  ),
+  tags$li(a(href = 'https://github.com/niklaslollo/HWMO_webapp',
             icon("file-code-o"),
             title = "Github",
             style = "padding-top:10px; padding-bottom:10px;"),
