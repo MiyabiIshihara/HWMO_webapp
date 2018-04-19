@@ -34,7 +34,7 @@ census_dat <- st_transform(census_dat, 4326)
 # Change variable names
 census_dat <- census_dat %>%
   mutate(
-    `Median HH Income` = MedH_Inc,
+    `Median Household Income` = MedH_Inc,
     `Native Hawaiian Count` = NH_ac,
     Homeownership = Homeowner
   )
@@ -65,7 +65,7 @@ haz_dat <- haz_dat %>%
     Vegetation = VEG_TOT/5,
     Buildings = BLDG_TOT/5,
     `Fire Environment` = FIREHAZTOT/6,
-    `Total Score` = (`Fire Protection` + Subdivision + 
+    `Overall Wildfire Hazard` = (`Fire Protection` + Subdivision + 
       Vegetation + Buildings + `Fire Environment`)/5
   )
 
@@ -208,7 +208,7 @@ function(input, output, session) {
     user_choice <- input$dataset
     
     # Change dataset based on "map data" selection
-    if (user_choice %in% c("Median HH Income", 
+    if (user_choice %in% c("Median Household Income", 
                            "Native Hawaiian Count", 
                            "Homeownership")) {
       the_data = census_dat
@@ -257,10 +257,10 @@ function(input, output, session) {
      #)
 
     ## Popup and palette content ##
-    if (user_choice == "Median HH Income") {
+    if (user_choice == "Median Household Income") {
       ## Popup text
       popup = paste0("<h4>", haz_dat$AreaName, "</h4>", tags$br(),
-                    tags$em("Median Household Income: "),"$", census_dat$`Median HH Income`
+                    tags$em("Median Household Income: "),"$", census_dat$`Median Household Income`
                     )
       ## Palette for legend
       pal = pal_soc
@@ -332,7 +332,7 @@ function(input, output, session) {
                       tags$em("Ignition risk: "), haz_dat$Ign_Risk, tags$br(),
                       tags$em("Topography: "), haz_dat$Top_Adv)
         pal = pal_haz
-      } else { # Total Score
+      } else { # Overall Wildfire Hazard
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>",tags$br(),
                        tags$em("Fire Protection: "), round(haz_dat$`Fire Protection`, digits = 2), tags$br(),
                        tags$em("Subdivision: "), round(haz_dat$Subdivision, digits = 2), tags$br(),

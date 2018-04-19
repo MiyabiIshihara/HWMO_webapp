@@ -66,16 +66,17 @@ body <- dashboardBody(
                      box(width=NULL, 
                          status = "danger", # Makes header red
                          # Select map data
+                         #title = "Map Data",
                          selectInput(inputId = "dataset",
                                      label = "Map Data",
                                      choices = list(
-                                       "Total Score" = "Total Score",
+                                       "Overall Wildfire Hazard" = "Overall Wildfire Hazard",
                                        "Fire Protection" = "Fire Protection",
                                        "Subdivision" = "Subdivision",
                                        "Vegetation" = "Vegetation",
                                        "Buildings" = "Buildings",
                                        "Fire Environment" = "Fire Environment",
-                                       "Median HH Income" = "Median HH Income",
+                                       "Median Household Income" = "Median Household Income",
                                        "Native Hawaiian Count" = "Native Hawaiian Count",
                                        "Homeownership" = "Homeownership"
                                        #"CWPP" = "Status"
