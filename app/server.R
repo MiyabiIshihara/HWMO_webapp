@@ -115,7 +115,7 @@ function(input, output, session) {
         position = "bottomright",
         icon = '<strong>E</strong>', 
         title="Big Island",
-        onClick = JS("function(btn, map){map.setView([-156, 21],8); }"))) %>%
+        onClick = JS("function(btn, map){map.setView([-156, 21],8); }"))) #%>%
     #addEasyButton(
     #  easyButton(
     #    id="cHI",
