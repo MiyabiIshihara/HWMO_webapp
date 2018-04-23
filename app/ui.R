@@ -343,6 +343,7 @@ body <- dashboardBody(
 
 # Call the dashboard elements            
 dashboardPage(
+  title = "HWMO WebApp",
   skin = "red",
   header,
   sidebar,
