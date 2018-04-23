@@ -106,8 +106,10 @@ We actively encourage use of this data set for scientific purposes and planning 
 E-mail: <admin@hawaiiwildfire.org> or call (808) 885-0900
 
 **App developed by**  
-Niklas Lollo & Evangeline McGlynn, PhD candidates
-University of California, Berkeley
-Data Sciences for the 21st Century
-<niklaslollo.github.io>
+[Niklas Lollo](niklaslollo.github.io) & Evangeline McGlynn, PhD candidates  
+University of California, Berkeley  
+Data Sciences for the 21st Century  
+![NSF](NSF.png)
+![UC Berkeley](UCBseal.png)
+  
 
