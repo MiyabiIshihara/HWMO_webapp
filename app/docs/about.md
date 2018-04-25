@@ -95,6 +95,19 @@ The community input available in this app are from 2016 CWPPs: Kauai Update, Mol
 </div>
 </div>
 
+<div class="w3-container">
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#census">Census Data</button>
+
+  <div id="census" class="collapse">
+<p>The HWMO data tool also includes 5-year US Census estimates from 2012. These data include:
+<ul>
+<li> Median Household Income (in 2012 dollars)</li>
+<li> Number of Native Hawaiians (Hawaiian only or mixed race)</li>
+<li> Percentage of homeowners </li>
+</ul>
+
+</div>
+</div>
 
 <h3 id="four">Data Use and Distribution:</h3>
 We actively encourage use of this data set for scientific purposes and planning by communities, natural resource managers, and emergency response agencies. This is not, however, the case for commercial purposes.  Users are prohibited from any commercial, non-free resale, or redistribution without explicit written permission from Hawai'i Wildfire Management Organization (HWMO). We kindly ask any users to cite the HWMO as the source used in the creation of any reports, publications, new data sets, derived products, or services resulting from the use of this data set.  If possible, please link web pages to the HWMO website [hawaiiwildfire.org](hawaiiwildfire.org).  
