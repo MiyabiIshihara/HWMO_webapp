@@ -211,7 +211,8 @@ function(input, output, session) {
       pretty = F,
       #Green Yellow Red
       palette = c(
-        "#2c7bb6",
+        #"#2c7bb6", #colorblind safe blue
+        "#30c1b0", #blue-green
         '#ffffbf',
         "#d7191c"),
       alpha = T,
@@ -449,7 +450,7 @@ function(input, output, session) {
       text = "Medium"
     } else if (score ==1) {
       icon = "thumbs-up"
-      color = "green"
+      color = "teal" #closest equivalent to map in allowed colors
       text = "Low"
     } else {
       color = "black"
@@ -484,7 +485,7 @@ function(input, output, session) {
       "Low Hazard", 
       paste0(end_data[[1]]), 
       icon = icon("thumbs-up", lib = "glyphicon"),
-      color = "green", fill = FALSE
+      color = "teal", fill = FALSE
     )
   })
   
