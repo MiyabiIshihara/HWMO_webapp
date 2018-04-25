@@ -240,17 +240,17 @@ function(input, output, session) {
     ## Popup and palette content ##
     if (user_choice == "Median Household Income") {
       ## Popup text
-      popup = paste0("<h4>", haz_dat$AreaName, "</h4>", tags$br(),
+      popup = paste0("<h4>", "Census Tract ", census_dat$TRACT_1, "</h4>", tags$br(),
                     tags$em("Median Household Income: "),"$", census_dat$`Median Household Income`
                     )
       ## Palette for legend
       pal = pal_soc
       } else if (user_choice == "Native Hawaiian Count") {
-        popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
+        popup = paste0("<h4>", "Census Tract ", census_dat$TRACT_1, "</h4>", tags$br(),
                       tags$em("Native Hawaiian count: "), census_dat$`Native Hawaiian Count`)
         pal = pal_soc
       } else if (user_choice == "Homeownership") {
-        popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
+        popup = paste0("<h4>", "Census Tract ", census_dat$TRACT_1, "</h4>", tags$br(),
                       tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
         pal = pal_soc
       #} else if (user_choice == "Status") {
