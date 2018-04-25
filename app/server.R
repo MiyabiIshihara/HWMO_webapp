@@ -392,6 +392,7 @@ function(input, output, session) {
   })
   
   #### Explore your area tab #########
+  haz_temp <- reactive({ haz_tidy })
   # Select Hazard
   observeEvent(input$category2, {
     if (input$category2!="") {
@@ -590,12 +591,11 @@ function(input, output, session) {
   )
   
   #### Hazard Assessment Data tab ####
-  haz_temp <- reactive({ haz_tidy })
   # Observe user input for hazards
   observe({
     hazards <- if (is.null(input$category)) character(0) else {
       filter(haz_temp(), hazard_category %in% input$category) %>%
-        `$`('hazard') %>%
+        `$`('hazard_full') %>%
         unique() %>%
         sort()
     }
@@ -620,7 +620,7 @@ function(input, output, session) {
       haz_temp() %>%
         filter(
           is.null(input$category) | hazard_category %in% input$category,
-          is.null(input$hazard) | hazard %in% input$hazard,
+          is.null(input$hazard) | hazard_full %in% input$hazard,
           is.null(input$island) | Island %in% input$island,
           is.null(input$areaname) | AreaName %in% input$areaname
         ) %>%
