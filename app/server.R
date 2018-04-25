@@ -25,7 +25,7 @@ hawaiiFiresdf <- as.data.frame(HFires) %>%
   filter(year > 2001 & year < 2012) # remove some fires from 1988 and 1900
 
 # 3. Firewise Communities data
-FComms <- geojsonio::geojson_read("data/firewise/firewise5.geojson", what = "sp")
+FComms <- geojsonio::geojson_read("data/firewise/firewise6.geojson", what = "sp")
 
 # 4. Census data
 census_dat = st_read("data/Census_Tract_All_Data/Census_Tract_All_Data.shp")
