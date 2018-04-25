@@ -38,8 +38,9 @@ h4 {
   background-color: #d53b2d;
   height: 45px;
   font-weight: 200;
-  color: #666666;
-  text-align: "center";
+  color: #ffffff;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .main-header .logo {
@@ -48,6 +49,20 @@ h4 {
   font-size: 24px;
   color: #944fe8;
   max-height: 200px;
+}
+
+/*image containers*/
+/* Three image containers (use 25% for four, and 50% for two, etc) */
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 2px;
+}
+
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
 }
 
 /*Links*/

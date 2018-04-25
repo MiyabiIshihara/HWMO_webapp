@@ -2,23 +2,43 @@
 <html>
 
 <head>
-<title>HWMO Webapp Help</title>
+<title>HWMO Help</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  
-<div class = "header">HWMO Help</div>  
-  
+<div class = "header">
+<div class="row">
+  <div class="column">
+  <a href='https://hawaiiwildfire.org'>
+            <img src='hwmo_logo_white.svg' alt = "HWMO Home" 
+            style = "height:40px"></a>
+            </div>
+  <div class = "column">
+HWMO HELP 
+</div>
+</div>
+            </div>  
+ <div id="sm_lnk" align="right">
 <a href = "https://lollon.shinyapps.io/HWMO_Prototype/"> return to app</a>
+</div> 
 
 <h1>Navigation</h1> 
-<ul>
-<li><a href="#Menu"> Top menu</a></li>
-<li><a href="#Sidebar"> Sidebar</a></li>
-</ul>
+<img src="img/01_home.png" alt="page overview" style="width:500px">
+<ol>
+<li>Header</li>
+<li>Sidebar & menu items</li>
+<li>Show/hide sidebar</li>
+<li>Help</li>
+<li>See original code on github</li>
+</ol>
 
-<h1>Tabs</h1>
+<h1>Menu items</h1>
+<!--<div class="row">
+  <div class="column">
+    <img src="img/07_menu.png" alt="sidebar image" style="width:100px">
+   </div>
+  <div class = "column" align="left">-->
 <ul>
 <li><a href="#Map"> Map</a></li>
 <li><a href="#Explore">Explore your area</a> </li>
@@ -27,31 +47,63 @@
 <li><a href="#Data"> Data downloads</a></li>
 <li><a href="#Links">Links</a> </li>
 </ul>
-
-<h1></h1>
+<!--</div></div>-->
 
 
 <h3 id="Map">Map</h3>
-[IMAGE]
+
 <h4>Map navigation</h4>
+<ul>
+<li>Use the +/- keys to zoom in and out of the map </li>
+<li>Pan around the map by clicking and dragging with your mouse </li>
+<li>Use <img src="img/earth.png" alt="globe button" style="width:16px"> to zoom back out to Hawai'i</li>
+<li> If you get lost, try the zoom bookmarks to get to East (E), Central (()), or Western islands</li>
+</ul>
 
 <h4>Map data</h4>
+<div class="row">
+  <div class="column">
+    <img src="img/02_popup.png" alt="popup example" style="width:200px">
+  </div>
+  <div class = "column">
+Interact with the data by choosing a layer to look at on the righthand side of the map. Notice the change in legend in the lower lefthand corner. To get more detail about individual areas, click to see a popup. 
+</div>
+</div>
 
-<h4>Extra layers</h4>
+<h4>Overlay layers</h4>
+<div class="row">
+  <div class="column">
+    <img src="img/03_overlay.png" alt="overlay example" style="width:200px">
+     </div>
+  <div class = "column">
+In addition to the map layers available in the dropdown menu on the side, there are also overlays you can use to compare. In the image below, individual fires are aggregated into clusters. Drill down to find dates of individual events.
+</div>
+</div>
+
 <h4>Fire graph</h4>
+<div class="row">
+  <div class="column">
+    <img src="img/04_graph.png" alt="graph example" style="width:200px">
+   </div>
+  <div class = "column">
+<p>The graph to the right of the map contains all fires in the zone visible in the map window. To see exactly what is measured in the graph, be sure to turn on one of the historical fire overlays. </p>
+<p>Notice changing the "Time" X axis from Year to Month allows you to see seasonable patterns. On the other hand, the "Statistic" Y column has options to go from just the number of fires historically in the map area to see their relative destructiveness (fires by average acrage bured) </p>
+</div>
+</div>
 
 
 <h3 id="Explore">Explore your area</h3>
-[IMAGE]
-On this tab you can find out hazard information for individual communities.
-Scroll down or start typing an island to select where you want to learn about. Find your community in hte Area drop down list.
+<img src="img/05_explore.png" alt="Explore your area screen" style="width:500px">
+
+<p>On this page you can find out hazard information for individual communities.
+Scroll down or start typing an island to select where you want to learn about. Find your community in the Area drop down list.</p>
 Hazard scores are divided into 5 categories:
 <ol>
-  <li>Subdivision (eg, the arrangement of houses and roads)</li>
-  <li>Fire Protection (eg, access to the fire department and related agencies)</li>
-  <li>Vegetation (eg, the impact of local trees and brush on fire hazard) </li>
-  <li>Building (eg, how fire resilient typical buildings in the community are)</li>
-  <li>Fire environment (eg, environmental conditions like rainfall)</li>
+  <li><b>Subdivision</b> (eg, the arrangement of houses and roads)</li>
+  <li><b>Fire Protection</b> (eg, access to the fire department and related agencies)</li>
+  <li><b>Vegetation</b> (eg, the impact of local trees and brush on fire hazard) </li>
+  <li><b>Building</b> (eg, how fire resilient typical buildings in the community are)</li>
+  <li><b>Fire environment</b> (eg, environmental conditions like rainfall)</li>
 </ol>
 Select a hazard category and then an individual hazard in order to see the score for the community you selected.
 
@@ -59,26 +111,35 @@ Note that explanations for how each community was scored are right underneath.
 
 
 <h3 id="Action">Take action</h3>
-[IMAGE]
-The take action tab provides information about what you can do to increase fire resilience in your community and across Hawai'i. Take a look at our videos and lots of links!
-This page also contains links to all our social media sites if you want to connect with us.
+<img src="img/06_action.png" alt="Take action screen" style="width:500px">
+<p>The take action page provides information about what you can do to increase fire resilience in your community and across Hawai'i. Click on an action item to reveal specific information. Be sure to take a look at our videos and lots of links!</p>
+<p>This page also contains links to all our social media sites if you want to connect with us.</p>
 
 
 <h3 id="About">About</h3>
-[IMAGE]
 For more detailed information about the data contained in the web app, go to the About page. Here is also more information on how we think you might use the app and license information if you want to use our data in your own projects.
 
 <h3 id="Data">Data downloads</h3>
-[IMAGE]
-If you are interested in looking at data from across the state in a table format, go to the data downloads tab where you can look at the original data used to make the map as well as download it. There are two sub-pages under the Data Downloads tab, Community Meeting Info and Hazards. 
+<div class="row">
+  <div class="column">
+<img src="img/07a_menu.png" alt="sidebar image" style="width:200px">
+</div>
+  <div class = "column">
+If you are interested in looking at data from across the state in a table format, go to the data downloads page where you can look at the original data used to make the map as well as download it. There are two sub-pages under the Data Downloads page, Community Meeting Info and Hazards. 
+</div></div>
 <h4>Community Meeting Info</h4>
-Here is where you can look at all the priorities identified in community meetings about wildfire awareness. Pick a focus and a Community Wildfire Protection Plan (CWPP) region to sort the data, then click the download button on the upper right to receive either all or subset you've selected. The download comes in a comma separated values (CSV) format.
+<img src="img/08_download_comm.png" alt="download page" style="width:500px">
+<p>Here is where you can look at all the priorities identified in community meetings about wildfire awareness. Pick a focus and a Community Wildfire Protection Plan (CWPP) region to sort the data, then click the download button on the upper right to receive either all or subset you've selected. The download comes in a comma separated values (CSV) format.</p>
+<img src="img/08a_download_filter.png" alt="download filter" style="width:200px" align="left">
+Remember that you can choose more than one region or strategic focus to browse.
+
+
 <h4>Hazards</h4>
-This works just like the Community Meeting Info download page except for hazard data. Notice how you can sort the table columns such that you can either look for a specific community alphabetically or organize the table by hazard score. 
+<p>This works just like the Community Meeting Info download page except for hazard data. Notice how you can sort the table columns such that you can either look for a specific community alphabetically or organize the table by hazard score. You can also leave the filters blank and search by keyword.</p>
+<img src="img/11_download_haz_search.png" alt="download hazard search page" style="width:500px">
 
 <h3 id="Links">Links</h3>
-[IMAGE]
-Here are links to the HWMO main website and to the code we used to build the app!
+<p>Click on the Links menu item to access links to the HWMO main website and to the code we used to build the app!</p>
 
 <a href = "https://lollon.shinyapps.io/HWMO_Prototype/"> return to app</a>
 
