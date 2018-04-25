@@ -25,7 +25,7 @@ It has three types of data: fire history, community hazard assessments, and comm
 
 <h3 id="three">What data is included?</h3>
 <div class="w3-container">
-  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#fhist">Statewide Wildfire History  (2002-2011 data)</button>
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#fhist">Statewide Wildfire History  (2002-2011)</button>
   
   <div id="fhist" class="collapse">
 <p> HWMO led a multi-year, multi-partner effort with fire response agencies and resource managers (see below) to create compatible reporting among agencies, and to compile the first ever statewide wildfire history data set.  In Hawaii, fire suppression agencies use reporting formats that differ in the type of information and level of detail recorded per fire event. These differences have prevented mapping and identifying fire trends and emerging problems at community, county, and state levels. The HWMO Hawaii State Wildfire History data set is intended to:
