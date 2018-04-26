@@ -53,6 +53,26 @@ comm_dat <- read_csv("data/comm_input.csv") %>%
 #      Status = as_factor(Status)
 #    )
  
+# CWPP pseudo code ##################################
+# # intermediary table
+# cwpp_temp <- cwpp_dat %>% 
+#   mutate(
+#     group_by( cwpp_temp$Region )
+#     # result should be Region Concern Votes (plus the status stuff?)
+#   ) %>%
+#   sort(cwpp_temp$votes)
+# cwpp_new <- as.data.frame(cwpp_df)
+#     # add three columns (choice 1, 2, 3)
+#     regions <- factor(table$Region)
+#     for (r in regions){
+#         subtab <- table[table$Region==r],
+#         concerns <- subtab$concern[1:n],
+#     #populate values in row
+#     concerns <- c(r, concerns)
+#     cwpp_new <- rbind(cwpp_new, concerns)
+#       }
+
+
 # 7. Hazard Assessment data
 haz_dat <- st_read("data/hazard/WHA2015.shp")
 # Change coordinate reference system
