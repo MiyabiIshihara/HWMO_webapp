@@ -375,7 +375,7 @@ function(input, output, session) {
       addCircleMarkers(lng = ~lng, 
                        lat = ~lat, 
                        data = FComms,
-                       radius = 10,
+                       radius = 7,
                        fillColor = "rgba(0, 0, 0, 0.1)",
                        stroke = T,
                        weight = 0.8,
