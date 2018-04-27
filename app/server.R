@@ -45,13 +45,16 @@ comm_dat <- read_csv("data/comm_input.csv") %>%
             sec_desc1, sec_desc2, sec_desc3))
 
 # 6. CWPP Data - Currently non-functional
-# cwpp_dat <- geojsonio::geojson_read("data/CWPP/CWPP.geojson", what = "sp")
+cwpp_dat_tmp <- geojsonio::geojson_read("data/CWPP/CWPP_tmp.geojson", what = "sp")
 # cwpp_dat <- st_read("data/CWPP/ALL_CWPP.shp")
 # cwpp_dat <- st_transform(cwpp_dat, 4326)
-# cwpp_dat <- cwpp_dat %>%
-#    mutate(
-#      Status = as_factor(Status)
-#    )
+
+cwpp_dat_tmp <- cwpp_dat_tmp %>%
+  mutate(
+    CWPP = Status, 
+    CWPP_num = status_num
+  )
+
  
 # CWPP pseudo code ##################################
 # # intermediary table
@@ -213,8 +216,8 @@ function(input, output, session) {
                            "Native Hawaiian Count", 
                            "Homeownership")) {
       the_data = census_dat
-    #} else if (user_choice %in% c("Status")){
-    #  the_data = cwpp_dat
+    } else if (user_choice %in% c("CWPP")){
+      the_data = cwpp_dat_tmp
     } else {
       the_data = haz_dat
     }
@@ -249,14 +252,30 @@ function(input, output, session) {
       domain = color_domain
     )
     
-    # palette for CWPP data (qualitative data) #currently crashes
-     #pal_cwpp <- colorFactor(
-     #  domain = color_domain, ### I would guess this is the problem area
-     #  #levels = c("Current: Completed 2015", "Current: Completed 2016",       
-     #  #           "Current: Update Completed 2016","Update Planned for 2018-2019"),
-     #  palette = "YlGn"
-     #  #,na.color = alpha("blue",0.0)
-     #)
+    #CWPP palette
+    pal_cwpp <- colorNumeric(
+      na.color = alpha("blue",0.0),
+      #Green Yellow Red
+      palette = "set1",
+        # c(
+        # "#30c1b0", #blue-green
+        # '#ffffbf',
+        # "#d7191c"),
+      alpha = T,
+      domain = color_domain
+    )
+    
+    # # palette for CWPP data (qualitative data) #currently crashes
+    #  pal_cwpp <- colorFactor(
+    #   domain = color_domain, ### I would guess this is the problem area
+    #   #topo.colors(4),
+    #   #cwpp_dat_tmp$Status_num
+    #   # levels = c("Current: Completed 2015", "Current: Completed 2016",
+    #   #            "Current: Update Completed 2016","Update Planned for 2018-2019"),
+    #   # palette = "set1"
+    #   
+    #   na.color = alpha("blue",0.0)
+    #  )
 
     ## Popup and palette content ##
     if (user_choice == "Median Household Income") {
@@ -274,10 +293,10 @@ function(input, output, session) {
         popup = paste0("<h4>", "Census Tract ", census_dat$TRACT_1, "</h4>", tags$br(),
                       tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
         pal = pal_soc
-      #} else if (user_choice == "Status") {
-      #  popup = paste0("<h4>",cwpp_dat$CWPPregion, "</h4>", tags$br(),
-      #                tags$em("Region Status: "), cwpp_dat$Status)
-      #  pal = pal_cwpp
+      } else if (user_choice == "CWPP") {
+       popup = paste0("<h4>",cwpp_dat_tmp$CWPPregion, "</h4>", tags$br(),
+                     tags$em("Region Status: "), cwpp_dat_tmp$CWPP_num)
+        pal = pal_cwpp
       } else if (user_choice == "Fire Protection") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                        tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),

@@ -12,6 +12,12 @@ library(leaflet)
 library(dplyr)
 ```
 
+```{r}
+ cwpp_dat_tmp <- geojsonio::geojson_read("../app/data/CWPP/CWPP_tmp.geojson", what = "sp")
+  
+
+```
+
 
 ```{r community input data, warning = F, message = F, error = F}
 # Load data
@@ -92,6 +98,9 @@ for(r in regions){
   concerns <- c(r, concerns)
   comm_dat_new <- rbind(comm_dat_new, concerns)
 }
+
+#temp output
+write_csv(comm_dat_tmp, "../app/data/comm_dat_tmp.csv")
 ```
 
 
@@ -107,6 +116,10 @@ for(r in regions){
 #     concerns <- c(r, concerns)
 #     cwpp_new <- rbind(cwpp_new, concerns)
 #       }
+```{r}
+cwpp_dat <- geojsonio::geojson_read("../app/data/CWPP/CWPP.geojson", what = "sp")
+
+```
 
 ```{r}
 #tables to join
