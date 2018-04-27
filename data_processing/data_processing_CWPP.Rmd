@@ -107,3 +107,11 @@ for(r in regions){
 #     concerns <- c(r, concerns)
 #     cwpp_new <- rbind(cwpp_new, concerns)
 #       }
+
+```{r}
+#tables to join
+left_join(cwpp_dat, comm_dat_new, by = NULL)
+
+
+
+```
