@@ -49,11 +49,11 @@ cwpp_dat_tmp <- geojsonio::geojson_read("data/CWPP/CWPP_tmp.geojson", what = "sp
 # cwpp_dat <- st_read("data/CWPP/ALL_CWPP.shp")
 # cwpp_dat <- st_transform(cwpp_dat, 4326)
 
-cwpp_dat_tmp <- cwpp_dat_tmp %>%
-  mutate(
-    CWPP = Status, 
-    CWPP_num = status_num
-  )
+# cwpp_dat_tmp <- cwpp_dat_tmp
+# mutate(
+#   Status = Status,
+#   CWPP_num = status_num
+# )
 
  
 # CWPP pseudo code ##################################
@@ -216,7 +216,7 @@ function(input, output, session) {
                            "Native Hawaiian Count", 
                            "Homeownership")) {
       the_data = census_dat
-    } else if (user_choice %in% c("CWPP")){
+    } else if (user_choice %in% "Status"){
       the_data = cwpp_dat_tmp
     } else {
       the_data = haz_dat
@@ -253,15 +253,17 @@ function(input, output, session) {
     )
     
     #CWPP palette
-    pal_cwpp <- colorNumeric(
+    pal_cwpp <- colorBin(
       na.color = alpha("blue",0.0),
-      #Green Yellow Red
-      palette = "set1",
-        # c(
-        # "#30c1b0", #blue-green
-        # '#ffffbf',
-        # "#d7191c"),
+      bins = 3,
+      palette =  c(
+        "#30c1b0", #blue-green
+        '#ffffbf',
+        "#d7191c"),
       alpha = T,
+      #pretty = F,
+      # levels = c("Current: Completed 2015", "Current: Completed 2016",
+      #                "Current: Update Completed 2016","Update Planned for 2018-2019")
       domain = color_domain
     )
     
@@ -293,9 +295,8 @@ function(input, output, session) {
         popup = paste0("<h4>", "Census Tract ", census_dat$TRACT_1, "</h4>", tags$br(),
                       tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
         pal = pal_soc
-      } else if (user_choice == "CWPP") {
-       popup = paste0("<h4>",cwpp_dat_tmp$CWPPregion, "</h4>", tags$br(),
-                     tags$em("Region Status: "), cwpp_dat_tmp$CWPP_num)
+      } else if (user_choice == "Status") {
+       popup = paste0("TEST")
         pal = pal_cwpp
       } else if (user_choice == "Fire Protection") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),

@@ -81,7 +81,7 @@ body <- dashboardBody(
                                        "Median Household Income" = "Median Household Income",
                                        "Native Hawaiian Count" = "Native Hawaiian Count",
                                        "Homeownership" = "Homeownership",
-                                       "CWPP" = "CWPP"
+                                       "Status" = "Status"
                                       ),
                                      selected = "overall_score")),
                      # Fires showing in map plot
