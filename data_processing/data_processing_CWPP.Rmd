@@ -79,29 +79,24 @@ comm_dat_tmp <- comm_dat_tmp %>%
   #sort concerns from higest to lowest votes, grouped by region
   arrange(-comm_dat_tmp$votes, .by_group = TRUE)
 
-
-
-comm_dat_tmp <- comm_dat_tmp %>%
- # group_by(comm_dat_tmp$region) %>%
- #mutate(votes = as.numeric(votes)) %>%
-   mutate(votes = as.factor(votes)) %>%
-  mutate_if(is.character,funs(factor(.))) %>%
-  # Changes concerns and recommendations back to characters
-  mutate(concern = as.character(concern)) %>%
-  #  mutate(concern = as.vector(concern)) %>%
-  #  mutate(region = as.vector(region)) %>%
-  sort(comm_dat_tmp$votes, decreasing = TRUE)
+# new table for results
+comm_dat_new <- data.frame("region" = character(0), 
+                           "concern_1" = character(0), 
+                           "concern_2" = character(0), 
+                           "concern_3"  = character(0)) 
+regions <- factor(comm_dat_tmp$region)
+for(r in regions){
+  subtab <- comm_dat_tmp[comm_dat_tmp$region==r]
+  concerns <- subtab$concern[1:3]
+  #populate values in a row
+  concerns <- c(r, concerns)
+  comm_dat_new <- rbind(comm_dat_new, concerns)
+}
 ```
 
 
 # CWPP pseudo code ##################################
-# # intermediary table
-# cwpp_temp <- cwpp_dat %>% 
-#   mutate(
-#     group_by( cwpp_temp$Region )
-#     # result should be Region Concern Votes (plus the status stuff?)
-#   ) %>%
-#   sort(cwpp_temp$votes)
+
 # cwpp_new <- as.data.frame(cwpp_df)
 #     # add three columns (choice 1, 2, 3)
 #     regions <- factor(table$Region)
