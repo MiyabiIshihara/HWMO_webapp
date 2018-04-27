@@ -1,0 +1,114 @@
+---
+title: "Data Processing"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(sf)
+library(tidyverse)
+library(spdep)
+library(leaflet)
+library(dplyr)
+```
+
+
+```{r community input data, warning = F, message = F, error = F}
+# Load data
+comm_input_dat <-
+    # this generates the list of files in that folder
+    list.files(path = "community_input/",
+               pattern="*.csv", 
+               full.names = T) %>% 
+    # map over read_csv, col_types specifies that each have same column headers
+    map_df(~read_csv(., col_types = cols(.default = "c"))) 
+
+## Clean data
+# Split secondary desc (should be 15 total)
+comm_input_dat <- comm_input_dat %>%
+    mutate(
+      # combines firewise and Firewise
+      secondary_desc = tolower(secondary_desc),
+      # combines collab and Collab
+      key_codes = tolower(key_codes)
+           ) %>%
+  # Makes three new columns
+    separate(secondary_desc, c("sec_desc1", "sec_desc2", "sec_desc3"), ",")
+
+# Remove potentially complicating $ and '
+comm_input_dat$sec_desc1<-gsub("\\$", "money", comm_input_dat$sec_desc1)
+comm_input_dat$sec_desc1<-gsub("\\'", "", comm_input_dat$sec_desc1)
+# Remove all items after - (e.g. to- ll)
+comm_input_dat$sec_desc1<-gsub("\\-.*", "", comm_input_dat$sec_desc1)
+
+# Manipulate data
+comm_input_dat <- comm_input_dat %>% 
+  # Make votes numeric instead of character
+  mutate(total_votes = as.numeric(total_votes)) %>%
+  # Changes all remaining character variables to factors
+  mutate_if(is.character,funs(factor(.))) %>%
+  # Changes concerns and recommendations back to characters
+  mutate(concern = as.character(concern),
+         recommendations = as.character(recommendations))
+
+## Output data
+write_csv(comm_input_dat,"../app/data/comm_input.csv")
+```
+
+```{r}
+comm_dat <- read_csv("../app/data/comm_input.csv") %>%
+  select(-c(cohesive_strategy, key_codes,
+            sec_desc1, sec_desc2, sec_desc3))
+```
+
+```{r}
+#getting rid of NAs
+comm_dat[is.na(comm_dat)] <- 0
+
+#temporary df
+comm_dat_tmp <- data.frame("region" = comm_dat$cwpp_region,
+                           "concern" = comm_dat$concern,
+                           "votes" = comm_dat$total_votes)
+comm_dat_tmp[is.na(comm_dat_tmp)] <- 0
+comm_dat_tmp <- comm_dat_tmp %>%
+     mutate(votes = as.factor(votes)) %>%
+  mutate_if(is.character,funs(factor(.))) %>%
+  # Changes concerns and recommendations back to characters
+  mutate(concern = as.character(concern)) %>%
+  group_by(region) %>%
+  #sort concerns from higest to lowest votes, grouped by region
+  arrange(-comm_dat_tmp$votes, .by_group = TRUE)
+
+
+
+comm_dat_tmp <- comm_dat_tmp %>%
+ # group_by(comm_dat_tmp$region) %>%
+ #mutate(votes = as.numeric(votes)) %>%
+   mutate(votes = as.factor(votes)) %>%
+  mutate_if(is.character,funs(factor(.))) %>%
+  # Changes concerns and recommendations back to characters
+  mutate(concern = as.character(concern)) %>%
+  #  mutate(concern = as.vector(concern)) %>%
+  #  mutate(region = as.vector(region)) %>%
+  sort(comm_dat_tmp$votes, decreasing = TRUE)
+```
+
+
+# CWPP pseudo code ##################################
+# # intermediary table
+# cwpp_temp <- cwpp_dat %>% 
+#   mutate(
+#     group_by( cwpp_temp$Region )
+#     # result should be Region Concern Votes (plus the status stuff?)
+#   ) %>%
+#   sort(cwpp_temp$votes)
+# cwpp_new <- as.data.frame(cwpp_df)
+#     # add three columns (choice 1, 2, 3)
+#     regions <- factor(table$Region)
+#     for (r in regions){
+#         subtab <- table[table$Region==r],
+#         concerns <- subtab$concern[1:n],
+#     #populate values in row
+#     concerns <- c(r, concerns)
+#     cwpp_new <- rbind(cwpp_new, concerns)
+#       }

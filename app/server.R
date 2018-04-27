@@ -557,6 +557,7 @@ function(input, output, session) {
   
   #### Community Meetings Data tab ####
   comm_temp <- reactive({ comm_dat })
+
   ## Observe user input
   observe({
     meetings <- if (is.null(input$region)) character(0) else {
