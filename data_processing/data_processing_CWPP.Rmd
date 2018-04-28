@@ -13,9 +13,9 @@ library(dplyr)
 ```
 
 ```{r}
- cwpp_dat_tmp <- geojsonio::geojson_read("../app/data/CWPP/CWPP_tmp.geojson", what = "sp")
-  
-
+ #cwpp_dat_tmp <- geojsonio::geojson_read("../app/data/CWPP/CWPP_tmp.geojson", what = "sp")
+  cwpp_dat_tmp <- st_read("../app/data/CWPP/CWPP_tmp.shp")
+cwpp_dat_tmp
 ```
 
 

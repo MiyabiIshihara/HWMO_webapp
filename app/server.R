@@ -45,14 +45,15 @@ comm_dat <- read_csv("data/comm_input.csv") %>%
             sec_desc1, sec_desc2, sec_desc3))
 
 # 6. CWPP Data - Currently non-functional
-cwpp_dat_tmp <- geojsonio::geojson_read("data/CWPP/CWPP_tmp.geojson", what = "sp")
-# cwpp_dat <- st_read("data/CWPP/ALL_CWPP.shp")
-# cwpp_dat <- st_transform(cwpp_dat, 4326)
+# cwpp_dat_tmp <- geojsonio::geojson_read("data/CWPP/CWPP_tmp.geojson", what = "sp")
+cwpp_dat <- st_read("data/CWPP/CWPP_tmp.shp")
+cwpp_dat <- st_transform(cwpp_dat, 4326)
 
-# cwpp_dat_tmp %>% mutate(
+cwpp_dat_tmp <- cwpp_dat_tmp %>%
+  mutate(
+  `CWPP Status` = status_num
+ )
 #   cwpp_dat_tmp$status_num = as.Date.numeric(format(status_num, format = '%Y'))
-# )
-
 
 # CWPP pseudo code ##################################
 # # intermediary table
@@ -98,9 +99,15 @@ haz_scoring <- read_csv("data/hazard_scoring_system.csv")
 function(input, output, session) {
   
   ### Leaflet Map Base ####
+ tiles_cust <- "https://api.mapbox.com/styles/v1/vmcg/cjgjigumz001n2rqvo8xef3t1/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoidm1jZyIsImEiOiJjajRxMjdlNDUwc3I1MzN0Y3Q4M25yaTFvIn0._RA-S8a296YTmsdkBryKDQ"
+ tiles_attr <- "© <a href='https://www.mapbox.com/map-feedback/'>Mapbox</a> Basemap © E McGlynn"
+ 
   output$leafmap <- renderLeaflet({
     leaflet() %>%
-      addProviderTiles(providers$OpenMapSurfer.Grayscale) %>%
+      addTiles(
+        urlTemplate = tiles_cust,
+        attribution = tiles_attr
+        ) %>%
       setView(lng = -156, lat = 20.35, zoom = 7) %>%
       # Two diagonal pts that limit panning (long1, lat1, long2, lat2)
       setMaxBounds(-162.6,23.6,-153.5,18.0) %>% 
@@ -245,7 +252,7 @@ function(input, output, session) {
       bins =  5,
       na.color = alpha("blue",0.0),
       pretty = T,
-      palette = "YlGn",
+      palette = "YlGnBu",
       alpha = T,
       domain = color_domain
     )
@@ -254,8 +261,7 @@ function(input, output, session) {
     pal_cwpp <- colorBin(
       na.color = alpha("blue",0.0),
       bins = 3,
-      palette = 
-        c(
+      palette =  c(
         "#30c1b0", #blue-green
         '#ffffbf',
         "#d7191c"),
@@ -294,10 +300,9 @@ function(input, output, session) {
         popup = paste0("<h4>", "Census Tract ", census_dat$TRACT_1, "</h4>", tags$br(),
                       tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
         pal = pal_soc
-      } else if (user_choice == "status_num") {
-       popup = if(is.na(cwpp_dat_tmp$Status)){
-         paste0("<h4>", cwpp_dat_tmp$CWPPregion, "</h4>", tags$br(),
-           tags$em("Status: ", cwpp_dat_tmp$Status), tags$br(),
+      } else if (user_choice == "CWPP Status") {
+       popup =  paste0("<h4>", cwpp_dat_tmp$CWPPregion, "</h4>", tags$br(),
+           tags$em("CWPP Status: ", cwpp_dat_tmp$Status), tags$br(),
            tags$em("Primary concern: "), cwpp_dat_tmp$concern)
        
          
