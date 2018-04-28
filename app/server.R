@@ -52,27 +52,10 @@ cwpp_dat <- st_transform(cwpp_dat, 4326)
 cwpp_dat_tmp <- cwpp_dat_tmp %>%
   mutate(
   `CWPP Status` = status_num
+ #   status_num = format(status_num, big.mark = "-")
  )
 #   cwpp_dat_tmp$status_num = as.Date.numeric(format(status_num, format = '%Y'))
 
-# CWPP pseudo code ##################################
-# # intermediary table
-# cwpp_temp <- cwpp_dat %>% 
-#   mutate(
-#     group_by( cwpp_temp$Region )
-#     # result should be Region Concern Votes (plus the status stuff?)
-#   ) %>%
-#   sort(cwpp_temp$votes)
-# cwpp_new <- as.data.frame(cwpp_df)
-#     # add three columns (choice 1, 2, 3)
-#     regions <- factor(table$Region)
-#     for (r in regions){
-#         subtab <- table[table$Region==r],
-#         concerns <- subtab$concern[1:n],
-#     #populate values in row
-#     concerns <- c(r, concerns)
-#     cwpp_new <- rbind(cwpp_new, concerns)
-#       }
 
 
 # 7. Hazard Assessment data
@@ -300,18 +283,10 @@ function(input, output, session) {
         popup = paste0("<h4>", "Census Tract ", census_dat$TRACT_1, "</h4>", tags$br(),
                       tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
         pal = pal_soc
-      } else if (user_choice == "CWPP Status") {
+      } else if (user_choice == "status_num") {
        popup =  paste0("<h4>", cwpp_dat_tmp$CWPPregion, "</h4>", tags$br(),
-           tags$em("CWPP Status: ", cwpp_dat_tmp$Status), tags$br(),
+           tags$em("CWPP Status ", cwpp_dat_tmp$Status), tags$br(),
            tags$em("Primary concern: "), cwpp_dat_tmp$concern)
-       
-         
-         # paste0("<h4>", cwpp_dat_tmp$CWPPregion, "</h4>", tags$br(),
-         #              tags$em("Status: ", cwpp_dat_tmp$Status), tags$br(),
-         #              if (!is.null(cwpp_dat_tmp$Status)){
-         #              paste0(tags$em("Primary concern: "), cwpp_dat_tmp$concern)
-         #              } else {}
-        
         pal = pal_cwpp
       } else if (user_choice == "Fire Protection") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),

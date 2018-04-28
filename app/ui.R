@@ -69,6 +69,7 @@ body <- dashboardBody(
                          status = "danger", # Makes header red
                          # Select map data
                          #title = "Map Data",
+                         #for choices, 1st is for the menu, second for the legend
                          selectInput(inputId = "dataset",
                                      label = "Map Data",
                                      choices = list(
@@ -81,7 +82,7 @@ body <- dashboardBody(
                                        "Median Household Income" = "Median Household Income",
                                        "Native Hawaiian Count" = "Native Hawaiian Count",
                                        "Homeownership" = "Homeownership",
-                                       "CWPP Status" = "CWPP Status"
+                                       "CWPP Status" = "status_num"
                                       ),
                                      selected = "overall_score")),
                      # Fires showing in map plot
