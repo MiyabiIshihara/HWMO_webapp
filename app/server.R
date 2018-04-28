@@ -295,7 +295,18 @@ function(input, output, session) {
                       tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
         pal = pal_soc
       } else if (user_choice == "status_num") {
-       popup = paste0("TEST")
+       popup = if(is.na(cwpp_dat_tmp$Status)){
+         paste0("<h4>", cwpp_dat_tmp$CWPPregion, "</h4>", tags$br(),
+           tags$em("Status: ", cwpp_dat_tmp$Status), tags$br(),
+           tags$em("Primary concern: "), cwpp_dat_tmp$concern)
+       
+         
+         # paste0("<h4>", cwpp_dat_tmp$CWPPregion, "</h4>", tags$br(),
+         #              tags$em("Status: ", cwpp_dat_tmp$Status), tags$br(),
+         #              if (!is.null(cwpp_dat_tmp$Status)){
+         #              paste0(tags$em("Primary concern: "), cwpp_dat_tmp$concern)
+         #              } else {}
+        
         pal = pal_cwpp
       } else if (user_choice == "Fire Protection") {
         popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
