@@ -49,13 +49,11 @@ cwpp_dat_tmp <- geojsonio::geojson_read("data/CWPP/CWPP_tmp.geojson", what = "sp
 # cwpp_dat <- st_read("data/CWPP/ALL_CWPP.shp")
 # cwpp_dat <- st_transform(cwpp_dat, 4326)
 
-# cwpp_dat_tmp <- cwpp_dat_tmp
-# mutate(
-#   Status = Status,
-#   CWPP_num = status_num
+# cwpp_dat_tmp %>% mutate(
+#   cwpp_dat_tmp$status_num = as.Date.numeric(format(status_num, format = '%Y'))
 # )
 
- 
+
 # CWPP pseudo code ##################################
 # # intermediary table
 # cwpp_temp <- cwpp_dat %>% 
@@ -216,7 +214,7 @@ function(input, output, session) {
                            "Native Hawaiian Count", 
                            "Homeownership")) {
       the_data = census_dat
-    } else if (user_choice %in% "Status"){
+    } else if (user_choice %in% "status_num"){
       the_data = cwpp_dat_tmp
     } else {
       the_data = haz_dat
@@ -256,7 +254,8 @@ function(input, output, session) {
     pal_cwpp <- colorBin(
       na.color = alpha("blue",0.0),
       bins = 3,
-      palette =  c(
+      palette = 
+        c(
         "#30c1b0", #blue-green
         '#ffffbf',
         "#d7191c"),
@@ -271,7 +270,7 @@ function(input, output, session) {
     #  pal_cwpp <- colorFactor(
     #   domain = color_domain, ### I would guess this is the problem area
     #   #topo.colors(4),
-    #   #cwpp_dat_tmp$Status_num
+    #   #cwpp_dat_tmp$status_num
     #   # levels = c("Current: Completed 2015", "Current: Completed 2016",
     #   #            "Current: Update Completed 2016","Update Planned for 2018-2019"),
     #   # palette = "set1"
@@ -295,7 +294,7 @@ function(input, output, session) {
         popup = paste0("<h4>", "Census Tract ", census_dat$TRACT_1, "</h4>", tags$br(),
                       tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
         pal = pal_soc
-      } else if (user_choice == "Status") {
+      } else if (user_choice == "status_num") {
        popup = paste0("TEST")
         pal = pal_cwpp
       } else if (user_choice == "Fire Protection") {
