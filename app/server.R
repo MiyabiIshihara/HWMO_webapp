@@ -378,6 +378,14 @@ function(input, output, session) {
                        tags$em("Fire Environment: "), round(haz_dat$`Fire Environment`, digits = 2))
         pal = pal_haz
       }
+    # fire icon
+    fire_icon <- makeIcon(
+      iconUrl = "data/fire_icon.png",
+      iconWidth = 48,
+      iconHeight = 48,
+      iconAnchorX = 24,
+      iconAnchorY = 24
+    )
     
     ## Update Leaflet map according to user_choice
     leafletProxy("leafmap", 
@@ -421,6 +429,7 @@ function(input, output, session) {
       addMarkers(lng = ~Long, 
                  lat = ~Lat, 
                  data = hawaiiFiresdf,
+                 icon = fire_icon,
                  clusterOptions = markerClusterOptions(), # algorithmic clustering
                  popup = paste(tags$em("Date of fire: "), hawaiiFiresdf$Start_Date, tags$br(),
                                tags$em("Acres burned"), hawaiiFiresdf$Total_Ac),
