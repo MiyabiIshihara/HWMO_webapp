@@ -219,7 +219,7 @@ function(input, output, session) {
     # To change the color palette according to user_choice
     color_domain <- the_data[[user_choice]]
     color_domain[color_domain==0] <- NA
-    #if(){}
+
     
     # Hazard Assessment palette (discrete, 3 bins)
     pal_haz <- colorBin(
@@ -315,7 +315,6 @@ function(input, output, session) {
                      tags$em("Wildland proximity: "),haz_dat$Prox_Wild)
       pal = pal_haz
       the_labels = lab_haz
-      the_labels <- c("Low","Medium", "High")
     } else if (user_choice == "Vegetation") {
       popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                      tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
@@ -326,7 +325,6 @@ function(input, output, session) {
                      tags$em("Defensible space: "), haz_dat$Def_Space)
       pal = pal_haz
       the_labels = lab_haz
-      the_labels <- c("Low","Medium", "High")
     } else if (user_choice == "Buildings") {
       popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                      tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
@@ -337,7 +335,6 @@ function(input, output, session) {
                      tags$em("Structural ignitability: "), haz_dat$Strc_Ign)
       pal = pal_haz
       the_labels = lab_haz
-      the_labels <- c("Low","Medium", "High")
     } else if(user_choice == "Fire Environment"){
       popup = paste0("<h4>",haz_dat$AreaName, "</h4>",tags$br(),
                      tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
@@ -349,7 +346,6 @@ function(input, output, session) {
                      tags$em("Topography: "), haz_dat$Top_Adv)
       pal = pal_haz
       the_labels = lab_haz
-      the_labels <- c("Low","Medium", "High")
     } else { # Overall Wildfire Hazard
       popup = paste0("<h4>",haz_dat$AreaName, "</h4>",tags$br(),
                      tags$em("Fire Protection: "), round(haz_dat$`Fire Protection`, digits = 2), tags$br(),
@@ -359,7 +355,6 @@ function(input, output, session) {
                      tags$em("Fire Environment: "), round(haz_dat$`Fire Environment`, digits = 2))
       pal = pal_haz
       the_labels = lab_haz
-      the_labels <- c("Low","Medium", "High")
     }
     # fire icon
     fire_icon <- makeIcon(
@@ -390,8 +385,8 @@ function(input, output, session) {
                   )) %>%
       addLegend("bottomleft", 
                 pal = pal, 
-                values = list("Low", "Medium", "High"),
-                #values = the_labels,
+                #values = list("Low", "Medium", "High"),
+                values = the_labels,
                 title = user_choice,
                 #labels = list("Low", "Medium", "High"),
                 labels = the_labels,
@@ -440,6 +435,7 @@ function(input, output, session) {
       hideGroup(c("Fire Heatmap", "Fire Points", "Firewise Communities"))
     
   })
+  
   
   #### Explore your area tab #########
   haz_temp <- reactive({ haz_tidy })
@@ -499,7 +495,7 @@ function(input, output, session) {
       text = "Medium"
     } else if (score ==1) {
       icon = "thumbs-up"
-      color = "teal" #closest equivalent to map in allowed colors
+      color = "green"
       text = "Low"
     } else {
       color = "black"
@@ -534,7 +530,7 @@ function(input, output, session) {
       "Low Hazard", 
       paste0(end_data[[1]]), 
       icon = icon("thumbs-up", lib = "glyphicon"),
-      color = "teal", fill = FALSE
+      color = "green", fill = FALSE
     )
   })
   
@@ -612,6 +608,7 @@ function(input, output, session) {
              Recommendations = recommendations, 
              `Strategic Focus` = timing_focus)
   })
+  
   ## Download Selected Data
   output$download_data <- downloadHandler(
     # This function returns a string which tells the client browser what name to use when saving the file.
