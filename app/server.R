@@ -49,14 +49,13 @@ comm_dat <- read_csv("data/comm_input.csv") %>%
 cwpp_dat <- st_read("data/CWPP/CWPP_tmp.shp")
 cwpp_dat <- st_transform(cwpp_dat, 4326)
 
-cwpp_dat_tmp <- cwpp_dat_tmp %>%
+cwpp_dat_tmp <- cwpp_dat %>%
   mutate(
     `CWPP Status` = status_num
+    #`CWPP Status` = as.factor(status_num) # Need to change the coloring to colorFactor
     #   status_num = format(status_num, big.mark = "-")
   )
 #   cwpp_dat_tmp$status_num = as.Date.numeric(format(status_num, format = '%Y'))
-
-
 
 # 7. Hazard Assessment data
 haz_dat <- st_read("data/hazard/WHA2015.shp")
@@ -257,7 +256,7 @@ function(input, output, session) {
       #                "2019"),
       domain = color_domain
     )
-  
+
     
     ## Popup and palette content ##
     if (user_choice == "Median Household Income") {
@@ -284,7 +283,7 @@ function(input, output, session) {
                       tags$em("Primary concern: "), cwpp_dat_tmp$concern)
       pal = pal_cwpp
       the_labels = lab_cwpp
-      the_labels <- c("2015", "","Medium", "High")
+      #the_labels <- c("2015", "","Medium", "High")
     } else if (user_choice == "Fire Protection") {
       popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                      tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
