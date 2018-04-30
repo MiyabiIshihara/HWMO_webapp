@@ -49,7 +49,7 @@ comm_dat <- read_csv("data/comm_input.csv") %>%
 cwpp_dat <- st_read("data/CWPP/CWPP_tmp.shp")
 cwpp_dat <- st_transform(cwpp_dat, 4326)
 
-cwpp_dat_tmp <- cwpp_dat_tmp %>%
+cwpp_dat_tmp <- cwpp_dat %>%
   mutate(
     `CWPP Status` = status_num
     #   status_num = format(status_num, big.mark = "-")
