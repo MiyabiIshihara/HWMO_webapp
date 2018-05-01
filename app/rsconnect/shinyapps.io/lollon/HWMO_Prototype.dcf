@@ -5,9 +5,9 @@ account: lollon
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 304597
-bundleId: 1326460
+bundleId: 1347999
 url: https://lollon.shinyapps.io/HWMO_Prototype/
-when: 1524090460.4111
+when: 1525120139.83031
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: .Rapp.history
