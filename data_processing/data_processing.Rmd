@@ -226,7 +226,7 @@ comm_input_dat <-
                pattern="*.csv", 
                full.names = T) %>% 
     # map over read_csv, col_types specifies that each have same column headers
-    map_dfr(~read_csv(., col_types = cols(.default = "c"))) 
+    map_df(~read_csv(., col_types = cols(.default = "c"))) 
 
 ## Clean data
 # Split secondary desc (should be 15 total)

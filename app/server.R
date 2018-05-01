@@ -52,6 +52,7 @@ cwpp_dat <- st_transform(cwpp_dat, 4326)
 cwpp_dat_tmp <- cwpp_dat %>%
   mutate(
     `CWPP Status` = status_num
+
     #`CWPP Status` = as.factor(status_num) # Need to change the coloring to colorFactor
     #   status_num = format(status_num, big.mark = "-")
   )
@@ -277,13 +278,6 @@ function(input, output, session) {
                      tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
       pal = pal_soc
       the_labels = lab_soc
-    } else if (user_choice == "CWPP Status") {
-      popup =  paste0("<h4>", cwpp_dat_tmp$CWPPregion, "</h4>", tags$br(),
-                      tags$em("CWPP Status ", cwpp_dat_tmp$Status), tags$br(),
-                      tags$em("Primary concern: "), cwpp_dat_tmp$concern)
-      pal = pal_cwpp
-      the_labels = lab_cwpp
-      #the_labels <- c("2015", "","Medium", "High")
     } else if (user_choice == "Fire Protection") {
       popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
                      tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
@@ -355,6 +349,7 @@ function(input, output, session) {
       pal = pal_haz
       the_labels = lab_haz
     }
+    
     # fire icon
     fire_icon <- makeIcon(
       iconUrl = "data/fire_icon.png",
@@ -427,11 +422,28 @@ function(input, output, session) {
                        label = FComms$AreaName,
                        group = "Firewise Communities"
       ) %>%
+      
+      # CWPP Layer
+      addPolygons(data = cwpp_dat,
+                  weight = 0.7,
+                  color = 'darkorchid',
+                  fillColor = "rgba(0, 0, 0, 0.1)",
+                  opacity = 1.0,
+                  group = "Current CWPPs",
+                  popup = paste0( "<h4>", cwpp_dat_tmp$CWPPregion, "</h4>", tags$br(),
+                                               tags$em("CWPP Status ", cwpp_dat_tmp$Status), tags$br(),
+                                               tags$em("Primary concern: "), cwpp_dat_tmp$concern),
+                  highlightOptions = highlightOptions(color = "darkorchid",
+                                                      weight = 2.5,
+                                                      opacity = 0.8,
+                                                      bringToFront = TRUE)
+                  
+      ) %>%
       addLayersControl(
-        overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities"),
+        overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities", "Current CWPPs"),
         options = layersControlOptions(collapsed = FALSE)
       ) %>%
-      hideGroup(c("Fire Heatmap", "Fire Points", "Firewise Communities"))
+      hideGroup(c("Fire Heatmap", "Fire Points", "Firewise Communities", "Current CWPPs"))
     
   })
   
