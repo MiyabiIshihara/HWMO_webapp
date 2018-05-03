@@ -49,13 +49,15 @@ comm_dat <- read_csv("data/comm_input.csv") %>%
 cwpp_dat <- st_read("data/CWPP/CWPP_tmp.shp")
 cwpp_dat <- st_transform(cwpp_dat, 4326)
 
-cwpp_dat_tmp <- cwpp_dat %>%
+cwpp_dat_tmp <- cwpp_dat %>% as.tibble() %>%
   mutate(
-    `CWPP Status` = status_num
-
+    `CWPP Status` = status_num,
+    concern = as.character(concern)
     #`CWPP Status` = as.factor(status_num) # Need to change the coloring to colorFactor
     #   status_num = format(status_num, big.mark = "-")
   )
+cwpp_dat_tmp[is.na(cwpp_dat_tmp)] <- "Not yet available"
+
 #   cwpp_dat_tmp$status_num = as.Date.numeric(format(status_num, format = '%Y'))
 
 # 7. Hazard Assessment data
@@ -103,11 +105,11 @@ function(input, output, session) {
       addEasyButtonBar(
         position = "bottomright",
         easyButton(
-          id="BI",
+          id="wHI",
           position = "bottomright",
-          icon = '<strong>E</strong>', 
-          title="Big Island",
-          onClick = JS("function(btn, map){map.setView([19.678, -155.450],9); }")),
+          icon = '<strong>W</strong>',
+          title="West",
+          onClick = JS("function(btn, map){map.panTo([22.037, -159.774], 7); }")),
         easyButton(
           id="cHI",
           position = "bottomright",
@@ -115,11 +117,12 @@ function(input, output, session) {
           title="Central",
           onClick = JS("function(btn, map){map.setView([21.123, -157.017],8); }")),
         easyButton(
-          id="wHI",
+          id="BI",
           position = "bottomright",
-          icon = '<strong>W</strong>',
-          title="West",
-          onClick = JS("function(btn, map){map.panTo([22.037, -159.774], 7); }"))
+          icon = '<strong>E</strong>', 
+          title="Big Island",
+          onClick = JS("function(btn, map){map.setView([19.678, -155.450],9); }"))
+        
       )
     
   }) #end of leaflet function
@@ -333,7 +336,7 @@ function(input, output, session) {
                      tags$b("1 is a low hazard (Good), 3 is a high hazard (Bad)"), tags$br(),
                      tags$em("Slope: "), haz_dat$Slope, tags$br(),
                      tags$em("Avg rain (1-6): "), haz_dat$Avg_Rain, tags$br(),
-                     tags$em("Prevailng wind (1-4): "), haz_dat$Prev_Wind, tags$br(),
+                     tags$em("Prevailing wind (1-4): "), haz_dat$Prev_Wind, tags$br(),
                      tags$em("Seasonal hazard condition: "), haz_dat$Seas_Haz, tags$br(),
                      tags$em("Ignition risk: "), haz_dat$Ign_Risk, tags$br(),
                      tags$em("Topography: "), haz_dat$Top_Adv)
@@ -431,7 +434,7 @@ function(input, output, session) {
                   opacity = 1.0,
                   group = "Current CWPPs",
                   popup = paste0( "<h4>", cwpp_dat_tmp$CWPPregion, "</h4>", tags$br(),
-                                               tags$em("CWPP Status ", cwpp_dat_tmp$Status), tags$br(),
+                                               tags$em("CWPP Status: "), tags$b(cwpp_dat_tmp$Status), tags$br(),
                                                tags$em("Primary concern: "), cwpp_dat_tmp$concern),
                   highlightOptions = highlightOptions(color = "darkorchid",
                                                       weight = 2.5,
@@ -496,7 +499,27 @@ function(input, output, session) {
     score <- row$score[1]
     
     # Conditional icon, color and text
-    if (score == 3){
+    if (input$hazard2 == "Average Rainfall" && 
+        score %in% c(5,6)){
+      icon = "thumbs-down"
+      color = "red"
+      text = "High"
+    } else if (input$hazard2 == "Average Rainfall" && 
+               score %in% c(3,4)){
+      icon = "cog"
+      color = "yellow"
+      text = "Medium"
+    } else if (input$hazard2 == "Average Rainfall" && 
+               score %in% c(1,2)){
+      icon = "thumbs-up"
+      color = "green"
+      text = "Low"
+    } else if (input$hazard2 == "Prevailing Wind Speeds and Direction" && 
+          score %in% c(3,4)){
+      icon = "thumbs-down"
+      color = "red"
+      text = "High"
+    } else if (score == 3){
       icon = "thumbs-down"
       color = "red"
       text = "High"
