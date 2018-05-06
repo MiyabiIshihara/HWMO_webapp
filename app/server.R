@@ -173,7 +173,7 @@ function(input, output, session) {
     ## X variable  
     if(input$histX == "month"){
       xChoice = "Month"
-    } else if(input$histX == "year") {
+    } else {
       xChoice = "Year"
     }
     ## Plot  
