@@ -425,7 +425,6 @@ function(input, output, session) {
                        label = FComms$AreaName,
                        group = "Firewise Communities"
       ) %>%
-      
       # CWPP Layer
       addPolygons(data = cwpp_dat,
                   weight = 0.7,
@@ -442,8 +441,15 @@ function(input, output, session) {
                                                       bringToFront = TRUE)
                   
       ) %>%
+      addDrawToolbar(
+        targetGroup='Added Markers',
+        polygonOptions = FALSE,
+        rectangleOptions = FALSE,
+        circleOptions = FALSE,
+        position = "bottomright",
+        editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions())) %>%
       addLayersControl(
-        overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities", "Current CWPPs"),
+        overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities", "Current CWPPs", "Added Markers"),
         options = layersControlOptions(collapsed = FALSE)
       ) %>%
       hideGroup(c("Fire Heatmap", "Fire Points", "Firewise Communities", "Current CWPPs"))
