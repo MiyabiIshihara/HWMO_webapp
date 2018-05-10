@@ -40,7 +40,7 @@ census_dat <- census_dat %>%
   )
 
 # 5. Community Input data
-comm_dat <- read_csv("data/comm_input.csv") %>%
+comm_dat <- read_rds("data/comm_input.rds") %>%
   select(-c(cohesive_strategy, key_codes, 
             sec_desc1, sec_desc2, sec_desc3))
 
@@ -77,7 +77,7 @@ haz_dat <- haz_dat %>%
   )
 
 # 8. Hazard scoring system
-haz_scoring <- read_csv("data/hazard_scoring_system.csv")
+haz_scoring <- read_rds("data/hazard_scoring_system.rds")
 
 ####---- Shiny server function ----####
 
