@@ -68,6 +68,7 @@ comm_input_dat <- comm_input_dat %>%
 
 ## Output data
 write_csv(comm_input_dat,"../app/data/comm_input.csv")
+write_rds(comm_input_dat,"../app/data/comm_input.rds")
 ```
 
 ```{r}
@@ -110,6 +111,7 @@ for(r in regions){
 
 #temp output
 write_csv(comm_dat_tmp, "../app/data/comm_dat_tmp.csv")
+write_rds(comm_dat_tmp, "../app/data/comm_dat_tmp.rds")
 ```
 
 
