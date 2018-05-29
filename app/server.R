@@ -35,8 +35,10 @@ census_dat <- st_transform(census_dat, 4326)
 census_dat <- census_dat %>%
   mutate(
     `Median Household Income` = MedH_Inc,
-    `Native Hawaiian Count` = NH_ac,
-    Homeownership = pct_homeow
+    `Native Hawaiians` = pct_NH_ac,
+    Homeownership = pct_homeow,
+    `Vacant Homes` = pct_vacant,
+    `Population Density` = pop_densit
   )
 
 # 5. Community Input data
@@ -204,8 +206,10 @@ function(input, output, session) {
 
     # Change dataset based on "map data" selection
     if (user_choice %in% c("Median Household Income", 
-                           "Native Hawaiian Count", 
-                           "Homeownership")) {
+                           "Native Hawaiians", 
+                           "Homeownership",
+                           "Vacant Homes",
+                           "Population Density")) {
       the_data = census_dat
     } else if (user_choice %in% "CWPP Status"){
       the_data = cwpp_dat_tmp
@@ -265,19 +269,20 @@ function(input, output, session) {
     ## Popup and palette content ##
     if (user_choice == "Median Household Income") {
       ## Popup text
-      popup = paste0("<h4>", "Census Tract ", census_dat$TRACT_1, "</h4>", tags$br(),
+      popup = paste0("<h4>", "Census Tract ", census_dat$Geo_TRACT, "</h4>", tags$br(),
                      tags$em("Median Household Income: "),"$", census_dat$`Median Household Income`
       )
       ## Palette for legend
       pal = pal_soc
       the_labels = census_dat$`Median Household Income`
-    } else if (user_choice == "Native Hawaiian Count") {
-      popup = paste0("<h4>", "Census Tract ", census_dat$TRACT_1, "</h4>", tags$br(),
-                     tags$em("Native Hawaiian count: "), census_dat$`Native Hawaiian Count`)
+    } else if (user_choice == "Native Hawaiians") {
+      popup = paste0("<h4>", "Census Tract ", census_dat$Geo_TRACT, "</h4>", tags$br(),
+                     tags$em("% Native Hawaiians and Pacific Islanders: "), census_dat$`Native Hawaiians`,tags$br(),
+                     tags$em("Native Hawaiians and Pacific Islander Count: "), census_dat$`NH_ac`)
       pal = pal_soc
-      the_labels <- census_dat$`Native Hawaiian Count`
+      the_labels <- census_dat$`Native Hawaiians`
     } else if (user_choice == "Homeownership") {
-      popup = paste0("<h4>", "Census Tract ", census_dat$TRACT_1, "</h4>", tags$br(),
+      popup = paste0("<h4>", "Census Tract ", census_dat$Geo_TRACT, "</h4>", tags$br(),
                      tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
       pal = pal_soc
       the_labels = lab_soc
