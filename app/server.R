@@ -36,7 +36,7 @@ census_dat <- census_dat %>%
   mutate(
     `Median Household Income` = MedH_Inc,
     `Native Hawaiian Count` = NH_ac,
-    Homeownership = Homeowner
+    Homeownership = pct_homeow
   )
 
 # 5. Community Input data
