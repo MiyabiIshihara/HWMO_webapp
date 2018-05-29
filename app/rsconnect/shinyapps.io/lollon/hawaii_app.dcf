@@ -5,9 +5,9 @@ account: lollon
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 334477
-bundleId: 1365699
+bundleId: 1367572
 url: https://lollon.shinyapps.io/hawaii_app/
-when: 1525907960.63861
+when: 1525993085.73773
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: .Rapp.history
