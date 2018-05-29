@@ -277,13 +277,23 @@ function(input, output, session) {
       the_labels = census_dat$`Median Household Income`
     } else if (user_choice == "Native Hawaiians") {
       popup = paste0("<h4>", "Census Tract ", census_dat$Geo_TRACT, "</h4>", tags$br(),
-                     tags$em("% Native Hawaiians and Pacific Islanders: "), census_dat$`Native Hawaiians`,tags$br(),
+                     tags$em("Native Hawaiians and Pacific Islander Population: "), round(census_dat$`Native Hawaiians`, digits = 2),"%",tags$br(),
                      tags$em("Native Hawaiians and Pacific Islander Count: "), census_dat$`NH_ac`)
       pal = pal_soc
       the_labels <- census_dat$`Native Hawaiians`
     } else if (user_choice == "Homeownership") {
       popup = paste0("<h4>", "Census Tract ", census_dat$Geo_TRACT, "</h4>", tags$br(),
                      tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
+      pal = pal_soc
+      the_labels = lab_soc
+    } else if (user_choice == "Vacant Homes") {
+      popup = paste0("<h4>", "Census Tract ", census_dat$Geo_TRACT, "</h4>", tags$br(),
+                     tags$em("Vacant Homes: "), round(census_dat$`Vacant Homes`, digits = 2),"%")
+      pal = pal_soc
+      the_labels = lab_soc
+    } else if (user_choice == "Population Density") {
+      popup = paste0("<h4>", "Census Tract ", census_dat$Geo_TRACT, "</h4>", tags$br(),
+                     tags$em("Population Density: "), census_dat$`Population Density`,"pop/sq.mi")
       pal = pal_soc
       the_labels = lab_soc
     } else if (user_choice == "Fire Protection") {
