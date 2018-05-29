@@ -40,7 +40,7 @@ census_dat <- census_dat %>%
   )
 
 # 5. Community Input data
-comm_dat <- read_csv("data/comm_input.csv") %>%
+comm_dat <- read_rds("data/comm_input.rds") %>%
   select(-c(cohesive_strategy, key_codes, 
             sec_desc1, sec_desc2, sec_desc3))
 
@@ -77,7 +77,7 @@ haz_dat <- haz_dat %>%
   )
 
 # 8. Hazard scoring system
-haz_scoring <- read_csv("data/hazard_scoring_system.csv")
+haz_scoring <- read_rds("data/hazard_scoring_system.rds")
 
 ####---- Shiny server function ----####
 
@@ -425,7 +425,6 @@ function(input, output, session) {
                        label = FComms$AreaName,
                        group = "Firewise Communities"
       ) %>%
-      
       # CWPP Layer
       addPolygons(data = cwpp_dat,
                   weight = 0.7,
@@ -442,8 +441,15 @@ function(input, output, session) {
                                                       bringToFront = TRUE)
                   
       ) %>%
+      addDrawToolbar(
+        targetGroup='Added Markers',
+        polygonOptions = FALSE,
+        rectangleOptions = FALSE,
+        circleOptions = FALSE,
+        position = "bottomright",
+        editOptions = editToolbarOptions(selectedPathOptions = selectedPathOptions())) %>%
       addLayersControl(
-        overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities", "Current CWPPs"),
+        overlayGroups = c("Fire Heatmap", "Fire Points", "Firewise Communities", "Current CWPPs", "Added Markers"),
         options = layersControlOptions(collapsed = FALSE)
       ) %>%
       hideGroup(c("Fire Heatmap", "Fire Points", "Firewise Communities", "Current CWPPs"))
@@ -643,21 +649,6 @@ function(input, output, session) {
              `Strategic Focus` = timing_focus)
   })
   
-  ## Download Selected Data
-  output$download_data <- downloadHandler(
-    # This function returns a string which tells the client browser what name to use when saving the file.
-    filename = function() {
-      paste0("comm_input_",
-             paste(input$focus, input$region, input$meeting, sep = "_"),
-             ".csv")
-    },
-    # This function should write data to a file given to it by the argument 'file'.
-    content = function(file) {
-      # Write to a file specified by the 'file' argument
-      write.table(comm_temp(), file, sep = ",", row.names = FALSE)
-    }
-  )
-  
   # Download All Data
   output$download_all_data <- downloadHandler(
     # This function returns a string which tells the client browser what name to use when saving the file.
@@ -709,21 +700,6 @@ function(input, output, session) {
       select(Island, Area=AreaName, Category= hazard_category, Hazard = hazard_full,
              Score = score, Reason = reason, -hazard)
   })
-  # Download Selected Data
-  output$download_haz <- downloadHandler(
-    # This function returns a string which tells the client browser what name to use when saving the file.
-    filename = function() {
-      paste0("hazards_",
-             paste(input$category, input$hazard,
-                   input$island, input$areaname, sep = "_"),
-             ".csv")
-    },
-    # This function should write data to a file given to it by the argument 'file'.
-    content = function(file) {
-      # Write to a file specified by the 'file' argument
-      write.table(haz_temp(), file, sep = ",", row.names = FALSE)
-    }
-  )
   
   # Download All Data
   output$download_all_haz <- downloadHandler(

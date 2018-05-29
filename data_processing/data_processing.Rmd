@@ -216,6 +216,7 @@ tidy_haz <- haz_dat %>%
 
 ## Output file ##
 write_csv(tidy_haz, "../app/data/tidy_haz.csv")
+write_rds(tidy_haz, "../app/data/tidy_haz.rds")
 ```
 
 ```{r community input data, warning = F, message = F, error = F}
@@ -258,6 +259,7 @@ comm_input_dat <- comm_input_dat %>%
 
 ## Output data
 write_csv(comm_input_dat,"../app/data/comm_input.csv")
+write_rds(comm_input_dat,"../app/data/comm_input.rds")
 ```
 
 ```{r community hazard scoring, message=F, warning=F, error=F}
@@ -265,4 +267,5 @@ write_csv(comm_input_dat,"../app/data/comm_input.csv")
 dat <- readxl::read_xlsx(path = "2014_3_31_Community Hazard Assessment_Key Final_HWMO.xlsx")
 ## Output data as csv
 write_csv(dat, path = "../app/data/hazard_scoring_system.csv")
+write_rds(dat, path = "../app/data/hazard_scoring_system.rds")
 ```
