@@ -99,11 +99,13 @@ The community input available in this app are from 2016 CWPPs: Kauai Update, Mol
   <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#census">Census Data</button>
 
   <div id="census" class="collapse">
-<p>The HWMO data tool also includes 5-year US Census estimates from 2012. These data include:
+<p>The HWMO data tool also includes 5-year estimates from the 2016 US Census <a href = https://www.census.gov/programs-surveys/acs/about.html> American Communities Survey</a>. These data include:
 <ul>
-<li> Median Household Income (in 2012 dollars)</li>
-<li> Number of Native Hawai'ians (Hawai'ian only or mixed race)</li>
-<li> Percentage of homeowners </li>
+<li> Median household income (in 2016 dollars)</li>
+<li> People of Native Hawai'ian or other Pacific Islander descent</li>
+<li> Homeowners (percentage of owner-occupied housing units)</li>
+<li> Percentage of vacant housing units </li>
+<li> Population density (in people per square mile)</li>
 </ul>
 
 </div>
