@@ -83,8 +83,8 @@ body <- dashboardBody(
                                        "Median Household Income ($)" = "Median Household Income",
                                        "Native Hawaiians (%)" = "Native Hawaiians",
                                        "Homeownership (%)" = "Homeownership",
-                                       "Vacant Homes (%)" = "Vacant Homes",
-                                       "Population Density (pop/sqmi)" = "Population Density"
+                                       "Vacant Housing Units (%)" = "Vacant Housing Units",
+                                       "Population Density (pop/sq.mi)" = "Population Density"
                                       ),
                                      selected = "overall_score")),
                      # Fires showing in map plot

@@ -37,7 +37,7 @@ census_dat <- census_dat %>%
     `Median Household Income` = MedH_Inc,
     `Native Hawaiians` = pct_NH_ac,
     Homeownership = pct_homeow,
-    `Vacant Homes` = pct_vacant,
+    `Vacant Housing Units` = pct_vacant,
     `Population Density` = pop_densit
   )
 
@@ -208,7 +208,7 @@ function(input, output, session) {
     if (user_choice %in% c("Median Household Income", 
                            "Native Hawaiians", 
                            "Homeownership",
-                           "Vacant Homes",
+                           "Vacant Housing Units",
                            "Population Density")) {
       the_data = census_dat
     } else if (user_choice %in% "CWPP Status"){
@@ -245,10 +245,19 @@ function(input, output, session) {
     
     # Census palette 
     pal_soc <- colorBin(
-      #bins =  5,
+      bins =  5,
       na.color = alpha("blue",0.0),
       pretty = T,
       palette = "YlGnBu",
+      alpha = T,
+      domain = color_domain
+    )
+    
+    # Alternate census palette
+    pal_soc_alt<- colorBin(
+      bins =  5,
+      na.color = alpha("blue",0.0),
+      palette = "YlOrRd",
       alpha = T,
       domain = color_domain
     )
@@ -270,15 +279,14 @@ function(input, output, session) {
     if (user_choice == "Median Household Income") {
       ## Popup text
       popup = paste0("<h4>", "Census Tract ", census_dat$Geo_TRACT, "</h4>", tags$br(),
-                     tags$em("Median Household Income: "),"$", census_dat$`Median Household Income`
-      )
+                     tags$em("Median Household Income: "),"$", format(census_dat$`Median Household Income`, big.mark = ","))
       ## Palette for legend
       pal = pal_soc
       the_labels = census_dat$`Median Household Income`
     } else if (user_choice == "Native Hawaiians") {
       popup = paste0("<h4>", "Census Tract ", census_dat$Geo_TRACT, "</h4>", tags$br(),
-                     tags$em("Native Hawaiians and Pacific Islander Population: "), round(census_dat$`Native Hawaiians`, digits = 2),"%",tags$br(),
-                     tags$em("Native Hawaiians and Pacific Islander Count: "), census_dat$`NH_ac`)
+                     tags$em("Native Hawaiian and Pacific Islander Population: "), round(census_dat$`Native Hawaiians`, digits = 2),"%",tags$br(),
+                     tags$em("Total Population: "), formatC(census_dat$pop, big.mark = ","))
       pal = pal_soc
       the_labels <- census_dat$`Native Hawaiians`
     } else if (user_choice == "Homeownership") {
@@ -286,15 +294,17 @@ function(input, output, session) {
                      tags$em("Homeownership: "), round(census_dat$Homeownership, digits = 2),"%")
       pal = pal_soc
       the_labels = lab_soc
-    } else if (user_choice == "Vacant Homes") {
+    } else if (user_choice == "Vacant Housing Units") {
       popup = paste0("<h4>", "Census Tract ", census_dat$Geo_TRACT, "</h4>", tags$br(),
-                     tags$em("Vacant Homes: "), round(census_dat$`Vacant Homes`, digits = 2),"%")
+                     tags$em("Vacant Housing Units: "), round(census_dat$`Vacant Housing Units`, digits = 2),"%", tags$br(),
+                     tags$em("Total Housing Units: "), formatC(census_dat$num_hh, big.mark = ","))
       pal = pal_soc
       the_labels = lab_soc
     } else if (user_choice == "Population Density") {
       popup = paste0("<h4>", "Census Tract ", census_dat$Geo_TRACT, "</h4>", tags$br(),
-                     tags$em("Population Density: "), census_dat$`Population Density`,"pop/sq.mi")
-      pal = pal_soc
+                     tags$em("Population: "), formatC(census_dat$ pop, big.mark = ","),tags$br(),
+                     tags$em("Population Density: "), census_dat$`Population Density`," pop/sq.mi")
+      pal = pal_soc_alt
       the_labels = lab_soc
     } else if (user_choice == "Fire Protection") {
       popup = paste0("<h4>",haz_dat$AreaName, "</h4>", tags$br(),
